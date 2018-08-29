@@ -1,0 +1,23 @@
+{% extends 'main_page/index.html' %}
+{% block title %}Удаление :: {{good.name}} :: {{good.category.name}}{% endblock %}
+{% block body %}
+	<form action='' method='post'>
+		{% for field in form %}
+			<div class='form-field'>
+				{% if field.errors|length > 0 %}
+					<div class='error-list'>
+						{{ field.errors }}
+					</div>
+				{% endif %}
+			<div class='label'>{{ field.label }}</div>
+			<div class='control'>{{field}}</div>
+			{% if field.help_text %}
+				<div class='help'>{{field.help_text}}</div>
+			{% endif %}
+			</div>
+		{% endfor %}
+		<input type="submit" name="Сохранить" value="Сохранить">
+	</form>
+	<h1>{{pn}}</h1>
+	<p><a href="{% url 'index' %}?page={{pn}}">Назад</a></p>
+{% endblock %}

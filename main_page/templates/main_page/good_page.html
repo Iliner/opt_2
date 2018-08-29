@@ -1,0 +1,28 @@
+{% extends 'main_page/index.html' %}
+
+{% block body %}
+<div id='main_card_good'>
+	
+	<div id='card_description'>
+		<div id='card_description_img'>
+			{% if not good.photo %}
+				<img src="/media/{{default_img}}">
+			{% else %}
+				<img src="/media/{{good.photo.photo}}">
+			{% endif %}
+		</div>
+
+		<div id='card_description_des'>
+			<h3>Код: {{good.code}}</h3>
+			<h3>Цена: {{good.price}}</h3>
+			<h3>Описание: {{good.description}}</h3>
+			<a href="{% url 'index' %}?page={{pn}}">back</a>
+		</div>
+	</div>
+
+	<div id='card_admin_do'>
+		<a href="{% url 'good_edit'  code=good.code %}?page={{page_obj.number}}">Изменить</a>
+		<a href="{% url 'good_delete' code=good.pk %}?page={{page_obj.number}}">Удалить</a>				
+	</div>
+</div>
+{% endblock %}

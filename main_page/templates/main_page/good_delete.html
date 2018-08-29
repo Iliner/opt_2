@@ -1,0 +1,16 @@
+{% extends 'main_page/index.html' %}
+{% block title %}Удаление :: {{good.name}} :: {{good.category.name}}{% endblock %}
+
+{% block body %}
+<div id='main_card_good'>
+	<h3>{{good.code}}</h3>
+	<h3>{{good.price}}</h3>
+	<h3>{{good.description}}</h3>
+	<h3>{{pn}}</h3>
+	<a href="{% url 'index' %}?page={{pn}}">back</a>
+	<form action='' method='post'>
+		{% csrf_token %}
+		<input type="submit" value='Удалить'>
+	</form>
+</div>
+{% endblock %}

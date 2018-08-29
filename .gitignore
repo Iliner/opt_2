@@ -1,0 +1,7 @@
+*.pyc
+*~
+myvenv
+db.sqlite3
+/static
+uploads
+.DB_Store
