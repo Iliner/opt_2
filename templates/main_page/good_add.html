@@ -1,6 +1,6 @@
 {% extends 'main_page/index.html' %}
 {% block title %}Удаление :: {{good.name}} :: {{good.category.name}}{% endblock %}
-{% block body %}
+{% block content %}
 	<form action='' method='post'>
 		{% csrf_token %}
 		{{ form.as_p }}

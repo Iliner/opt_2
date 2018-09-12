@@ -13,6 +13,24 @@ from django.contrib import messages
 from django import forms
 from .models import *
 from .forms import *
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+
+
+
+
+
+class Navbar(TemplateView):
+	template_name = 'includes/navbar.html'
+	def get_context_data(self, **kwargs):
+		context = super(Navbar, self).get_context_data(**kwargs)
+		context['login_img'] = Photo.objects.get(name='login').photo
+		return context
+
+
+
+
 
 
 
@@ -61,6 +79,8 @@ class GoodListView(ListView, CategoryListMixin):
 		# в частности значениями полученными контроллером параметров.
 		context = super(GoodListView, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
+		context['login_img'] = Photo.objects.get(name='login')
+		context['logout_img'] = Photo.objects.get(name='logout')
 
 		return context
 
@@ -162,35 +182,6 @@ class GoodEditView(ProcessFormView):
 
 
 
-# class GoodCreate(CreateView, GoodEditMixin):
-# 	#form_class = GoodForm
-# 	model = Goods
-# 	template_name = 'main_page/good_add.html'
-# 	fields = ['code', 'articul', 'producer', 'category', 'description', 'price']
-
-# 	def get(self, request, *args, **kwargs):
-# 		if self.kwargs['cat_id'] != None:
-# 			self.initial['category'] = Category.objects.get(pk = self.kwargs['cat_id'])
-# 		return super(GoodCreate, self).get(request, *args,**kwargs)
-
-# 	def post(self, request, *args, **kwargs):
-# 		"""
-# 		reverse формирует интернет адрес принимает имя, 
-# 		указанного параметра name функции url  в привязке интернет адреса
-# 		"""
-# 		self.success_url = reverse('good_page', kwargs={'code': 8922})
-# 		return super(GoodCreate, self).post(request, *args, **kwargs)
-
-# 	def get_context_data(self, **kwargs):
-# 		"""
-# 		Формирует в контексте данных переменную форм
-# 		"""
-# 		context = super(GoodCreate, self).get_context_data(**kwargs)
-# 		context['category'] = Category.objects.get(pk=self.kwargs['cat_id'])
-# 		return context
-
-
-
 class GoodCreate(SuccessMessageMixin, CreateView, GoodEditMixin):
 	#form_class = GoodForm
 	form_class = GoodForm
@@ -271,36 +262,6 @@ class GoodDelete(DeleteView, GoodEditMixin, GoodEditView):
 
 
 
-	# def get_object(self):
-	# 	"""Возвращает единственный объект, отображаемый этим представлением. 
-	# 	Если queryset предусмотрено, этот запрос будет использоваться как источник объектов; 
-	# 	в противном случае get_queryset(). get_object()ищет pk_url_kwargаргумент в аргументах представления; 
-	# 	если этот аргумент найден, этот метод выполняет поиск на основе первичного ключа с использованием этого значения. 
-	# 	Если этот аргумент не найден, он ищет slug_url_kwargаргумент и выполняет поиск в slug с помощью slug_field.
-	# 	"""
-
-	# 	return Goods.objects.get(code=self.kwargs['code'])
-
-# class AddFiles(TemplateView):
-# 	template_name = 'main_page/add_files.html'
-# 	form = UploadFiles
-
-
-# 	def post(self, request, *args, **kwargs):
-# 		self.form = UploadFiles(request.POST, request.FILES)
-# 		if self.form.is_valid():
-# 			self.form.save()
-# 			return redirect('index')
-# 		else:
-# 			return super(GoodCreate, self).post(request, *args, **kwargs)
-
-
-# 	def get_context_data(self, **kwargs):
-# 		context['form'] = self.form
-# 		return context
-
-
-
 
 class AddFiles(SuccessMessageMixin, TemplateView):
 	template_name = 'main_page/add_files.html'
@@ -332,3 +293,169 @@ class AddFiles(SuccessMessageMixin, TemplateView):
 		context['form'] = self.form
 		return context
 
+
+
+
+
+def uploads_photo(request, id=None):
+	form = UploadImg(request.POST or None, request.FILES or None)
+	if form.is_valid():
+		print(request.POST)
+		post = form.save(commit=False)
+		post.save()
+		return redirect('index')
+	else:
+		form = UploadImg()
+	return render(request, 'main_page/add_files.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
+
+# def my_profile(request):
+# 	my_user_profile = Profile.objects.filter(user=request.user).first()
+# 	my_orders = Order.objects.filter(is_ordered=True, owner=my_user_profile)
+# 	context = {
+# 		'my_orders': my_orders
+# 	}
+
+# 	return render(request, 'main_page/profile.html', context)
+
+
+
+
+
+
+# def get_user_pending_order(request):
+#     # get order for the correct user
+#     user_profile = get_object_or_404(Profile, user=request.user)
+#     order = Order.objects.filter(owner=user_profile, is_ordered=False)
+#     if order.exists():
+#         # get the only order in the list of filtered orders
+#         return order[0]
+#     return 0
+
+
+# @login_required()
+# def add_to_cart(request, **kwargs):
+#     # get the user profile
+#     user_profile = get_object_or_404(Profile, user=request.user)
+#     # filter products by id
+#     product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+#     # check if the user already owns this product
+#     if product in request.user.profile.ebooks.all():
+#         messages.info(request, 'You already own this ebook')
+#         return redirect(reverse('products:product-list')) 
+#     # create orderItem of the selected product
+#     order_item, status = OrderItem.objects.get_or_create(product=product)
+#     # create order associated with the user
+#     user_order, status = Order.objects.get_or_create(owner=user_profile, is_ordered=False)
+#     user_order.items.add(order_item)
+#     if status:
+#         # generate a reference code
+#         user_order.ref_code = generate_order_id()
+#         user_order.save()
+
+#     # show confirmation message and redirect back to the same page
+#     messages.info(request, "item added to cart")
+#     return redirect(reverse('products:product-list'))
+
+
+# @login_required()
+# def delete_from_cart(request, item_id):
+#     item_to_delete = OrderItem.objects.filter(pk=item_id)
+#     if item_to_delete.exists():
+#         item_to_delete[0].delete()
+#         messages.info(request, "Item has been deleted")
+#     return redirect(reverse('shopping_cart:order_summary'))
+
+
+# @login_required()
+# def order_details(request, **kwargs):
+#     existing_order = get_user_pending_order(request)
+#     context = {
+#         'order': existing_order
+#     }
+#     return render(request, 'shopping_cart/order_summary.html', context)
+
+
+# @login_required()
+# def checkout(request):
+#     existing_order = get_user_pending_order(request)
+#     publishKey = settings.STRIPE_PUBLISHABLE_KEY
+#     if request.method == 'POST':
+#         try:
+#             token = request.POST['stripeToken']
+
+#             charge = stripe.Charge.create(
+#                 amount=100*existing_order.get_cart_total(),
+#                 currency='usd',
+#                 description='Example charge',
+#                 source=token,
+#             )
+#             return redirect(reverse('shopping_cart:update_records',
+#                         kwargs={
+#                             'token': token
+#                         })
+#                     )
+
+#         except stripe.CardError as e:
+#             message.info(request, "Your card has been declined.")
+            
+#     context = {
+#         'order': existing_order,
+#         'STRIPE_PUBLISHABLE_KEY': publishKey
+#     }
+
+#     return render(request, 'shopping_cart/checkout.html', context)
+
+
+# @login_required()
+# def update_transaction_records(request, token):
+#     # get the order being processed
+#     order_to_purchase = get_user_pending_order(request)
+
+#     # update the placed order
+#     order_to_purchase.is_ordered=True
+#     order_to_purchase.date_ordered=datetime.datetime.now()
+#     order_to_purchase.save()
+    
+#     # get all items in the order - generates a queryset
+#     order_items = order_to_purchase.items.all()
+
+#     # update order items
+#     order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())
+
+#     # Add products to user profile
+#     user_profile = get_object_or_404(Profile, user=request.user)
+#     # get the products from the items
+#     order_products = [item.product for item in order_items]
+#     user_profile.ebooks.add(*order_products)
+#     user_profile.save()
+
+    
+#     # create a transaction
+#     transaction = Transaction(profile=request.user.profile,
+#                             token=token,
+#                             order_id=order_to_purchase.id,
+#                             amount=order_to_purchase.get_cart_total(),
+#                             success=True)
+#     # save the transcation (otherwise doesn't exist)
+#     transaction.save()
+
+
+#     # send an email to the customer
+#     # look at tutorial on how to send emails with sendgrid
+#     messages.info(request, "Thank you! Your purchase was successful!")
+#     return redirect(reverse('accounts:my_profile'))
+
+
+# def success(request, **kwargs):
+#     # a view signifying the transcation was successful
+#     return render(request, 'shopping_cart/purchase_success.html', {})

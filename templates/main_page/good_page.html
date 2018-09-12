@@ -1,6 +1,6 @@
 {% extends 'main_page/index.html' %}
 
-{% block body %}
+{% block content %}
 <div id='main_card_good'>
 	
 	<div id='card_description'>
@@ -16,7 +16,7 @@
 			<h3>Код: {{good.code}}</h3>
 			<h3>Цена: {{good.price}}</h3>
 			<h3>Описание: {{good.description}}</h3>
-			<a href="{% url 'index' %}?page={{pn}}">back</a>
+			<a href="{% url 'index' %}?page={{pn}}">back</a>zz
 		</div>
 	</div>
 

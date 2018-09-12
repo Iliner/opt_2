@@ -14,7 +14,6 @@ def valid_positive(value):
 
 
 
-
 class GoodForm(forms.ModelForm):
 	class Meta:
 		model = Goods
@@ -31,24 +30,24 @@ class GoodForm(forms.ModelForm):
 
 
 
-
-
 class CustomerStock(forms.Form):
 	count = forms.IntegerField()
 
 
 
-class UploadFiles(forms.Form):
+class UploadFiles(forms.ModelForm):
 	class Meta:
 		model = FileUpload
 		fields = "__all__"
 
 	name = forms.CharField(label = 'Название файла', help_text='Название товара которое будет отображаться в меню админа', 
 		error_messages={'required': 'блаб балаб лабла'})
-	file = models.FileField()
+	file = models.FileField(help_text='Название товара которое будет отображаться в меню админа')
 
-# class GoodOrderForm(forms.Form):
-# 	count = forms.IntegerField()
-	
 
-#class GoodAdd(forms.ModelForm)
+
+
+class UploadImg(forms.ModelForm):
+	class Meta:
+		model = UploadsImage
+		fields = '__all__'

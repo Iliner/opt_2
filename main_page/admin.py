@@ -3,7 +3,16 @@ from .models import *
 # Register your models here.
 
 admin.site.register(Category)
-admin.site.register(Goods)
+
+@admin.register(Goods)
+class AdminGoods(admin.ModelAdmin):
+	list_display = ['code', 'articul', 'price']
+
+#admin.site.register(Goods)
 admin.site.register(Photo)
 admin.site.register(UploadsImage)
 admin.site.register(FileUpload)
+# admin.site.register(OrderItem)
+# admin.site.register(Order)
+# admin.site.register(Profile)
+

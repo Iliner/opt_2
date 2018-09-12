@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_page',
+    'basket',
+    'django.contrib.sites',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'opt_online.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +71,9 @@ TEMPLATES = [
     },
 ]
 
+
+
+
 WSGI_APPLICATION = 'opt_online.wsgi.application'
 
 
@@ -77,7 +83,7 @@ WSGI_APPLICATION = 'opt_online.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'data_base/db.sqlite3'),
     }
 }
 
@@ -118,8 +124,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+
+
+
+
+# TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
+
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+
 STATIC_URL = '/static/'
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+
+LOGIN_URL = "login"
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = "/"
+
+SITE_ID = 2

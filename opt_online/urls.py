@@ -17,9 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import login, logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^login/', login,  {'template_name': 'registration/login.html'}, name="login"),
+    url(r'^logout/', logout, {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('main_page.urls'))
 ]
 
