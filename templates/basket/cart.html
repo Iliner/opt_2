@@ -1,0 +1,43 @@
+{% extends 'main_page/index.html' %}
+{% block title %}Корзина{% endblock %}
+
+
+{% block navbar_button %}
+	<ul class='nav navbar-nav navbar-right'>
+		<li><a href="{% url 'cart' %}">Корзина <span class='badge'>{{ cart.cart_total }}</span></a></li>
+	</ul>
+{% endblock %}
+
+{% block content %}
+<div class='main'>
+	<table class='table table-hover'>
+		<thead>
+			<th>Код</th>
+			<th>Производитель</th>
+			<th>Артикул</th>
+			<th>Описание</th>
+			<th>Цена</th>
+			<th class='row_th_img'>Фото</th>
+			<th>Test</th>
+		</thead>
+		<tbody>
+			{% for good in cart.items.all %}
+					<tr>
+						<th>{{good.product.code}}</th>
+						<th>{{good.product.producer}}</th>
+						<th>{{good.product.articul}}</th>
+						<th>{{good.product.description}}</th>
+						<th>{{good.product.price}}</th>
+						{% if not good.product.photo %}
+							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
+						{% else %}
+							<th class='row_th_img'><img id='row_img' src="{{good.product.photo.photo.url}}"></th>
+						{% endif %}
+						<th>{{category}}</h1>
+					</tr>	
+			{% endfor %}
+		</tbody>	
+	</table>
+	
+</div>
+{% endblock %}

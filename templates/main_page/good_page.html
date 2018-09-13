@@ -16,7 +16,8 @@
 			<h3>Код: {{good.code}}</h3>
 			<h3>Цена: {{good.price}}</h3>
 			<h3>Описание: {{good.description}}</h3>
-			<a href="{% url 'index' %}?page={{pn}}">back</a>zz
+			<div><a href="{% url 'add_cart' code=good.code %}">Добавить в корзину</a></div>
+			<a href="{% url 'index' %}?page={{pn}}">back</a>
 		</div>
 	</div>
 

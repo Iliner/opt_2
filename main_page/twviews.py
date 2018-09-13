@@ -13,6 +13,7 @@ from django.contrib import messages
 from django import forms
 from .models import *
 from .forms import *
+from basket.forms import Order
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -54,7 +55,7 @@ class GoodListView(ListView, CategoryListMixin):
 	template_name = 'main_page/list_goods.html'
 	paginate_by = 1
 	cat = None
-
+	form = None
 
 	def get(self, request, *args, **kwargs):
 		"""
@@ -67,7 +68,7 @@ class GoodListView(ListView, CategoryListMixin):
 		if self.kwargs['cat_id']:
 			self.cat = Category.objects.get(pk=kwargs['cat_id'])
 
-
+		self.form = Order
 		return super(GoodListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):

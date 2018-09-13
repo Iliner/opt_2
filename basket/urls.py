@@ -1,16 +1,14 @@
-from django.conf.urls import url 
-from basket.views import *
-from django.contrib.auth.decorators import login_required, permission_required
+from django.conf.urls import url, include
+from basket.views import cart_view, add_to_card_view
+# Create your views here.
 
 
-# app_name = 'shopping_cart'
+# urlpatterns = [
+# 	url(r'^$',  views.index, name='index'),
+# 	url(r"^good/(?P<code>\d+)/$", views.good, name='good'),
+# ]
 
 urlpatterns = [
-    url(r'^add-to-cart/(?P<item_id>[-\w]+)/$', add_to_cart, name="add_to_cart"),
-    url(r'^order-summary/$', order_details, name="order_summary"),
-    url(r'^success/$', success, name='purchase_success'),
-    url(r'^item/delete/(?P<item_id>[-\w]+)/$', delete_from_cart, name='delete_item'),
-    url(r'^checkout/$', checkout, name='checkout'),
-    url(r'^update-transaction/(?P<token>[-\w]+)/$', update_transaction_records,
-        name='update_records')
+	url(r"^/add_to_card/(?P<code>\d+)/$",  add_to_card_view, name='add_cart'),
+	url(r"^cart/$", cart_view, name='cart' ),
 ]

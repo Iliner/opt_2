@@ -11,7 +11,7 @@
 			<th>Описание</th>
 			<th>Цена</th>
 			<th class='row_th_img'>Фото</th>
-			<th>Test</th>
+			<th>Заказать</th>
 		</thead>
 		<tbody>
 			{% for good in object_list %}
@@ -26,7 +26,12 @@
 						{% else %}
 							<th class='row_th_img'><img id='row_img' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
-						<th>{{category}}</h1>
+						<th>
+							<form action='' method='post'>
+								{% csrf_token %}
+								{{ form.as_p }}
+							</form>
+						</th>	
 					</tr>	
 			{% endfor %}
 		</tbody>	

@@ -18,7 +18,8 @@ class Goods(models.Model):
 	in_stock = models.CharField(max_length=20, null=True)
 	price = models.FloatField()	
 	photo = models.ForeignKey('Photo', blank=True, null=True)
-
+	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
+	
 	def get_in_stock(self):
 		if in_stock:
 			return '+'
