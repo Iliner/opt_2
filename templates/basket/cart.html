@@ -23,17 +23,27 @@
 		<tbody>
 			{% for good in cart.items.all %}
 					<tr>
-						<th>{{good.product.code}}</th>
+						<th>{{good.product.code}}<br>
+							<form action="{% url 'cart_delete_positon' good.pk %}" method='post'>
+								{% csrf_token %}
+								<input type="submit" value='Удалить'>
+						</form></th>
 						<th>{{good.product.producer}}</th>
 						<th>{{good.product.articul}}</th>
 						<th>{{good.product.description}}</th>
 						<th>{{good.product.price}}</th>
 						{% if not good.product.photo %}
 							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
+							<script type="text/javascript">console.log('fuck')</script>
 						{% else %}
 							<th class='row_th_img'><img id='row_img' src="{{good.product.photo.photo.url}}"></th>
 						{% endif %}
-						<th>{{category}}</h1>
+						<th>
+							<form action='' method='post'>
+								{% csrf_token %}
+								{{ form.as_p }}
+							</form>
+						</th>
 					</tr>	
 			{% endfor %}
 		</tbody>	

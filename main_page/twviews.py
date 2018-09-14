@@ -13,6 +13,7 @@ from django.contrib import messages
 from django import forms
 from .models import *
 from .forms import *
+from basket.models import Cart
 from basket.forms import Order
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -64,11 +65,9 @@ class GoodListView(ListView, CategoryListMixin):
 		записей, этот самый список.
 		(То есть инициализирует сам context)
 		"""
-
+		self.form = Order
 		if self.kwargs['cat_id']:
 			self.cat = Category.objects.get(pk=kwargs['cat_id'])
-
-		self.form = Order
 		return super(GoodListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -82,7 +81,8 @@ class GoodListView(ListView, CategoryListMixin):
 		context['categorymy'] = self.cat
 		context['login_img'] = Photo.objects.get(name='login')
 		context['logout_img'] = Photo.objects.get(name='logout')
-
+		context['cart'] = Cart.objects.first()
+		context['form'] = self.form
 		return context
 
 	def get_queryset(self): 
@@ -98,6 +98,11 @@ class GoodListView(ListView, CategoryListMixin):
 			return Goods.objects.all().order_by('code')
 
 
+	def post(self, request, *args, **kwargs):
+		if self.form.is_valid():
+			self.form.save()
+		else:
+			return super(GoodListView, self).post(request, *args, **kwargs)
 
 
 

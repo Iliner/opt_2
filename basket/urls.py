@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from basket.views import cart_view, add_to_card_view
+from basket.views import CartView, add_to_card_view, DeletePosition
 # Create your views here.
 
 
@@ -9,6 +9,7 @@ from basket.views import cart_view, add_to_card_view
 # ]
 
 urlpatterns = [
-	url(r"^/add_to_card/(?P<code>\d+)/$",  add_to_card_view, name='add_cart'),
-	url(r"^cart/$", cart_view, name='cart' ),
+	url(r"^add_to_card/(?P<code>\d+)/$",  add_to_card_view, name='add_cart'),
+	url(r"^cart/$", CartView.as_view(), name='cart' ),
+	url(r"^cart/(?P<pk>\d+)?$", DeletePosition.as_view(), name='cart_delete_positon' ),
 ]
