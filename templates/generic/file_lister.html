@@ -1,0 +1,32 @@
+{% extends 'main_page/index.html' %}
+{% load staticfiles %}
+{% block_additional_js %}
+	<script type="text/javascript" src='{% static "jquery.js" %}'></script>
+	<script type="text/javascript" src='{% static "imagepool.js" %}'></script>
+{% endblock %}
+
+{% block content %}
+<table>
+	<tr>
+		<td class='link'><a id='image_prev' href="#">&lt;</a></td>
+		<td class='image'>&nbsp;</td>
+		<td class='image'>&nbsp;</td>
+		<td class='image'>&nbsp;</td>
+		<td class='image'>&nbsp;</td>
+		<td class='link'><a id='image_next' href="#">&gt;</a></td>
+	</tr>
+</table>
+<div class='form'>
+	method='post' enctype="multipart/form-data" target="imagepool_output">
+		{% csrf_token %}
+		<div class='form-field'>
+			<div class='label'>Файл для выгрузки</div>
+			<div class='control'>
+				<input type="file" name="file_to_upload" id='file_to_upload'>
+			</div>
+		</div>
+		<div class='submit-button'><input type="submit" value='Выгрузить'></div>
+	</form>
+	<iframe src="imagepool_output" name='imagepool_output'></iframe>
+</div>
+{% endblock %}

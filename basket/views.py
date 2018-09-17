@@ -21,15 +21,28 @@ class CartCommonMixin(ContextMixin):
 class CartView(TemplateView, CartCommonMixin):
 	template_name = 'basket/cart.html'
 	form = None
+	cart_id = None
 
 	def get(self, request, *args, **kwargs):
 		self.form = Order
+		try:
+			cart_id = request.session['cart_id']
+			cart = Cart.objects.get(id=cart_id)
+			#request.session['total'] = cart.cart_total
+		except:
+			cart = Cart()
+			cart.save()
+			self.cart_id = cart.id
+			request.session['cart_id'] = self.cart_id
 		return super(CartView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
 		context = super(CartView, self).get_context_data(**kwargs)
 		context['form'] = self.form
+		print(self.cart_id)
+		#context['cart'] = Cart.objects.get(id=self.cart_id)
 		context['cart'] = Cart.objects.first()
+		context['cart_id'] = self.cart_id
 		return context
 
 	def post(self, request, *args, **kwargs):
@@ -37,9 +50,6 @@ class CartView(TemplateView, CartCommonMixin):
 			self.form.save()
 		else:
 			return super(CartView, self).post(request, *args, **kwargs)
-
-
-
 
 
 

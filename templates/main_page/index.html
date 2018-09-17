@@ -36,8 +36,13 @@
 					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Menu</a></li>
 
 				</ul>
+				{% block navbar_button %}
 				<ul class='nav navbar-nav navbar-right'>
 					<li><a href="{% url 'cart' %}">Корзина <span class='badge'>{{ cart.cart_total }}</span></a></li>
+				</ul>
+				{% endblock %}
+				<ul class='nav navbar-nav navbar-right'>
+					<li><a href="{% url 'file_lister' %}">imagepool</a></li>
 				</ul>
 			</div>
 			{% if user.is_authenticated %}

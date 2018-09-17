@@ -24,7 +24,9 @@ urlpatterns = [
     url(r'^login/', login,  {'template_name': 'registration/login.html'}, name="login"),
     url(r'^logout/', logout, {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('main_page.urls')),
-    url(r'', include('basket.urls'))
+    url(r'', include('basket.urls')),
+    url(r'', include('imagepool.urls'))
+       
 ]
 
 
