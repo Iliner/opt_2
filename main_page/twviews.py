@@ -14,7 +14,7 @@ from django import forms
 from .models import *
 from .forms import *
 from basket.models import Cart
-from basket.forms import Order
+from basket.forms import CartItemCount
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -65,7 +65,7 @@ class GoodListView(ListView, CategoryListMixin):
 		записей, этот самый список.
 		(То есть инициализирует сам context)
 		"""
-		self.form = Order
+		self.form = CartItemCount
 		if self.kwargs['cat_id']:
 			self.cat = Category.objects.get(pk=kwargs['cat_id'])
 		return super(GoodListView, self).get(request, *args, **kwargs)

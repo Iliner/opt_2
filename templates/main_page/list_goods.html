@@ -12,6 +12,7 @@
 			<th>Цена</th>
 			<th class='row_th_img'>Фото</th>
 			<th>Заказать</th>
+			<th>Добавить</th>
 		</thead>
 		<tbody>
 			{% for good in object_list %}
@@ -27,10 +28,37 @@
 							<th class='row_th_img'><img id='row_img' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
 						<th>
-							<form action='' method='post'>
-								{% csrf_token %}
-								{{ form.as_p }}
-							</form>
+						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+						        {% csrf_token %}
+								{% for field in form.hidden_fields %}
+									{{ field }}
+								{% endfor %}
+								{% for field in form.visible_fields %}
+									{% if field.name == 'honeypot' %}
+										<div class='honeypot'>{{ field }}</div>
+									{% else %}
+										<div class='form_field'>
+											{% if field.errors|length > 0 %}
+												<div class='eror_list'>
+													{% for error in field.errors %}
+														<div class='error_description'>{{ error }}</div>
+													{% endfor %}
+												</div>
+											{% endif %}
+											{% if field.label %}
+												<div class='label'>{{ field.label }}</div>
+											{% endif %}
+											<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% if field.help_text %}
+												<div class='help'>{{ field.help_text }}</div>
+											{% endif %}
+										</div>
+									{% endif %}
+								{% endfor %}
+    						</form>
+						</th>
+						<th>
+						<div><a href="{% url 'add_cart' code=good.code %}">add</a></div>
 						</th>	
 					</tr>	
 			{% endfor %}
@@ -97,3 +125,5 @@
 	{% endif %}
 </div>
 {% endblock %}
+
+

@@ -5,8 +5,12 @@ from django.views.generic.base import TemplateView, ContextMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import Cart, CartItem
-from .forms import Order
+from .forms import CartItemCount
 from main_page.models import Goods, Photo
+
+
+
+
 
 
 
@@ -24,7 +28,7 @@ class CartView(TemplateView, CartCommonMixin):
 	cart_id = None
 
 	def get(self, request, *args, **kwargs):
-		self.form = Order
+		self.form = CartItemCount
 		try:
 			cart_id = request.session['cart_id']
 			cart = Cart.objects.get(id=cart_id)
@@ -38,9 +42,13 @@ class CartView(TemplateView, CartCommonMixin):
 
 	def get_context_data(self, **kwargs):
 		context = super(CartView, self).get_context_data(**kwargs)
+		cart_items = CartItem.objects.all()
+		dict_count = {}
+		for items in cart_items.all():
+			dict_count[items.product.code] = items.count
+		#print(dict_count)
+		context['dict_count'] = dict_count
 		context['form'] = self.form
-		print(self.cart_id)
-		#context['cart'] = Cart.objects.get(id=self.cart_id)
 		context['cart'] = Cart.objects.first()
 		context['cart_id'] = self.cart_id
 		return context
@@ -61,9 +69,17 @@ class DeletePosition(DeleteView):
 	model = CartItem
 	template_name = 'basket/cart.html'
 	pk_url_kwarg = 'pk'
+	print('4')
+
+	def get(self, *args, **kwargs):
+		cart = Cart.objects.first()
+		cart.cart_total = cart.cart_total - CartItem.objects.get(pk=self.kwargs['pk']).product.price 
+		return super(DeletePosition, self).get(*args)
 
 	def get_context_data(self, **kwargs):
 		context = super(DeletePosition, self).get_context_data(**kwargs)
+		cart = Cart.objects.first()
+		cart.cart_total = cart.cart_total - int(CartItem.objects.get(pk=self.kwargs['pk']).product.price) 
 		context['good'] = CartItem.objects.get(pk=self.kwargs['pk'])
 		return context
 
@@ -93,6 +109,11 @@ class DeletePosition(DeleteView):
 
 
 
+def delete_from_cart_view(request, code):
+	pass
+
+
+
 def add_to_card_view(request, code):
 	product = Goods.objects.get(code=code)
 	new_item, _ = CartItem.objects.get_or_create(
@@ -105,4 +126,62 @@ def add_to_card_view(request, code):
 	cart.cart_total += decimal.Decimal(product.price)
 	cart.save()
 	return HttpResponseRedirect('/cart/')
+
+
+
+def add_view(request):
+	"""Контролер для корзины
+
+	Добовляет позицию в корзину
+	"""
+	cart = Cart.objects.first()
+	if request.method == 'POST':
+		product = Goods.objects.get(code=request.POST['code'])
+		if int(request.POST['count']) > 0:
+			if CartItem.objects.filter(product__code=request.POST['code']).exists():
+				# print('exists')
+				need_item = CartItem.objects.get(product__code=request.POST['code'])
+				need_item.count = request.POST['count']
+				need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
+				need_item.save()
+			else:			
+				# print('not exists')
+				# print(request.POST['count'], request.POST['code'], 'here')
+				cart_item = CartItem
+				new_cart_object = cart_item.objects.create(product=product, count=request.POST['count'], item_total=product.price * int(request.POST['count']))
+				cart.items.add(new_cart_object)
+				cart.save()
+		elif int(request.POST['count']) == 0:
+			need_item = CartItem.objects.get(product__code=request.POST['code']).delete()
+				
+
+	cart.cart_total = cart.cart_total_summ()
+	cart.save()
+	return HttpResponse(cart.cart_total)
+
+                                                                                                                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -9,5 +9,5 @@ from  imagepool.views import get_list
 # ]
 
 urlpatterns = [
-	url(r"^imagepool/$",  view.get_list, name='file_lister'),
+	url(r"^imagepool/$",  get_list, name='file_lister'),
 ]
