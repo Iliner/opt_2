@@ -45,7 +45,7 @@ nav.navbar {
 }
 
 
-/*Photo card*/
+
 
 #main_card_good {
 	position:  absolute;
@@ -68,7 +68,7 @@ nav.navbar {
 }
 
 
-/*Navbar*/
+
 
 #navbar_header{
 	z-index: 3;
@@ -92,7 +92,7 @@ nav.navbar {
 
 
 
-/*pushy_master*/
+
 
 #menu_common > a{
     pointer-events: none;
@@ -125,7 +125,6 @@ nav.navbar {
 
 
 
-/*list_files*/
 
 #imagepool_output {
 	display: none;
