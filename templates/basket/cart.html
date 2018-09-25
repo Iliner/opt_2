@@ -9,77 +9,81 @@
 {% endblock %}
 
 {% block content %}
-<div class='main'>
-	<table class='table table-hover'>
-		<thead>
-			<th>Код<br>{{ cart_id }} </th>
-			<th>Производитель</th>
-			<th>Артикул</th>
-			<th>Описание</th>
-			<th>Цена</th>
-			<th class='row_th_img'>Фото</th>
-			<th>Test</th>
-		</thead>
-		<tbody>
-			{% for good in cart.items.all %}
-					<tr>
-						<th>{{good.product.code}}<br>
-							<form action="{% url 'cart_delete_positon' good.pk %}" method='post'>
-								{% csrf_token %}
-								<input type="submit" value='Удалить'>
-							</form></th>
-							<a href="{% url 'delete_from_cart_view' code=good.product.code %}"></a>
-						<th>{{good.product.producer}}
-						</th>
-						<th>{{good.product.articul}}</th>
-						<th>{{good.product.description}}</th>
-						<th>{{good.product.price}}</th>
-						{% if not good.product.photo %}
-							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
-							<script type="text/javascript">console.log('fuck')</script>
-						{% else %}
-							<th class='row_th_img'><img id='row_img' src="{{good.product.photo.photo.url}}"></th>
-						{% endif %}
-						<th>
-						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
-						        {% csrf_token %}
-								{% for field in form.hidden_fields %}
-									{{ field }}
-								{% endfor %}
-								{% for field in form.visible_fields %}
-									{% if field.name == 'honeypot' %}
-										<div class='honeypot'>{{ field }}</div>
-									{% else %}
-										<div class='form_field'>
-											{% if field.errors|length > 0 %}
-												<div class='eror_list'>
-													{% for error in field.errors %}
-														<div class='error_description'>{{ error }}</div>
-													{% endfor %}
-												</div>
-											{% endif %}
-											{% if field.label %}
-												<div class='label'>{{ field.label }}</div>
-											{% endif %}
-											{% for mykey,myvalue in dict_count.items %}
-												{% if mykey == good.product.code %}
-													{% with value_count=myvalue  %}
-													<div class='input_basket' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
-													{% endwith %}
+{% if cart.items.first %} 
+	<div class='main'>
+		<table class='table table-hover'>
+			<thead>
+				<th>Код<br>{{ cart_id }} </th>
+				<th>Производитель</th>
+				<th>Артикул</th>
+				<th>Описание</th>
+				<th>Цена</th>
+				<th class='row_th_img'>Фото</th>
+				<th>Test</th>
+			</thead>
+			<tbody>
+				{% for good in cart.items.all %}
+						<tr>
+							<th>{{good.product.code}}<br>
+								<form action="{% url 'cart_delete_positon' good.pk %}" method='post'>
+									{% csrf_token %}
+									<input type="submit" value='Удалить'>
+								</form></th>
+								<a href="{% url 'delete_from_cart_view' code=good.product.code %}"></a>
+							<th>{{good.product.producer}}
+							</th>
+							<th>{{good.product.articul}}</th>
+							<th>{{good.product.description}}</th>
+							<th>{{good.product.price}}</th>
+							{% if not good.product.photo %}
+								<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
+								<script type="text/javascript">console.log('fuck')</script>
+							{% else %}
+								<th class='row_th_img'><img id='row_img' src="{{good.product.photo.photo.url}}"></th>
+							{% endif %}
+							<th>
+							    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+							        {% csrf_token %}
+									{% for field in form.hidden_fields %}
+										{{ field }}
+									{% endfor %}
+									{% for field in form.visible_fields %}
+										{% if field.name == 'honeypot' %}
+											<div class='honeypot'>{{ field }}</div>
+										{% else %}
+											<div class='form_field'>
+												{% if field.errors|length > 0 %}
+													<div class='eror_list'>
+														{% for error in field.errors %}
+															<div class='error_description'>{{ error }}</div>
+														{% endfor %}
+													</div>
 												{% endif %}
-											{% endfor %}
-											{% if field.help_text %}
-												<div class='help'>{{ field.help_text }}</div>
-											{% endif %}
-										</div>
-									{% endif %}
-								{% endfor %}
-    						</form>
-						</th>
-					</tr>	
-			{% endfor %}
-		</tbody>	
-	</table>
-	
-</div>
+												{% if field.label %}
+													<div class='label'>{{ field.label }}</div>
+												{% endif %}
+												{% for mykey,myvalue in dict_count.items %}
+													{% if mykey == good.product.code %}
+														{% with value_count=myvalue  %}
+														<div class='input_count' id='form_{{good.product.code}}' count='{{ value_count }}'>{{ field }}</div>
+														{% endwith %}
+													{% endif %}
+												{% endfor %}
+												{% if field.help_text %}
+													<div class='help'>{{ field.help_text }}</div>
+												{% endif %}
+											</div>
+										{% endif %}
+									{% endfor %}
+	    						</form>
+							</th>
+						</tr>	
+				{% endfor %}
+			</tbody>	
+		</table>
+		
+	</div>
+{% else %}
+	<div>Корзина пуста</div>
+{% endif %}
 {% endblock %}

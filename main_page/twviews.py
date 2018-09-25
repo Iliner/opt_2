@@ -57,6 +57,7 @@ class GoodListView(ListView, CategoryListMixin):
 	paginate_by = 1
 	cat = None
 	form = None
+	cart = None
 
 	def get(self, request, *args, **kwargs):
 		"""
@@ -68,6 +69,17 @@ class GoodListView(ListView, CategoryListMixin):
 		self.form = CartItemCount
 		if self.kwargs['cat_id']:
 			self.cat = Category.objects.get(pk=kwargs['cat_id'])
+		# request.session['basket_goods'] = {}
+		try:
+			cart_id = request.session['cart_id']
+			self.cart = Cart.objects.get(id=cart_id)
+		except:
+			cart = Cart()
+			cart.save()
+			cart_id = cart.id
+			request.session['cart_id'] = cart_id
+			self.cart = Cart.objects.get(id=cart_id)
+		print(self.cart.id, 'cart_id')
 		return super(GoodListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -77,11 +89,12 @@ class GoodListView(ListView, CategoryListMixin):
 
 		# Формирует сам контекст данных и заполнит его начальными данными, 
 		# в частности значениями полученными контроллером параметров.
+
 		context = super(GoodListView, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
 		context['login_img'] = Photo.objects.get(name='login')
 		context['logout_img'] = Photo.objects.get(name='logout')
-		context['cart'] = Cart.objects.first()
+		context['cart'] = self.cart
 		context['form'] = self.form
 		return context
 
@@ -306,7 +319,7 @@ class AddFiles(SuccessMessageMixin, TemplateView):
 def uploads_photo(request, id=None):
 	form = UploadImg(request.POST or None, request.FILES or None)
 	if form.is_valid():
-		print(request.POST)
+		# print(request.POST)
 		post = form.save(commit=False)
 		post.save()
 		return redirect('index')

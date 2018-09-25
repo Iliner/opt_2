@@ -74,10 +74,13 @@
 		<script type="text/javascript"></script>
 		<script src="{% static '/pushy-master/js/pushy.min.js' %}"></script>
 		<script type="text/javascript">
+			
 			$( document ).ready(function() {
-    			console.log( "ready!" );
     			count_input_basket()
+
 			});
+			
+
 			if($(window).scrollTop() != '0'){
 				console.log('TYee');
 				$("nav.bar").css("box-shadow", "0px 7px 9px 0px #d0d0d0");
@@ -86,19 +89,25 @@
 			}	
 
 
+
+			// КОРЗИНА
 			$(".input_count > input").on('input', count_input)
 		    function count_input(){
+		    	// функция для отправки ajax знечений форм на сервер
 				this.value=this.value.replace(/[^\d\.]+/g,"");
 				var count_v =  $(this).val()
+				if (count_v == ''){
+					count_v = 0
+				}
 				var code_v = $(this).parent().attr("id").split('_')[1]
-				console.log(count_v, code_v)
+				console.log(count_v, code_v, 'count_input')
 
 				$.ajax({
 					type: 'POST',
 					url: 'count/add',
 					data: {
 						code: $(this).parent().attr("id").split('_')[1],
-						count: $(this).val(),
+						count: count_v,
 						csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
 					},
 					success:function(data){
@@ -112,15 +121,14 @@
 
 			}
 
-
+			// КОРЗИНА
 			function count_input_basket(){
-				var input = $(".input_basket > input")
-				var count = $(input).parent().attr("count")
-				var count_input = $(input).val(count)
+				// Функция для заполнения полей в КОРЗИНЕ 
+				var input = $(".input_count > input")
 				$(input).each(function(i,elem) {
-						var count = $(input).parent().attr("count")
-						console.log(count)
-						var count_input = $(input).val(count)
+					var count = $(this).parent().attr("count")
+					var count_input = $(this).val(count)
+
 				});
 			};
 			

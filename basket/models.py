@@ -31,6 +31,7 @@ class CartItem(models.Model):
 class Cart(models.Model):
 	items = models.ManyToManyField(CartItem)
 	cart_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+	paid_for = models.BooleanField(default=False, db_index=True, verbose_name='Оплаченно')
 
 
 	def cart_total_summ(self):
@@ -49,3 +50,4 @@ class Cart(models.Model):
 
 	def __str__(self):
 		return str(self.id)	
+
