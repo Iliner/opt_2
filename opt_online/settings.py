@@ -25,7 +25,7 @@ SECRET_KEY = 'm#@_!u3!!_b-!=+uz!fp7s059eu6v^tp88#w0j0dhqapb4nvg9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'golgot.pythonanywhere.com']
 
 
 # Application definition
