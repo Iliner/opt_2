@@ -219,13 +219,12 @@ def add_view(request):
 		product = Goods.objects.get(code=request.POST['code'])
 		if int(request.POST['count']) > 0:
 			if CartItem.objects.filter(product__code=request.POST['code']).exists():
-				# need_item = CartItem.objects.get(product__code=request.POST['code'])
-				# need_item.count = request.POST['count']
-				# need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
-				cart_item = CartItem
-				new_cart_object = cart_item.objects.create(product=product, count=request.POST['count'], item_total=product.price * int(request.POST['count']))
-				new_cart_object.save()
-				cart.items.add(new_cart_object)
+				need_item = CartItem.objects.get(product__code=request.POST['code'])
+				need_item.count = request.POST['count']
+				need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
+				
+				need_item.save()
+				cart.items.add(need_item)
 				print(cart.id, 'cart id exists')
 				cart.save()
 			else:			

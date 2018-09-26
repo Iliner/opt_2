@@ -10,6 +10,9 @@
 			<th>Артикул</th>
 			<th>Описание</th>
 			<th>Цена</th>
+			{% if user.is_authenticated %}
+				<th>Опт-цена</th>
+			{% endif %}
 			<th class='row_th_img'>Фото</th>
 			<th>Заказать</th>
 			<th>Добавить</th>
@@ -22,6 +25,19 @@
 						<th>{{good.articul}}</th>
 						<th>{{good.description}}</th>
 						<th>{{good.price}}</th>
+						{% if user.is_authenticated %}
+							{% if opt_user == 2 %}
+								<th>{{good.price_2}}</th>
+							{% elif opt_user == 3 %}
+								<th>{{good.price_2}}</th>
+							{% elif opt_user == 5 %}
+								<th>{{good.price_5}}</th>
+							{% elif opt_user == 6 %}
+								<th>{{good.price_6}}</th>
+							{% else %}
+								<th>Админ</th>
+							{% endif %}
+						{% endif %}
 						{% if not good.photo %}
 							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
 						{% else %}

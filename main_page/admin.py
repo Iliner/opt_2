@@ -12,6 +12,7 @@ class AdminGoods(admin.ModelAdmin):
 admin.site.register(Photo)
 admin.site.register(UploadsImage)
 admin.site.register(FileUpload)
+admin.site.register(Producers)
 # admin.site.register(OrderItem)
 # admin.site.register(Order)
 # admin.site.register(Profile)

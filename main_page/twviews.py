@@ -58,7 +58,7 @@ class GoodListView(ListView, CategoryListMixin):
 	cat = None
 	form = None
 	cart = None
-
+	opt_user = None
 	def get(self, request, *args, **kwargs):
 		"""
 		Присваивает gеременной контекста данных
@@ -66,6 +66,13 @@ class GoodListView(ListView, CategoryListMixin):
 		записей, этот самый список.
 		(То есть инициализирует сам context)
 		"""
+
+		if request.user.is_authenticated():
+			try:
+				self.opt_user = request.user.customer_set.first().opt
+			except:
+				pass
+
 		self.form = CartItemCount
 		if self.kwargs['cat_id']:
 			self.cat = Category.objects.get(pk=kwargs['cat_id'])
@@ -96,6 +103,7 @@ class GoodListView(ListView, CategoryListMixin):
 		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
+		context['opt_user'] = self.opt_user
 		return context
 
 	def get_queryset(self): 

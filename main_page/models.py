@@ -3,20 +3,21 @@ from django.db.models.fields import PositiveSmallIntegerField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
-
-
-# Create your models here.
-
+from django.contrib.sessions.models import Session
 
 
 class Goods(models.Model):
 	code = models.CharField(max_length=30, unique=True)
 	articul = models.CharField(max_length=30)
-	producer = models.CharField(max_length=50)
+	producer = models.ForeignKey('Producers')
 	description = models.TextField()
 	category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
 	in_stock = models.CharField(max_length=20, null=True)
-	price = models.FloatField()	
+	price = models.FloatField()
+	price_2 = models.FloatField(null=True, blank=True)
+	price_3 = models.FloatField(null=True, blank=True)	
+	price_5 = models.FloatField(null=True, blank=True)
+	price_6 = models.FloatField(null=True, blank=True)
 	photo = models.ForeignKey('Photo', blank=True, null=True)
 	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
 	
@@ -130,74 +131,16 @@ class FileUpload(models.Model):
 
 
 
+class Producers(models.Model):
+	name = models.CharField(max_length=50)
+	description = models.TextField(null=True, blank=True)
+	photo = models.ForeignKey(Photo, blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = 'Производитель'
+		verbose_name_plural = 'Производители'
 
 
-
-
-
-
-
-
- 
-
-
-# User = get_user_model()
-
-
-# class Profile(models.Model):
-# 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-# 	ebooks = models.ManyToManyField(Goods, blank=True)
-
-# 	def __str__(self):
-# 		return self.user.username
-
-# def post_save_profile_create(sender, instance, created, *args, **kwargs):
-# 	if created:
-# 		Profile.objects.get_or_create(user=instance)
-
-# post_save.connect(post_save_profile_create, sender=settings.AUTH_USER_MODEL)
-
-
-# class OrderItem(models.Model):
-# 	"""
-# 	Модель для добовление товара в корзину
-
-# 	Это модель для добовление одной позиции в 
-# 	общию корзину 
-# 	"""
-# 	good = models.OneToOneField(Goods, on_delete=models.SET_NULL, null=True)
-# 	is_ordered = models.BooleanField(default=False)
-# 	date_added = models.DateTimeField(auto_now=True)
-# 	date_ordered = models.DateTimeField(null=True)
-
-
-# 	def __str__(self):
-# 		return self.good.code
-
-# 	class Meta:
-# 		verbose_name = 'штучный заказ'
-# 		verbose_name_plural = 'штучные заказы'
-
-
-# class Order(models.Model):
-# 	"""
-# 	Модель общий корзины
-
-# 	Модель куда будут входить все товары 
-# 	которые заказали и уже тут рассчитываться 
-# 	финальная стоймость заказа
-# 	"""
-# 	ref_code = models.CharField(max_length=15)
-# 	owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
-# 	is_ordered = models.BooleanField(default=False)
-# 	items = models.ManyToManyField(OrderItem)
-# 	date_ordered =  models.DateTimeField(auto_now=True)
-
-# 	def get_cart_items(self):
-# 		return self.items.all() 
-
-# 	def get_cart_total(self):
-# 		return sum([item.goods.price for item in self.items.all()])
-
-# 	def __str__(self):
-# 		return "{} - {}".format(self.owner, self.ref_code)
