@@ -17,10 +17,10 @@ class CartItem(models.Model):
 	product = models.ForeignKey(Goods)
 	count = models.PositiveIntegerField()
 	item_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-	user = models.ForeignKey('Customer', default=None)
+	customer = models.ForeignKey('Customer', default=None)
 
 	def item_tootal_count(self):
-		return self.count * self.product.price
+		return int(self.count) * int(self.product.price)
 
 	def __unicode__(self):
 		return "Car item for product {}".format(self.product.code)

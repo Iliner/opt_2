@@ -59,6 +59,7 @@ class GoodListView(ListView, CategoryListMixin):
 	form = None
 	cart = None
 	opt_user = None
+	customer = None
 	def get(self, request, *args, **kwargs):
 		"""
 		Присваивает gеременной контекста данных
@@ -69,24 +70,39 @@ class GoodListView(ListView, CategoryListMixin):
 
 		if request.user.is_authenticated():
 			try:
+				self.customer = request.user.customer_set.first()
 				self.opt_user = request.user.customer_set.first().opt
-			except:
-				pass
+			except Exception as err:
+				print(err)
 
-		self.form = CartItemCount
-		if self.kwargs['cat_id']:
-			self.cat = Category.objects.get(pk=kwargs['cat_id'])
-		# request.session['basket_goods'] = {}
-		try:
-			cart_id = request.session['cart_id']
-			self.cart = Cart.objects.get(id=cart_id)
-		except:
+		if self.customer.baskets.all().exists():
+			for basket in self.customer.baskets.all():
+				if not basket.paid_for:
+					self.cart = basket
+					request.session['cart_id'] = basket.id
+		else:
 			cart = Cart()
 			cart.save()
 			cart_id = cart.id
+			self.customer.baskets.add(cart)
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
-		print(self.cart.id, 'cart_id')
+
+	
+		self.form = CartItemCount
+		# if self.kwargs['cat_id']:
+		# 	self.cat = Category.objects.get(pk=kwargs['cat_id'])
+		# # request.session['basket_goods'] = {}
+		# try:
+		# 	cart_id = request.session['cart_id']
+		# 	self.cart = Cart.objects.get(id=cart_id)
+		# except:
+		# 	cart = Cart()
+		# 	cart.save()
+		# 	cart_id = cart.id
+		# 	request.session['cart_id'] = cart_id
+		# 	self.cart = Cart.objects.get(id=cart_id)
+		# print(self.cart.id, 'cart_id')
 		return super(GoodListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):

@@ -7,10 +7,11 @@ from django.core.urlresolvers import reverse_lazy
 from .models import Cart, CartItem
 from .forms import CartItemCount, CartItemFormset
 from main_page.models import Goods, Photo
+from django.views.decorators.csrf import csrf_exempt
 
-
-
-
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
 
 
 
@@ -193,17 +194,47 @@ def add_to_card_view(request, code):
 
 
 def cart_init(request):
-	try:
-		cart_id = request.session['cart_id']
-		cart = Cart.objects.get(id=cart_id)
-	except:
+	user = request.user
+	customer = request.user.customer_set.first()
+	have_cart = customer.baskets.all().filter(paid_for=False).exists()
+	if have_cart:
+		cart = customer.baskets.all().filter(paid_for=False).first()
+		request.session['cart_id'] = cart.id
+	else:
 		cart = Cart()
 		cart.save()
 		cart_id = cart.id
+		customer.baskets.add(cart)
 		request.session['cart_id'] = cart_id
 		cart = Cart.objects.get(id=cart_id)
+	
+	# try:
+	# 	cart_id = request.session['cart_id']
+	# 	cart = Cart.objects.get(id=cart_id)
+	# except:
+	# 	cart = Cart()
+	# 	cart.save()
+	# 	cart_id = cart.id
+	# 	customer.baskets.add(cart)
+	# 	request.session['cart_id'] = cart_id
+	# 	cart = Cart.objects.get(id=cart_id)
 	return cart
 
+
+def opt_price(good, opt):
+	price = None
+	opt = str(opt)
+	if opt == '1':
+		price = good.price
+	elif opt == '2':
+		price = good.price_2
+	elif opt == '3':
+		price = good.price_3
+	elif opt == '5':
+		price = good.price_5
+	elif opt == '6':
+		price = good.price_6
+	return price
 
 
 def add_view(request):
@@ -211,37 +242,88 @@ def add_view(request):
 
 	Добовляет позицию в корзину
 	"""
-	#cart = Cart.objects.first()
 
+	opt_user = request.user.customer_set.first().opt
 	cart = cart_init(request)
-	print(cart.id, 'cart asdadsa')
 	if request.method == 'POST':
 		product = Goods.objects.get(code=request.POST['code'])
 		if int(request.POST['count']) > 0:
-			if CartItem.objects.filter(product__code=request.POST['code']).exists():
-				need_item = CartItem.objects.get(product__code=request.POST['code'])
+			price = opt_price(product, opt_user)
+			if cart.items.all().exists():
+				for item in cart.items.all():
+					if str(item.product.code) == str(request.POST['code']):
+						exists = 1
+						item = item
+						break
+					else:
+						exists = 0
+				if exists:	
+					print("есть")
+					item.count = request.POST['count']
+					item.item_total = int(request.POST['count']) * int(price)
+					item.save()
+				else:
+					print("нет")
+					need_item = CartItem()
+					need_item.product = product
+					need_item.count = request.POST['count']
+					need_item.item_total = int(request.POST['count']) * int(price)
+					need_item.customer = request.user.customer_set.first()  
+					need_item.save()
+					cart.items.add(need_item)
+					print(cart.id, 'cart id exists')
+			else:	
+				need_item = CartItem()
+				need_item.product = product
 				need_item.count = request.POST['count']
-				need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
-				
+				need_item.item_total = int(request.POST['count']) * int(price)
+				need_item.customer = request.user.customer_set.first()  
 				need_item.save()
 				cart.items.add(need_item)
 				print(cart.id, 'cart id exists')
 				cart.save()
-			else:			
-				# print('not exists')
-				# print(request.POST['count'], request.POST['code'], 'here')
-				print(cart.id, 'cart id exists no')
-				cart_item = CartItem
-				new_cart_object = cart_item.objects.create(product=product, count=request.POST['count'], item_total=product.price * int(request.POST['count']))
-				cart.items.add(new_cart_object)
-				cart.save()
+
 		elif int(request.POST['count']) == 0:
-			need_item = CartItem.objects.get(product__code=request.POST['code']).delete()
-				
+			price = opt_price(product, opt_user)
+			if cart.items.all().filter(product__code=request.POST['code']).exists():
+				cart.items.all().filter(product__code=request.POST['code']).delete()
+				cart.save()
+
 
 	cart.cart_total = cart.cart_total_summ()
 	cart.save()
 	return HttpResponse(cart.cart_total)
+
+
+
+	# if request.method == 'POST':
+	# 	product = Goods.objects.get(code=request.POST['code'])
+	# 	if int(request.POST['count']) > 0:
+	# 		if CartItem.objects.filter(product__code=request.POST['code']).exists():
+	# 			need_item = CartItem.objects.get(product__code=request.POST['code'])
+	# 			need_item.count = request.POST['count']
+	# 			need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
+				
+	# 			need_item.save()
+	# 			cart.items.add(need_item)
+	# 			print(cart.id, 'cart id exists')
+	# 			cart.save()
+	# 		else:			
+	# 			# print('not exists')
+	# 			# print(request.POST['count'], request.POST['code'], 'here')
+	# 			print(cart.id, 'cart id exists no')
+	# 			cart_item = CartItem
+	# 			new_cart_object = cart_item.objects.create(product=product, count=request.POST['count'], item_total=product.price * int(request.POST['count']))
+	# 			cart.items.add(new_cart_object)
+	# 			cart.save()
+	# 	elif int(request.POST['count']) == 0:
+	# 		need_item = CartItem.objects.get(product__code=request.POST['code']).delete()
+				
+
+	# cart.cart_total = cart.cart_total_summ()
+	# cart.save()
+	# return HttpResponse(cart.cart_total)
+	#return HttpResponse(2)
 
                                                                                                                             
 
@@ -253,10 +335,48 @@ def add_view(request):
 
 
 
+def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text):
+	msg = MIMEText(message_text, 'plain', 'utf-8')
+	msg['Subject'] = Header("Наличие ООО \"Прайм Тулс\"", 'utf-8')
+	msg['From'] = smtp_login
+	msg["To"] = send_to
+	smtpObj = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10)
+	smtpObj.login(smtp_login, smtp_password)
+	smtpObj.sendmail(smtp_login, send_to, msg.as_string())
+	smtpObj.quit()
+
+
+	smtp_host = "smtp.mail.ru"
+	smtp_port = "465"
+	smtp_login = "stock@kvam.ru"
+	smtp_password = "AT3TeC&5lshf"
+	send_to = "opt@th-tool.by"
+
+	message_text = """Добрый день! Прошу отправить актуальные остатки на этот почтовый адрес. 
+
+	Просьба не изменять нумерацию столбиков уникальных кодов и наличия в файле Exel, 
+	и отправлять только свежий файл с обновленным наличием. 
+	Это связано с корректной работой нашей автоматизированной системы. 
+	Спасибо! 
+
+	С уважением, Компания ООО "Прайм Тулс"
+	"""
+	smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text)
 
 
 
 
+
+
+
+@csrf_exempt
+def confirm_order(request):
+	cart = cart_init(request)
+	cart.paid_for = True
+	cart.save()
+	paid_for = 'True'
+	reverse_lazy('index')
+	return HttpResponse(paid_for)
 
 
 

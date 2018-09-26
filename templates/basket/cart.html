@@ -2,10 +2,12 @@
 {% block title %}Корзина{% endblock %}
 
 
+
 {% block navbar_button %}
-	<ul class='nav navbar-nav navbar-right'>
-		<li><a href="{% url 'cart' %}">Корзина <span class='badge'>{{ cart.cart_total }}</span></a></li>
-	</ul>
+<form class="form-inline">
+	{% csrf_token %}
+    <button class="btn btn-outline-success" type="button" id='confirm_order'>Подтвердить заказ</button>
+</form>
 {% endblock %}
 
 {% block content %}
