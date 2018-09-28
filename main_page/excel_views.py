@@ -159,7 +159,7 @@ def working_excel(request):
 					new_good.price_2 = prosition[object_excel.name_column['opt_2']]
 					new_good.price_3 = prosition[object_excel.name_column['opt_3']]
 					new_good.price_5 = prosition[object_excel.name_column['opt_5']]
-					new_good.price_6 = prosition[object_excel.name_column['opt_10']]
+					new_good.price_6 = prosition[object_excel.name_column['opt_6']]
 					new_good.save()
 					new_position = NewGoods()
 					new_position.position = new_good
@@ -174,15 +174,15 @@ def working_excel(request):
 	except Exception as err:
 		print('my print' ,err)
 		
-		smtp_host = "smtp.mail.ru"
-		smtp_port = "465"
-		smtp_login = "stock@kvam.ru"
-		smtp_password = "AT3TeC&5lshf"
-		send_to = "ivan_1995i@mail.ru"
+		# smtp_host = "smtp.mail.ru"
+		# smtp_port = "465"
+		# smtp_login = "stock@kvam.ru"
+		# smtp_password = "AT3TeC&5lshf"
+		# send_to = "ivan_1995i@mail.ru"
 
-		message_text = str(err)
+		# message_text = str(err)
 
-		smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text)
+		# smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text)
 
 
 
