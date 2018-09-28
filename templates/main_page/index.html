@@ -60,7 +60,7 @@
 		                </ul>
 		            </li>
 		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
-		  			<li class="pushy-link"><a href="#" id='action_actions'>Акции</a></li>
+		  			<li class="pushy-link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
 					<li class='pushy-link' id='loadPrice'><a class='nav-link' href='#'>Скачать прайс</a></li>
 					{% if perms.admin.add_good %}
 						<li class='pushy-link' id='admin_bottom'><a href='/admin'>Админ</a></li>
@@ -68,6 +68,7 @@
 					{% if perms.admin.add_good %}
 						<li class='pushy-link' id='working_excel'><a href=''>Запуск</a></li>
 					{% endif %}
+					<li class="pushy-link"><a href="{% url 'test' %}" id='action_actions'>Test</a></li>
 		        </ul>
 		    </div>
 		</nav>
@@ -132,13 +133,58 @@
 
 
 
+    			// $('.banner_stock_img').on('click', showFullimg_2);
 
+				$('.banner_stock_img').on('click', showFullimg_2);
+				function showFullimg_2(){
+				/*
+				
+				ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ БОЛЬШОГО ИЗОБРАЖЕНИЕ В БЛОКЕ АЦИИ
+				С ДЕТАЛЬНЫМ ОПИСАНИЕМ ИЗ СТРОКИ
 
+				*/
 
+					var height_window = window.innerHeight;
+					var get_id_from_img = $(this).attr('id');
+					var get_src_from_img = $(this).attr('src');
 
+					$('#open_big_img_banner').css('display', 'flex');
+					$('#blur_for_banner').css('display', 'flex');
+					if(height_window < 780){	
+						$('.big_img_banner').css({'max-height': 'none', 'max-width': 'none'});
+					}else{
+						$(".big_img_banner").css({'max-height': 'none', 'max-width': 'none'});
+					}
+					$('.big_img_banner').attr('src', get_src_from_img);
+					$(".big_img_banner").load(function() {
+				    	var height_one = $(this).height();
+				    	var width_one = $(this).width();
+				    	console.log(height_one)
+				    	if(height_one < 800){
+				    		$('#open_big_img_banner').css('position', 'fixed');
+				    	}
+					});
 
+					$('#wrapper_for_open_big_img_banner').css('display', 'flex');
+				}
 
-
+				$('.banner_stock_img').on('click', showFullimg_2);
+				$('.big_img_banner').click(function(e){
+					$('#open_big_img_banner').css('display', 'none');
+					$('#blur_for_banner').css('display', 'none');
+					$('#wrapper_for_open_big_img_banner').css('display', 'none');
+					$('#open_big_img_banner').css('position', 'absolute');
+				})
+				$(document).mouseup(function (e) {
+				    var container = $("#open_big_img_banner");
+				    var container_wrapper = $('#wrapper_for_open_big_img_banner');
+				    $('#open_big_img_banner').css('position', 'absolute');
+				    $('#blur_for_banner').css('display', 'none');
+				    if (container.has(e.target).length === 0){
+				        container.hide();
+				        container_wrapper.hide();
+				    }
+				});
 
 
 

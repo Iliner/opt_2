@@ -411,7 +411,7 @@ class GoodListViewNew(ListView, CategoryListMixin):
 		return context
 
 	def get_queryset(self): 
-		return NewGoods.objects.all()
+		return NewGoods.objects.all().order_by('-date')
 
 
 	def post(self, request, *args, **kwargs):
@@ -419,6 +419,137 @@ class GoodListViewNew(ListView, CategoryListMixin):
 			self.form.save()
 		else:
 			return super(GoodListViewNew, self).post(request, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class BannerView(ListView, CategoryListMixin):
+	template_name = 'main_page/banner.html'
+	paginate_by = 100
+
+	def get_queryset(self): 
+
+		return BannerStock.objects.all().order_by('-date')
+
+
+
+
+
+class Test(ListView, CategoryListMixin):
+	"""
+	Класс удобный для вывода СПИСКА чего либа 
+	"""
+
+	template_name = 'main_page/test.html'
+	paginate_by = 100
+	cat = None
+	form = None
+	cart = None
+	opt_user = None
+	customer = None
+	def get(self, request, *args, **kwargs):
+		"""
+		Присваивает gеременной контекста данных
+		в которой должен храниться список
+		записей, этот самый список.
+		(То есть инициализирует сам context)
+		"""
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+
+		if self.customer.baskets.all().exists():
+			for basket in self.customer.baskets.all():
+				if not basket.paid_for:
+					self.cart = basket
+					request.session['cart_id'] = basket.id
+		else:
+			cart = Cart()
+			cart.save()
+			cart_id = cart.id
+			self.customer.baskets.add(cart)
+			request.session['cart_id'] = cart_id
+			self.cart = Cart.objects.get(id=cart_id)
+
+	
+		self.form = CartItemCount
+		# if self.kwargs['cat_id']:
+		# 	self.cat = Category.objects.get(pk=kwargs['cat_id'])
+		# # request.session['basket_goods'] = {}
+		# try:
+		# 	cart_id = request.session['cart_id']
+		# 	self.cart = Cart.objects.get(id=cart_id)
+		# except:
+		# 	cart = Cart()
+		# 	cart.save()
+		# 	cart_id = cart.id
+		# 	request.session['cart_id'] = cart_id
+		# 	self.cart = Cart.objects.get(id=cart_id)
+		# print(self.cart.id, 'cart_id')
+		return super(Test, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		"""
+		Создает контекст данных
+		"""
+
+		# Формирует сам контекст данных и заполнит его начальными данными, 
+		# в частности значениями полученными контроллером параметров.
+
+		context = super(Test, self).get_context_data(**kwargs) 
+		context['categorymy'] = self.cat
+		context['login_img'] = Photo.objects.get(name='login')
+		context['logout_img'] = Photo.objects.get(name='logout')
+		context['cart'] = self.cart
+		context['form'] = self.form
+		context['opt_user'] = self.opt_user
+		return context
+
+	def get_queryset(self): 
+		"""
+		Этот метод вызврощает спичсок 
+		записей которые будут выводиться 
+		на экран 
+		""" 
+
+		if self.cat:
+			return Goods.objects.filter(category=self.cat).order_by('code')
+		else:
+			return Goods.objects.all().order_by('code')
+
+
+	def post(self, request, *args, **kwargs):
+		if self.form.is_valid():
+			self.form.save()
+		else:
+			return super(Test, self).post(request, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -170,3 +170,18 @@ class NewGoods(models.Model):
 	class Meta:
 		verbose_name = 'Новинка'
 		verbose_name_plural = 'Новинки'	
+
+
+class BannerStock(models.Model):
+	name = models.CharField(max_length=50, blank=True, null=True)
+	date =  models.DateTimeField(auto_now=True, editable=True,)
+	img =  models.ImageField(upload_to = "banner/")
+
+
+	def __str__(self):
+		return self.name
+
+
+	class Meta:
+		verbose_name = 'Баннер_акций'
+		verbose_name_plural = 'Баннеры_акций'	
