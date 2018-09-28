@@ -144,3 +144,29 @@ class Producers(models.Model):
 		verbose_name_plural = 'Производители'
 
 
+
+class ExcelImport(models.Model):
+	name = models.CharField(max_length=50)
+	file =  models.FileField(upload_to = "excel/")
+	date = models.DateTimeField(auto_now=True)
+	check = models.BooleanField(default=False, db_index=True, verbose_name='Проверрено')
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = 'Загрузить_эксел'
+		verbose_name_plural = 'Загрузить_эксели'
+
+
+class NewGoods(models.Model):
+	position = models.ForeignKey(Goods, null=True, blank=True,)
+	date = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.position.code
+
+
+	class Meta:
+		verbose_name = 'Новинка'
+		verbose_name_plural = 'Новинки'	

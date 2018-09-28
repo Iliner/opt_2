@@ -56,18 +56,17 @@
 		                <button id="first-link">Новые поступления</button>
 		                <ul>
 		                    <li class="pushy-link"><a href="#"  id='update_admission'>Обновленныe позиции</a></li>
-		                    <li class="pushy-link"><a href="#" id='news_admission'>Новинки</a></li>
+		                    <li class="pushy-link"><a href="{% url 'new_position' %}" id='news_admission'>Новинки</a></li>
 		                </ul>
 		            </li>
-		            <li class="pushy-link"><a href="{% url 'good_add'  cat_id=1 %}">Add</a></li>
-		            <li class="pushy-link"><a href="{% url 'add_file' %}">Add_file</a></li>
-		            <li class="pushy-link"><a href="{% url 'add_file' %}">Add_file</a></li>
-		            <li class="pushy-link"><a href="{% url 'add_img' %}">Add_img</a></li>
 		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
 		  			<li class="pushy-link"><a href="#" id='action_actions'>Акции</a></li>
 					<li class='pushy-link' id='loadPrice'><a class='nav-link' href='#'>Скачать прайс</a></li>
 					{% if perms.admin.add_good %}
 						<li class='pushy-link' id='admin_bottom'><a href='/admin'>Админ</a></li>
+					{% endif %}
+					{% if perms.admin.add_good %}
+						<li class='pushy-link' id='working_excel'><a href=''>Запуск</a></li>
 					{% endif %}
 		        </ul>
 		    </div>
@@ -113,6 +112,37 @@
 
 
     			})
+
+
+    			$('#working_excel').click(function(){
+
+    				$.ajax({
+    					type: 'POST',
+    					url: 'working_excel',
+    					data: {
+    						code: 'lala',
+    					},
+    					success:function(data){
+    						console.log(data)
+    					}
+
+    				})
+    			})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			});
 			

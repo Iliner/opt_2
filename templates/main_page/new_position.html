@@ -19,28 +19,28 @@
 		<tbody>
 			{% for good in object_list %}
 					<tr>
-						<th><a href="{% url 'good_page' code=good.code %}?page={{page_obj.number}}">{{good.code}}</a></th>
-						<th>{{good.producer}}</th>
-						<th>{{good.articul}}</th>
-						<th>{{good.description}}</th>
-						<th>{{good.price}}</th>
+						<th><a href="{% url 'good_page' code=good.position.code %}?page={{page_obj.number}}">{{good.position.code}}</a></th>
+						<th>{{good.position.producer}}</th>
+						<th>{{good.position.articul}}</th>
+						<th>{{good.position.description}}</th>
+						<th>{{good.position.price}}</th>
 						{% if user.is_authenticated %}
 							{% if opt_user == 2 %}
-								<th>{{good.price_2}}</th>
+								<th>{{good.position.price_2}}</th>
 							{% elif opt_user == 3 %}
-								<th>{{good.price_2}}</th>
+								<th>{{good.position.price_2}}</th>
 							{% elif opt_user == 5 %}
-								<th>{{good.price_5}}</th>
+								<th>{{good.position.price_5}}</th>
 							{% elif opt_user == 6 %}
-								<th>{{good.price_6}}</th>
+								<th>{{good.position.price_6}}</th>
 							{% else %}
 								<th>Админ</th>
 							{% endif %}
 						{% endif %}
-						{% if not good.photo %}
+						{% if not good.position.photo %}
 							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
 						{% else %}
-							<th class='row_th_img'><img id='row_img' src="{{good.photo.photo.url}}"></th>
+							<th class='row_th_img'><img id='row_img' src="{{good.position.photo.photo.url}}"></th>
 						{% endif %}
 						<th>
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
@@ -63,7 +63,7 @@
 											{% if field.label %}
 												<div class='label'>{{ field.label }}</div>
 											{% endif %}
-											<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											<div class='control input_count' id='form_{{good.position.code}}'>{{ field }}</div>
 											{% if field.help_text %}
 												<div class='help'>{{ field.help_text }}</div>
 											{% endif %}

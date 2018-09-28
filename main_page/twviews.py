@@ -17,6 +17,7 @@ from basket.models import Cart
 from basket.forms import CartItemCount
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -54,7 +55,7 @@ class GoodListView(ListView, CategoryListMixin):
 	"""
 
 	template_name = 'main_page/list_goods.html'
-	paginate_by = 1
+	paginate_by = 100
 	cat = None
 	form = None
 	cart = None
@@ -350,6 +351,84 @@ def uploads_photo(request, id=None):
 	else:
 		form = UploadImg()
 	return render(request, 'main_page/add_files.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
+
+class GoodListViewNew(ListView, CategoryListMixin):
+	"""
+	Класс удобный для вывода СПИСКА чего либа 
+	"""
+
+	template_name = 'main_page/new_position.html'
+	paginate_by = 100
+	cat = None
+	form = None
+	cart = None
+	opt_user = None
+	customer = None
+
+	def get(self, request, *args, **kwargs):
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+
+		if self.customer.baskets.all().exists():
+			for basket in self.customer.baskets.all():
+				if not basket.paid_for:
+					self.cart = basket
+					request.session['cart_id'] = basket.id
+		else:
+			cart = Cart()
+			cart.save()
+			cart_id = cart.id
+			self.customer.baskets.add(cart)
+			request.session['cart_id'] = cart_id
+			self.cart = Cart.objects.get(id=cart_id)
+	
+		self.form = CartItemCount
+		return super(GoodListViewNew, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(GoodListViewNew, self).get_context_data(**kwargs) 
+		context['categorymy'] = self.cat
+		context['login_img'] = Photo.objects.get(name='login')
+		context['logout_img'] = Photo.objects.get(name='logout')
+		context['cart'] = self.cart
+		context['form'] = self.form
+		context['opt_user'] = self.opt_user
+		return context
+
+	def get_queryset(self): 
+		return NewGoods.objects.all()
+
+
+	def post(self, request, *args, **kwargs):
+		if self.form.is_valid():
+			self.form.save()
+		else:
+			return super(GoodListViewNew, self).post(request, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
 
 
 
