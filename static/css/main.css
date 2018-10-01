@@ -38,6 +38,8 @@ nav.navbar {
 #row_img{
     max-height: 100px;
     max-width: 100px;
+    min-height: 100px;
+    min-width: 100px;
 }
 
 .row_th_img {
@@ -273,4 +275,21 @@ nav.navbar {
     padding-bottom: 0px;
     min-width: 455px;
     max-width: 1600px;
+}
+
+
+
+.basket_history_date {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 21px;
+}
+
+.basket_history_table {
+    margin: 0px 0px 30px 0px;
+    background: rgb(210, 210, 210);
+}
+
+.basket_history_table_row {
+    background-color: rgb(234, 234, 234);
 }

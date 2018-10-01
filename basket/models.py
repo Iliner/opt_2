@@ -2,15 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from main_page.models import Goods
-# Create your models here.
+from decimal import Decimal
 
-# User = get_user_model()
-# class Profile(models.Model):
-# 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-# 	ebooks = models.ManyToManyField(Goods, blank=True)
-
-# 	def __str__(self):
-# 		return self.user.username	
 
 
 class CartItem(models.Model):
@@ -18,6 +11,10 @@ class CartItem(models.Model):
 	count = models.PositiveIntegerField()
 	item_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
 	customer = models.ForeignKey('Customer', default=None)
+	price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+
+	def price(self):
+		return self.product.price
 
 	def item_tootal_count(self):
 		return int(self.count) * int(self.product.price)
@@ -36,9 +33,11 @@ class Cart(models.Model):
 	date = models.DateTimeField(auto_now=True)
 
 	def cart_total_summ(self):
-		summ = 0
+		summ = Decimal()
 		for item in self.items.all():
+			print(item.item_total)
 			summ += item.item_total
+		print(summ)
 		return summ
 
 
@@ -61,7 +60,7 @@ OPTS = (
 	(1, 1),
 	(2, 2),
 	(3, 3),
-	(5, 6),
+	(5, 5),
 	(6, 6),
 	)
 

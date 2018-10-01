@@ -1,0 +1,101 @@
+{% extends "main_page/index.html" %}
+
+
+{% block content %}
+{% for cart in object_list %}
+{% if cart.items.exists %}
+<div class='basket_history_date'>{{cart.date}} Сумма корзины: {{cart.cart_total}}</div>
+<table class='table table-hover basket_history_table'>
+	<thead>
+		<th>Код</th>
+		<th>Производитель</th>
+		<th>Артикул</th>
+		<th>Описание</th>
+		<th class='row_th_img'>Фото</th>
+		<th>Цена</th>
+		<th>Кол-во</th>
+		<th>Итог</th>
+	</thead>
+	<tbody>
+		{% for good in cart.items.all %}
+			<tr class='basket_history_table_row'>
+				<th><a href="{% url 'good_page' code=good.product.code %}?page={{page_obj.number}}">{{good.product.code}}</a></th>
+				<th>{{good.product.producer}}</th>
+				<th>{{good.product.articul}}</th>
+				<th>{{good.product.description}}</th>
+				{% if not good.product.photo %}
+					<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
+				{% else %}
+					<th class='row_th_img'><img id='row_img' src="{{good.product.photo.photo.url}}"></th>
+				{% endif %}
+				<th>{{good.price}}</th>
+				<th>{{good.count}}</th>
+				<th>{{good.item_total}}</th>	
+			</tr>		
+		{% endfor %}
+	</tbody>	
+</table>
+{% endif %}
+{% endfor %}
+{% if page_obj.paginator.num_pages > 1 %}
+	<div id='pagination'>
+		{% if category %}
+			{% if page_obj.has_previous %}
+				<div id='previous-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.previous_page_number }}">&lt;</a></div>
+			{% endif %}
+			<div id='num-pages'>
+				{% for pn in page_obj.paginator.page_range %}
+					{% if not forllop.first %}
+						&nbsp;&nbsp;|&nbsp;&nbsp;
+					{% endif %}
+					{% if category %}
+						{% if page_obj.number != pn %}
+							<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
+						{% endif %}
+					{% else %}
+						{% if page_obj.number != pn %}
+							<a href="{% url 'index' %}?page={{ pn }}">
+						{% endif %}
+					{% endif %}
+					{{ pn }}
+					{% if page_obj.number != pn %}
+						</a>
+					{% endif %}
+				{% endfor %}
+			</div>	
+			{% if page_obj.has_next %}
+				<div id='next-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.next_page_number }}">&gt;</a></div>
+			{% endif %}
+		{% else %}
+			{% if page_obj.has_previous%}
+				<div id='previous-page'><a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">&lt;</a></div>
+			{% endif %}
+			<div id='num-pages'>
+				{% for pn in page_obj.paginator.page_range %}
+					{% if not forllop.first %}
+						&nbsp;&nbsp;|&nbsp;&nbsp;
+					{% endif %}
+					{% if category %}
+						{% if page_obj.number != pn %}
+							<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
+						{% endif %}
+					{% else %}
+						{% if page_obj.number != pn %}
+							<a href="{% url 'index' %}?page={{ pn }}">
+						{% endif %}
+					{% endif %}
+					{{ pn }}
+					{% if page_obj.number != pn %}
+						</a>
+					{% endif %}
+				{% endfor %}
+			</div>	
+			{% if page_obj.has_next%}
+				<div id='next-page'><a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">&gt;</a></div>
+			{% endif %}
+		{% endif %}
+	</div>
+{% endif %}
+{% endblock %}
+
+

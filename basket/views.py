@@ -2,6 +2,7 @@ import decimal
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import TemplateView, ContextMixin
+from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import Cart, CartItem
@@ -28,10 +29,12 @@ class CartView(TemplateView, CartCommonMixin):
 	form = None
 	cart_id = None
 	cart = None
+	opt_user = None
 
 	def get(self, request, *args, **kwargs):
 		self.form = CartItemCount
 		self.cart = cart_init(request)
+		self.opt_user = request.user.customer_set.first().opt
 		return super(CartView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -44,6 +47,7 @@ class CartView(TemplateView, CartCommonMixin):
 		context['dict_count'] = dict_count
 		context['form'] = self.form
 		context['cart'] = self.cart
+		context['opt_user'] = self.opt_user
 		# context['cart_id'] = self.cart_id
 		return context
 
@@ -260,14 +264,16 @@ def add_view(request):
 				if exists:	
 					print("есть")
 					item.count = request.POST['count']
-					item.item_total = int(request.POST['count']) * int(price)
+					item.item_total = decimal.Decimal(request.POST['count']) * decimal.Decimal(price)
 					item.save()
 				else:
 					print("нет")
 					need_item = CartItem()
 					need_item.product = product
 					need_item.count = request.POST['count']
-					need_item.item_total = int(request.POST['count']) * int(price)
+					need_item.item_total = decimal.Decimal(request.POST['count']) * decimal.Decimal(price)
+					need_item.price = price
+					print('need_item.price', need_item.price)
 					need_item.customer = request.user.customer_set.first()  
 					need_item.save()
 					cart.items.add(need_item)
@@ -276,7 +282,9 @@ def add_view(request):
 				need_item = CartItem()
 				need_item.product = product
 				need_item.count = request.POST['count']
-				need_item.item_total = int(request.POST['count']) * int(price)
+				need_item.item_total = decimal.Decimal(request.POST['count']) * decimal.Decimal(price)
+				need_item.price = price
+				print('need_item.price ', need_item.price)
 				need_item.customer = request.user.customer_set.first()  
 				need_item.save()
 				cart.items.add(need_item)
@@ -335,35 +343,15 @@ def add_view(request):
 
 
 
-def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text):
+def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text, header_text):
 	msg = MIMEText(message_text, 'plain', 'utf-8')
-	msg['Subject'] = Header("Наличие ООО \"Прайм Тулс\"", 'utf-8')
+	msg['Subject'] = Header(header_text, 'utf-8')
 	msg['From'] = smtp_login
 	msg["To"] = send_to
 	smtpObj = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10)
 	smtpObj.login(smtp_login, smtp_password)
 	smtpObj.sendmail(smtp_login, send_to, msg.as_string())
 	smtpObj.quit()
-
-
-	smtp_host = "smtp.mail.ru"
-	smtp_port = "465"
-	smtp_login = "stock@kvam.ru"
-	smtp_password = "AT3TeC&5lshf"
-	send_to = "opt@th-tool.by"
-
-	message_text = """Добрый день! Прошу отправить актуальные остатки на этот почтовый адрес. 
-
-	Просьба не изменять нумерацию столбиков уникальных кодов и наличия в файле Exel, 
-	и отправлять только свежий файл с обновленным наличием. 
-	Это связано с корректной работой нашей автоматизированной системы. 
-	Спасибо! 
-
-	С уважением, Компания ООО "Прайм Тулс"
-	"""
-	smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text)
-
-
 
 
 
@@ -373,8 +361,40 @@ def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_
 def confirm_order(request):
 	cart = cart_init(request)
 	cart.paid_for = True
+	cart_id = cart.id
 	cart.save()
 	paid_for = 'True'
+
+	user = request.user
+	user_email = user.email
+	user_customer = user.customer_set.first()
+
+	smtp_host = "smtp.mail.ru"
+	smtp_port = "465"
+	smtp_login = "stock@kvam.ru"
+	smtp_password = "AT3TeC&5lshf"
+	body_text = ""
+
+	
+
+
+	for item in cart.items.all():
+		body_text = "{}\n Артикул: {} Цена: {}".format(body_text, item.product.articul, item.product.price)
+
+	header_text_to_customer = "opt-online.ru Ваш заказ №{}".format(cart_id)
+	header_text_to_admin = "Заказчик {} {} Стоймость {}".format(user.first_name, user.last_name, cart.cart_total)
+	
+	send_to = str(user_email)
+	send_to_admin = 'mynamekasatkin@gmail.com'
+	
+	
+	message_text = body_text
+	try:
+		smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text, header_text_to_customer)
+		smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to_admin, message_text, header_text_to_admin)
+	except:
+		print('err')
+
 	reverse_lazy('index')
 	return HttpResponse(paid_for)
 
@@ -387,5 +407,26 @@ def confirm_order(request):
 
 
 
+
+
+class HistoryOrderView(ListView, CartCommonMixin):
+	template_name = 'basket/history_order.html'
+	paginate_by = 100
+	customer = None
+
+	def get(self, request, *args, **kwargs):
+		self.customer = request.user.customer_set.first()
+		for cart in self.customer.baskets.all().filter(paid_for=True).order_by('-date'):
+			for item in cart.items.all():
+				print(item.product.code)
+		return super(HistoryOrderView, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(HistoryOrderView, self).get_context_data(**kwargs) 
+		return context
+
+	def get_queryset(self): 
+		carts_order = self.customer.baskets.all().filter(paid_for=True).order_by('-date')
+		return carts_order
 
 

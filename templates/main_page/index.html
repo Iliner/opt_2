@@ -68,6 +68,9 @@
 					{% if perms.admin.add_good %}
 						<li class='pushy-link' id='working_excel'><a href=''>Запуск</a></li>
 					{% endif %}
+					{% if user.is_authenticated %}
+						<li class="pushy-link"><a href="{% url 'history_order' %}" id='action_actions'>История заказов</a></li>
+					{% endif %}
 					<li class="pushy-link"><a href="{% url 'test' %}" id='action_actions'>Test</a></li>
 		        </ul>
 		    </div>
