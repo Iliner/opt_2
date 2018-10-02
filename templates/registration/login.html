@@ -2,10 +2,16 @@
 {% block title %}Вход{% endblock %}
 
 {% block login_logout %}
-	<h2>Вход</h2>
-	<form action='' method='post'>
-		{% include "generic/form.html" %}
-		<div class='submit_button'><input type="submit" value='Войти'></div>
-		<input type="" name="next" value='{{ next }}'>
+	<div id='div_form'>
+		<h2>Вход</h2>
+		<form action='' method='post' class='form_common'>
+			{% include "generic/form.html" %}
+			<div class='submit_button'><input type="submit" value='Войти'></div>
+		</form>
+	</div>
+	<form action="/your-name/" method="post">
+	    <label for="your_name">Your name: </label>
+	    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
+	    <input type="submit" value="OK">
 	</form>
 {% endblock %}

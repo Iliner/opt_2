@@ -18,7 +18,10 @@ urlpatterns = [
 	url(r'^add_file/$', login_required(AddFiles.as_view()), name='add_file'),
 	url(r'^banners/$', BannerView.as_view(), name='banners_view'),
 	url(r'^add_img/$', uploads_photo, name='add_img'),
+	#working_excel для запуска обработки прайса
 	url(r'working_excel', working_excel, name='working_excel'),
+	url(r'^excel_download/$', ExcelDownload.as_view(), name='download_excel'),
+
 
     # url(r'^add-to-cart/(?P<item_id>[-\w]+)/$', add_to_cart, name="add_to_cart"),
     # url(r'^order-summary/$', order_details, name="order_summary"),

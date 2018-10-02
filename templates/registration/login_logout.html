@@ -1,14 +1,15 @@
-{% extends "main_page/index.html" %}
 {% load staticfiles %}
-
-{% block additional_css %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block titile %}{% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/login_logout.css' %}">
-{% endblock %}
-
-
-{% block content %}
+</head>
+<body>
 	<div id='login_logout'>
 		{% block login_logout %}
 		{% endblock %}
 	</div>
-{% endblock %}
+</body>
+</html>
+

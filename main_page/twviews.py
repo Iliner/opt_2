@@ -75,6 +75,8 @@ class GoodListView(ListView, CategoryListMixin):
 				self.opt_user = request.user.customer_set.first().opt
 			except Exception as err:
 				print(err)
+		else:
+			return redirect('login')
 
 		if self.customer.baskets.all().exists():
 			for basket in self.customer.baskets.all():
@@ -540,29 +542,6 @@ class Test(ListView, CategoryListMixin):
 			self.form.save()
 		else:
 			return super(Test, self).post(request, *args, **kwargs)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

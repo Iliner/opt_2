@@ -1,4 +1,6 @@
 import os
+import random
+import csv
 
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, InvalidPage
@@ -9,6 +11,7 @@ from basket.forms import CartItemCount
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from main_page.twviews import *
+from django.views.generic.base import View
 
 import xlrd 
 import xlwt
@@ -18,6 +21,16 @@ import openpyxl
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
+
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+
+
+
+
 
 
 
@@ -223,3 +236,88 @@ def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_
 # 		new_good.code = code
 # 		new_good.articul = 
 # 	else:
+
+
+
+
+
+def opt_price(good, opt):
+	price = None
+	opt = str(opt)
+	if opt == '1':
+		price = good.price
+	elif opt == '2':
+		price = good.price_2
+	elif opt == '3':
+		price = good.price_3
+	elif opt == '5':
+		price = good.price_5
+	elif opt == '6':
+		price = good.price_6
+	return price
+
+
+
+
+def create_excel(opt_user):
+	goods = Goods.objects.all()
+	array_goods = []
+	excel_header = [
+		"Код", 
+		"Артикул", 
+		"Производитель", 
+		"Описание",
+		"Наличие",
+		"Цена",
+		"Оптовая-цена"
+		]
+	array_goods.append(excel_header)
+	for good in goods:
+		price_opt = opt_price(good, opt_user)
+		row = [
+			good.code, 
+			good.articul,
+			good.producer.name,
+			good.description,
+			good.in_stock,
+			good.price,
+			price_opt
+			]
+		array_goods.append(row)
+
+	
+	name = "{}.xlsx".format(random.randint(0, 55000))
+	base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	path = base_dir + '/uploads/generator_excel/' + name
+	pyexcel.save_as(array=array_goods, dest_file_name=path)
+	return path
+
+
+
+
+
+
+
+class ExcelDownload(View):
+	def get(self, request, *args, **kwargs):
+		template = get_template('main_page/dowanload_excel_dummy.html')
+		opt_user = request.user.customer_set.first().opt
+		excel = create_excel(opt_user)	
+		context = {
+			"data": 'data',
+		}
+		html = template.render(context)
+		excel_content = open(excel, 'rb')
+		response = HttpResponse(excel_content.read(), content_type='application/vnd.ms-excel')
+		filename = "Invoice_%s.xlsx" %("12341231")
+		content = "inline; filename='%s'" %(filename)
+		download = request.GET.get("download")
+		if download:
+			content = "attachment; filename='%s'" %(excel)
+		response['Content-Disposition'] = 'inline; filename=' + 'prime-tools.xlsx'
+		os.remove(excel)
+		return response
+		
+
+
+
