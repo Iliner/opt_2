@@ -343,7 +343,11 @@ def add_view(request):
 
 
 
-def smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text, header_text):
+def smtp_send(
+	smtp_host, smtp_port, 
+	smtp_login, smtp_password, 
+	send_to, message_text, 
+	header_text):
 	msg = MIMEText(message_text, 'plain', 'utf-8')
 	msg['Subject'] = Header(header_text, 'utf-8')
 	msg['From'] = smtp_login
@@ -379,22 +383,30 @@ def confirm_order(request):
 
 
 	for item in cart.items.all():
-		body_text = "{}\n Артикул: {} Цена: {}".format(body_text, item.product.articul, item.product.price)
+		body_text = "{}\n Артикул: {} Цена: {}".format(
+			body_text, 
+			item.product.articul, 
+			item.product.price)
 
 	header_text_to_customer = "opt-online.ru Ваш заказ №{}".format(cart_id)
-	header_text_to_admin = "Заказчик {} {} Стоймость {}".format(user.first_name, user.last_name, cart.cart_total)
+	header_text_to_admin = "Заказчик {} {} Стоймость {}".format(
+		user.first_name, 
+		user.last_name, 
+		cart.cart_total)
 	
 	send_to = str(user_email)
 	send_to_admin = 'mynamekasatkin@gmail.com'
-	
-	
 	message_text = body_text
-	try:
-		smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text, header_text_to_customer)
-		smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to_admin, message_text, header_text_to_admin)
-	except:
-		print('err')
-
+	smtp_send(
+		smtp_host, smtp_port, 
+		smtp_login, smtp_password, 
+		send_to_admin, message_text, 
+		header_text_to_admin)
+	smtp_send(
+		smtp_host, smtp_port, 
+		smtp_login, smtp_password, 
+		send_to, message_text, 
+		header_text_to_customer)
 	reverse_lazy('index')
 	return HttpResponse(paid_for)
 
