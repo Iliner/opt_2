@@ -279,17 +279,51 @@ nav.navbar {
 
 
 
+
+.basket_history_data{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
 .basket_history_date {
     margin-left: 10px;
     font-weight: bold;
-    font-size: 21px;
+    font-size: 14px;
 }
+
+.basket_history_total_count{
+    font-weight: bold;
+    font-size: 14px;
+
+} 
 
 .basket_history_table {
     margin: 0px 0px 30px 0px;
     background: rgb(210, 210, 210);
+    border-bottom: 1px solid black;
+    border-top: 2px solid black;
+    box-shadow: rgb(179, 179, 179) -14px 11px 12px 0px;
 }
 
 .basket_history_table_row {
     background-color: rgb(234, 234, 234);
+
+}
+
+#cart_svg {
+    width: 32px;
+}
+
+.navbar-nav{
+    height: 56px;
+    padding-top: 9px;
+
+}
+
+#cart_link{
+    font-size: 22px;
+    padding: 0;
+    color: white;
 }

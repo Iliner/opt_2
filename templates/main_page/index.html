@@ -24,7 +24,7 @@
 			<div class="btn-group">
 				<ul class='navbar-nav'>
 					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Menu</a></li>
-					<li class="nav-item menu-btn" ><a class="nav-link" href="{% if cart.cart_total > 0 %}{% url 'cart' %}{% else %}#{% endif %}">Корзина <span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
+					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% if cart.cart_total > 0 %}{% url 'cart' %}{% else %}{% endif %}"><img src='media/basket/cart_img/shopping-cart.svg' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
 					{% block navbar_link %}
 					{% endblock %}
 				</ul>

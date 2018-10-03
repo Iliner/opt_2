@@ -4,7 +4,10 @@
 {% block content %}
 {% for cart in object_list %}
 {% if cart.items.exists %}
-<div class='basket_history_date'>{{cart.date}} Сумма корзины: {{cart.cart_total}}</div>
+<div class='basket_history_data'>
+	<div class='basket_history_date'>{{cart.date}}</div>
+	<div class='basket_history_total_count'>Сумма корзины: {{cart.cart_total}}</div>
+</div>
 <table class='table table-hover basket_history_table'>
 	<thead>
 		<th>Код</th>
