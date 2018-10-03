@@ -85,10 +85,13 @@ nav.navbar {
 }
 
 .login_img_link{
-	right:  5px;
+    bottom: 8px;
+
 }
 
-
+.login_img_link:hover {
+    color: #bdb5b5;
+}
 
 
 
@@ -326,4 +329,33 @@ nav.navbar {
     font-size: 22px;
     padding: 0;
     color: white;
+}
+
+
+.search-container {
+    right: 15px;
+    position: absolute;
+}
+
+#search_input {
+    width: 292px;
+    background: rgb(52, 58, 64);
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #b3b3b3;
+    color: #fff;
+}
+
+#search_input::placeholder {
+  color: #b3b3b3;
+  font-size: 1em;
+}
+
+#search_sumbit {
+    color: #28a745;
+    border-color: #28a745;
+    background-color: transparent;
+    border: 1px solid;
+    height: 26px;
+    width: 63px;
 }

@@ -4,8 +4,10 @@
 <head>
 	<title>{% block titile %}{% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/login_logout.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 <body>
+	<div id='wrapper_circle'><img src="{% static "registration/login_img/circle.svg" %}"></div>
 	<div id='login_logout'>
 		{% block login_logout %}
 		{% endblock %}
