@@ -152,37 +152,6 @@
     			})
 
 
-    			$('.img_full').on('click', showFullimg);
-
-
-				function showFullimg(){
-					/*
-
-					ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ БОЛЬШОГО ИЗОБРАЖЕНИЕ
-					С ДЕТАЛЬНЫМ ОПИСАНИЕМ ИЗ СТРОКИ
-
-					*/
-
-					var height_window = window.innerHeight;
-					var get_id_from_img = $(this).attr('id');
-					var get_src_from_photo = $('#' + get_id_from_img).attr('data');
-					var get_row_id = get_id_from_img.split('_')[1];
-					var length_articul = get_row_articul.length;
-					$('#open_big_img').css('display', 'flex');
-					if(height_window < 780){
-						$('.big_img').css({'max-height': '73vh', 'max-width': '100vh'});
-						$('#dis_img_discription').css('font-size', '14px');
-					}else{
-						$(".big_img").css({'max-height': '74vh', 'max-width': '100vh'});
-						$('#dis_img_discription').css('font-size', '16px');
-					}
-					$('#open_big_img img').attr('src', get_src_from_photo);
-					$('#wrapper_for_open_big_img').css('display', 'flex');
-
-				}
-
-
-
 
 
 
