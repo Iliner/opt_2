@@ -1,4 +1,5 @@
 from io import BytesIO
+import os
 from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic.detail import DetailView
@@ -56,7 +57,8 @@ class CatalogOpenView(View):
 		catalog_id = self.kwargs['catalog_id']
 		need_catalog = PdfCatalogs.objects.get(id=catalog_id)
 		#/home/ivan/Документы/local/python/mydjango/opt_online/uploads/pdf/pdf_catalog
-		with open('/home/ivan/Документы/local/python/mydjango/opt_online/uploads/' + str(need_catalog.file), 'rb') as pdf:
+		base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		with open(base_dir + '/uploads/' + str(need_catalog.file), 'rb') as pdf:
 			response = HttpResponse(pdf.read(), content_type='application/pdf')
 			response['Content-Disposition'] = 'inline;filename=some_file.pdf'
 			return response
