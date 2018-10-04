@@ -8,6 +8,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="{% static 'css/main.css' %}">
+		<link rel="stylesheet" href="{% static 'css/catalogs.css' %}">
 		<link rel="stylesheet" href="{% static '/pushy-master/css/normalize.css' %}">
 		<link rel="stylesheet" href="{% static '/pushy-master/css/demo.css' %}">
 		<link rel="stylesheet" href="{% static '/pushy-master/css/pushy.css' %}">
@@ -33,7 +34,6 @@
 			</div>
 		<div class="search-container">
 			<form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
-				{% csrf_token %}
 				<input id='search_input' type="text" placeholder="Искать..." name="searche_good">
 				<button id='search_sumbit' type="submit">Поиск</button>
 			</form>
@@ -47,13 +47,13 @@
 		            <li class="pushy-submenu">
 		                <button id="first-link">Новые поступления</button>
 		                <ul>
-		                    <li class="pushy-link"><a href="#"  id='update_admission'>Обновленныe позиции</a></li>
 		                    <li class="pushy-link"><a href="{% url 'new_position' %}" id='news_admission'>Новинки</a></li>
 		                </ul>
 		            </li>
 		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
 		  			<li class="pushy-link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
 		  			<li class="pushy-link"><a href="{% url 'download_excel' %}" id='download_excel'>Скачать прайс</a></li>
+		  			<li class="pushy-link"><a href="{% url 'catalog_pdf' %}" id='catalog_pdf'>Каталоги</a></li>
 					{% if perms.admin.add_good %}
 						<li class='pushy-link' id='admin_bottom'><a href='/admin'>Админ</a></li>
 					{% endif %}
@@ -142,7 +142,7 @@
     					type: 'POST',
     					url: 'searche_good',
     					data: {
-    						code: $('#search_input').val(),
+    						input_data: $('#search_input').val(),
     					},
     					success:function(data){
     						console.log(data)
@@ -150,6 +150,51 @@
 
     				})
     			})
+
+
+    			$('.img_full').on('click', showFullimg);
+
+
+				function showFullimg(){
+					/*
+
+					ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ БОЛЬШОГО ИЗОБРАЖЕНИЕ
+					С ДЕТАЛЬНЫМ ОПИСАНИЕМ ИЗ СТРОКИ
+
+					*/
+
+					var height_window = window.innerHeight;
+					var get_id_from_img = $(this).attr('id');
+					var get_src_from_photo = $('#' + get_id_from_img).attr('data');
+					var get_row_id = get_id_from_img.split('_')[1];
+					var length_articul = get_row_articul.length;
+					$('#open_big_img').css('display', 'flex');
+					if(height_window < 780){
+						$('.big_img').css({'max-height': '73vh', 'max-width': '100vh'});
+						$('#dis_img_discription').css('font-size', '14px');
+					}else{
+						$(".big_img").css({'max-height': '74vh', 'max-width': '100vh'});
+						$('#dis_img_discription').css('font-size', '16px');
+					}
+					$('#open_big_img img').attr('src', get_src_from_photo);
+					$('#wrapper_for_open_big_img').css('display', 'flex');
+
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 				$('.banner_stock_img').on('click', showFullimg_2);

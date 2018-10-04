@@ -1,0 +1,20 @@
+{% extends "main_page/index.html" %}
+
+
+{% block content %}
+<div class='main'>
+	<div class='catalog_pfd_wrapper_main'>
+		<div class='catalog_pfd_wrapper_img'>
+			{% for catalog in object_list %}
+			<div class="catalog_pdf">
+				<a href="{% url 'catalog_pdf_open' catalog_id=catalog.id%}">
+					<img class='catalog_pdf_img' src="{{catalog.img.url}}">
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+

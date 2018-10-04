@@ -5,7 +5,6 @@ import csv
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, InvalidPage
 from .models import *
-from .forms import *
 from basket.models import Cart
 from basket.forms import CartItemCount
 from django.contrib.auth.decorators import login_required

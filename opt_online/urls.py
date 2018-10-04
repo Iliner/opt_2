@@ -25,7 +25,9 @@ urlpatterns = [
     url(r'^logout/', logout, {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('main_page.urls')),
     url(r'', include('basket.urls')),
-    url(r'', include('searcher.urls'))
+    url(r'', include('searcher.urls')),
+    url(r'', include('addons.urls')),
+    
 ]
 
 

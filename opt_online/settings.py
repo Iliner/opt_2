@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'imagepool',
     'customers',
     'searcher',
+    'addons',
 ]
 
 

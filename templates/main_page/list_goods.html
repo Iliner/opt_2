@@ -38,9 +38,9 @@
 							{% endif %}
 						{% endif %}
 						{% if not good.photo %}
-							<th class='row_th_img'><img id='row_img' src="{{default_img.url}}"></th>
+							<th class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
 						{% else %}
-							<th class='row_th_img'><img id='row_img' src="{{good.photo.photo.url}}"></th>
+							<th class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
 						<th>
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>

@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from .forms import *
+from django.views.decorators.csrf import csrf_exempt
+from main_page.models import Goods
 # Create your views here.
 
 
@@ -16,20 +19,21 @@ class SearchInput(TemplateView):
 		self.form = SeacerForm
 		return super(SearchInput, self).get(request, *args, **kwargs)
 
-	def post(self, request, *args, **kwargs):
-		if self.form.is_valid():
-			print('search form')
-		else:
-			return super(SearchInput, self).post(request, *args, **kwargs)
 
 
 
-
-
-
+@csrf_exempt
 def searche_good(request):
 	if request.method == "POST":
-		print('search', request.POST['value'])
+		query = request.POST.get('input_data')
+		goods = Goods.objects.all()
+		search_articles = goods.filter(code=query)
+		result = goods.filter(
+			Q(code__icontains=query)|
+			Q(articul__icontains=query)
+			).distinct()
+
+		print('search', result)
 	ro = 2
 	return HttpResponse(ro)
 

@@ -1,0 +1,31 @@
+.catalog_pfd_wrapper_main{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.catalog_pfd_wrapper_img{
+	display: flex;
+	flex-wrap: wrap;
+	width: 1000px;
+
+}
+
+.catalog_pdf {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px 15px 30px 15px;
+  align-content: space-between;
+  box-shadow: -9px 14px 10px rgba(0,0,0,0.5);
+}
+
+.catalog_pdf:hover {
+	box-shadow: -9px 14px 10px rgba(255, 6, 6, 0.59)
+}
+
+
+.catalog_pdf_img{
+    max-width: 220px;
+    max-height: 288px;
+}
+
+

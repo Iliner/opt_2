@@ -5,3 +5,5 @@ myvenv
 db.sqlite3
 .DB_Store
 *.xlsx
+pdf_catalog
+pdf_img

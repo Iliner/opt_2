@@ -438,15 +438,6 @@ class GoodListViewNew(ListView, CategoryListMixin):
 
 
 
-class BannerView(ListView, CategoryListMixin):
-	template_name = 'main_page/banner.html'
-	paginate_by = 100
-
-	def get_queryset(self): 
-
-		return BannerStock.objects.all().order_by('-date')
-
-
 
 
 

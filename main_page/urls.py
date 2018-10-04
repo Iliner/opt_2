@@ -1,7 +1,6 @@
 from django.conf.urls import url 
 #from main_page import views
 from main_page.twviews import *
-from main_page.excel_views import *
 from django.contrib.auth.decorators import login_required, permission_required
 
 
@@ -16,12 +15,8 @@ urlpatterns = [
 	url(r'^good/(?P<code>\d+)/edit/$', permission_required('main_page.change_good', GoodUpdate.as_view()), name='good_edit'),
 	url(r'^good/(?P<code>\d+)/delete/$', GoodDelete.as_view(), name='good_delete'),
 	url(r'^add_file/$', login_required(AddFiles.as_view()), name='add_file'),
-	url(r'^banners/$', BannerView.as_view(), name='banners_view'),
 	url(r'^add_img/$', uploads_photo, name='add_img'),
 	#working_excel для запуска обработки прайса
-	url(r'working_excel', working_excel, name='working_excel'),
-	url(r'^excel_download/$', ExcelDownload.as_view(), name='download_excel'),
-
 
     # url(r'^add-to-cart/(?P<item_id>[-\w]+)/$', add_to_cart, name="add_to_cart"),
     # url(r'^order-summary/$', order_details, name="order_summary"),
