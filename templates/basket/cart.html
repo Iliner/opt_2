@@ -21,17 +21,13 @@
 				<th>Описание</th>
 				<th class='row_th_img'>Фото</th>
 				<th>Цена</th>
-				<th>Test</th>
+				<th>Кол-во</th>
+				<th>Удалить</th>
 			</thead>
 			<tbody>
 				{% for good in cart.items.all %}
 						<tr>
 							<th>{{good.product.code}}<br>
-								<form action="{% url 'cart_delete_positon' good.pk %}" method='post'>
-									{% csrf_token %}
-									<input type="submit" value='Удалить'>
-								</form></th>
-								<a href="{% url 'delete_from_cart_view' code=good.product.code %}"></a>
 							<th>{{good.product.producer}}
 							</th>
 							<th>{{good.product.articul}}</th>
@@ -89,6 +85,7 @@
 									{% endfor %}
 	    						</form>
 							</th>
+							<th><div class='cart_delete_item' id='form_{{good.product.code}}' count='{{ value_count }}'>Удалить</div></th>
 						</tr>	
 				{% endfor %}
 			</tbody>	

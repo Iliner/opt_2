@@ -442,3 +442,15 @@ class HistoryOrderView(ListView, CartCommonMixin):
 		return carts_order
 
 
+
+
+@csrf_exempt
+def delete_item(request):
+	cart = cart_init(request)
+	if request.method == 'POST':
+		if cart.items.all().filter(product__code=request.POST['code']).exists():
+			cart.cart_total = cart.cart_total - cart.items.all().filter(product__code=request.POST['code']).first().item_total
+			cart.items.all().filter(product__code=request.POST['code']).delete()
+			cart.save()
+	CartView()		
+	return HttpResponse(cart.cart_total)

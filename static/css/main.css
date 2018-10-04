@@ -359,3 +359,15 @@ nav.navbar {
     height: 26px;
     width: 63px;
 }
+
+
+.cart_delete_item {
+    border: 1px solid red;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 100;
+}
+
+.cart_delete_item:hover {
+    box-shadow: 0px 0px 0px 3px rgba(255, 0, 0, 0.5);
+}

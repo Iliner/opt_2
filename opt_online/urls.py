@@ -21,8 +21,8 @@ from django.contrib.auth.views import login, logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login/', login,  {'template_name': 'registration/login.html'}, name="login"),
-    url(r'^logout/', logout, {'template_name': 'registration/logout.html'}, name="logout"),
+    url(r'^login/$', login,  {'template_name': 'registration/login.html'}, name="login"),
+    url(r'^logout/$', logout, {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('main_page.urls')),
     url(r'', include('basket.urls')),
     url(r'', include('searcher.urls')),

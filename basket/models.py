@@ -13,6 +13,7 @@ class CartItem(models.Model):
 	customer = models.ForeignKey('Customer', default=None)
 	price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
 
+
 	def price(self):
 		return self.product.price
 

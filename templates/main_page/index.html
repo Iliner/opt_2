@@ -152,6 +152,7 @@
     			})
 
 
+    			$('.cart_delete_item').click(cart_delete_item)
 
 
 
@@ -230,6 +231,43 @@
 			}else{
 				console.log($(window).scrollTop())
 			}	
+
+
+
+
+
+			function cart_delete_item(){
+				var code_v = $(this).attr("id").split('_')[1]
+
+
+				$.ajax({
+					type: 'POST',
+					url: 'count/delete',
+					data: {
+						code: $(this).attr("id").split('_')[1],
+						csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+					},
+					success:function(data){
+						$('#count_good').html(data)
+					}
+
+				})				
+
+			};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
