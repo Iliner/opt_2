@@ -25,15 +25,15 @@ class SearchInput(TemplateView):
 @csrf_exempt
 def searche_good(request):
 	if request.method == "POST":
-		query = request.POST.get('input_data')
-		goods = Goods.objects.all()
-		search_articles = goods.filter(code=query)
-		result = goods.filter(
-			Q(code__icontains=query)|
-			Q(articul__icontains=query)
-			).distinct()
+		# query = request.POST.get('input_data')
+		# goods = Goods.objects.all()
+		# search_articles = goods.filter(code=query)
+		# result = goods.filter(
+		# 	Q(code__icontains=query)|
+		# 	Q(articul__icontains=query)
+		# 	).distinct()
 
-		print('search', result)
-	ro = 2
+		print('search')
+	ro = """<table><tr class='search_output_row'>Hello</tr></table>"""
 	return HttpResponse(ro)
 

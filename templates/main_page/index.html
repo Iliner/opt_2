@@ -25,21 +25,23 @@
 			<div class="btn-group">
 				<ul class='navbar-nav'>
 					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Меню</a></li>
-					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% if cart.cart_total > 0 %}{% url 'cart' %}{% else %}{% endif %}"><img src='{% static "basket/cart_img/shopping-cart.svg" %}' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
+					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% url 'cart' %}"><img src='{% static "basket/cart_img/shopping-cart.svg" %}' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
 					{% block navbar_link %}
 					{% endblock %}
 				</ul>
 				{% block navbar_button %}
 				{% endblock %}
 			</div>
-		<div class="search-container">
-			<form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
-				<input id='search_input' type="text" placeholder="Искать..." name="searche_good">
-				<button id='search_sumbit' type="submit">Поиск</button>
-			</form>
-		</div>
 
-		</nav>
+			<div class="search-container">
+				<form method='post' action='{% url "searche_good" %}' enctype="multipart/form-data" target="search_output">
+					{% csrf_token %}
+					<input id='search_input' type="text" placeholder="Искать..." name="searche_good">
+					<input type="submit" id='search_sumbit' value='Поиск'>
+				</form>
+				<iframe  id='search_output' name='search_output'></iframe>
+			</div>		
+			</nav>
 
 		<nav class="pushy pushy-left" data-focus="#first-link" id='main_left_menu'>
 		    <div class="pushy-content">
@@ -72,10 +74,14 @@
 		        </ul>
 		    </div>
 		</nav>
-		{% endif %}
+		{% endif %}	
+		
 
-		{% block content %}
-		{% endblock %}
+			<div id='content_block'>
+				{% block content %}
+				{% endblock %}
+			</div>
+		
 
 
 		<div id='wrapper_info_BASKET'>
@@ -88,6 +94,11 @@
 				</div>
 			</div>
 		</div>
+
+
+		<footer>
+			
+		</footer>
 
 		<script type="text/javascript"></script>
 		<script src="{% static '/pushy-master/js/pushy.min.js' %}"></script>
@@ -136,7 +147,7 @@
 
 
     			$('#search_sumbit').click(function(){
-    				console.log('ckick')
+    				$('#search_output').css('display', 'block')
 
     				$.ajax({
     					type: 'POST',
@@ -238,7 +249,7 @@
 
 			function cart_delete_item(){
 				var code_v = $(this).attr("id").split('_')[1]
-
+				$(this).parent().parent().css('display', 'none')
 
 				$.ajax({
 					type: 'POST',

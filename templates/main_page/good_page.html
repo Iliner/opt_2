@@ -1,6 +1,7 @@
 {% extends 'main_page/index.html' %}
 
 {% block content %}
+<div class='main'>
 <div id='main_card_good'>
 	
 	<div id='card_description'>
@@ -25,5 +26,6 @@
 		<a href="{% url 'good_edit'  code=good.code %}?page={{page_obj.number}}">Изменить</a>
 		<a href="{% url 'good_delete' code=good.pk %}?page={{page_obj.number}}">Удалить</a>				
 	</div>
+</div>	
 </div>
 {% endblock %}

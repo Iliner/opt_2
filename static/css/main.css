@@ -1,7 +1,69 @@
 @charset "utf-8";
 
+
+
+@media not screen and (max-width: 1300px) {
+    #content_block{
+        background-color: #dedede;
+    }
+
+    .main {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main > table.table_list_goods{
+        width: 1266px;
+        box-shadow: 0px 0px 13px 8px rgba(0,0,0,0.5);
+        background-color: #fff;
+    }
+
+    #cart_history_wrapper {
+        width: 1266px;
+    }
+
+    #main_card_good{
+        width: 1266px;
+        height: 1000px;
+        background-color: #fff;
+        box-shadow: 0px 0px 13px 8px rgba(0,0,0,0.5);
+    }
+
+}
+
+
+
+
+
+
+footer {
+    width: 100%;
+    height: 300px;
+    background: #262a2d;
+}
+
+
+
+
+
+
+
+
+
+#navbar_header{
+    position: fixed;
+    width: 100%;
+}
+
 nav.navbar {
 	background-color: #ffe6e6;
+}
+
+#content_block{
+    margin-top: 81px;
+    min-height: 900px;
 }
 
 
@@ -50,9 +112,9 @@ nav.navbar {
 
 
 #main_card_good {
-	position:  absolute;
+/*	position:  absolute;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column;*/
 }
 
 
@@ -304,14 +366,14 @@ nav.navbar {
 
 .basket_history_table {
     margin: 0px 0px 30px 0px;
-    background: rgb(210, 210, 210);
+    background-color: #fff;
     border-bottom: 1px solid black;
     border-top: 2px solid black;
     box-shadow: rgb(179, 179, 179) -14px 11px 12px 0px;
 }
 
 .basket_history_table_row {
-    background-color: rgb(234, 234, 234);
+ 
 
 }
 
@@ -361,6 +423,16 @@ nav.navbar {
 }
 
 
+
+#search_output {
+    height: 371px;
+    position: absolute;
+    width: 292px;
+    background-color: #000;
+    color: #fff;
+    display: none;
+}
+
 .cart_delete_item {
     border: 1px solid red;
     text-align: center;
@@ -368,6 +440,17 @@ nav.navbar {
     font-weight: 100;
 }
 
+#cart_is_empty {
+    text-align: center;
+}
+
 .cart_delete_item:hover {
     box-shadow: 0px 0px 0px 3px rgba(255, 0, 0, 0.5);
 }
+
+/*<div class="search-container">
+    <form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+        <input id='search_input' type="text" placeholder="Искать..." name="searche_good">
+        <button id='search_sumbit' type="submit">Поиск</button>
+    </form>
+</div>*/
