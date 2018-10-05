@@ -34,14 +34,13 @@
 			</div>
 
 			<div class="search-container">
-				<form method='post' action='{% url "searche_good" %}' enctype="multipart/form-data" target="search_output">
-					{% csrf_token %}
-					<input id='search_input' type="text" placeholder="Искать..." name="searche_good">
-					<input type="submit" id='search_sumbit' value='Поиск'>
-				</form>
-				<iframe  id='search_output' name='search_output'></iframe>
-			</div>		
-			</nav>
+			    <form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+			        <input id='search_input' type="text" placeholder="Искать..." name="searche_good">
+			        <button id='search_sumbit' type="submit">Поиск</button>
+			    </form>
+			    <div id='search_output'></div>
+			</div>
+		</nav>
 
 		<nav class="pushy pushy-left" data-focus="#first-link" id='main_left_menu'>
 		    <div class="pushy-content">
@@ -146,14 +145,38 @@
 
 
 
-    			$('#search_sumbit').click(function(){
-    				$('#search_output').css('display', 'block')
 
+    			$('#search_input').on('input', function(){
+    				var count_v =  $(this).val()
+    				console.log(count_v, '1')
     				$.ajax({
     					type: 'POST',
     					url: 'searche_good',
     					data: {
+    						csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
     						input_data: $('#search_input').val(),
+    					},
+    					success:function(data){
+    						$('#search_output').html(data)
+    						$('#search_output').css('display', 'block')
+    						
+    					}
+
+    				})
+    			})
+
+
+
+
+    			$('#input_search_2 > input').on('input', function(){
+    				var count_v =  $(this).val()
+    				console.log(count_v, '2')
+    				$.ajax({
+    					type: 'POST',
+    					url: 'searche_good',
+    					data: {
+    						csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+    						input_data: $('#input_search_2 > input').val(),
     					},
     					success:function(data){
     						console.log(data)
@@ -163,15 +186,41 @@
     			})
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     			$('.cart_delete_item').click(cart_delete_item)
-
-
-
-
-
-
-
-
 
 
 

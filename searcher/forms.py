@@ -6,8 +6,12 @@ from .models import *
 
 
 
-class SeacerForm(forms.Form):
-	searcher = forms.CharField()
+# class SeacerForm(forms.Form):
+# 	searcher = forms.CharField()
 
 
 
+class SeacerForm(forms.ModelForm):
+	class Meta:
+		model = SearchUserQuery
+		fields = "__all__"

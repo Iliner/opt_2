@@ -428,8 +428,7 @@ nav.navbar {
     height: 371px;
     position: absolute;
     width: 292px;
-    background-color: #000;
-    color: #fff;
+    background-color: #fff;
     display: none;
 }
 
@@ -454,3 +453,20 @@ nav.navbar {
         <button id='search_sumbit' type="submit">Поиск</button>
     </form>
 </div>*/
+
+
+#input_search_2 > input {
+    width: 292px;
+    background: rgb(52, 58, 64);
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #b3b3b3;
+}
+
+.search_output_row{
+    height: 37px;
+}
+
+.search_output_row > a{
+    color: black;
+}

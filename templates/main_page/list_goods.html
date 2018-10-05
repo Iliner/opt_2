@@ -9,11 +9,11 @@
 			<th>Производитель</th>
 			<th>Артикул</th>
 			<th>Описание</th>
+			<th class='row_th_img'>Фото</th>
 			<th>Цена</th>
 			{% if user.is_authenticated %}
 				<th>Опт-цена</th>
 			{% endif %}
-			<th class='row_th_img'>Фото</th>
 			<th>Заказать</th>
 		</thead>
 		<tbody>
@@ -23,6 +23,11 @@
 						<th>{{good.producer}}</th>
 						<th>{{good.articul}}</th>
 						<th>{{good.description}}</th>
+						{% if not good.photo %}
+							<th class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
+						{% else %}
+							<th class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
+						{% endif %}
 						<th>{{good.price}}</th>
 						{% if user.is_authenticated %}
 							{% if opt_user == 2 %}
@@ -36,11 +41,6 @@
 							{% else %}
 								<th>Админ</th>
 							{% endif %}
-						{% endif %}
-						{% if not good.photo %}
-							<th class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
-						{% else %}
-							<th class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
 						<th>
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
