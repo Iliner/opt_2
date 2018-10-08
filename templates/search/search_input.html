@@ -1,5 +1,5 @@
 <div class="search-container">
-<form class='my-ajax-form' method='post' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+<form class='my-ajax-form' method='post' action='.' data-url='{{ request.build_absolute_uri|safe }}' novalidate>
     {% csrf_token %}
 	{% for field in form.hidden_fields %}
 		{{ field }}

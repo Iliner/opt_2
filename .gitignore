@@ -7,3 +7,4 @@ db.sqlite3
 *.xlsx
 pdf_catalog
 pdf_img
+/uploads/goods/photos/

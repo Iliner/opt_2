@@ -34,7 +34,7 @@
 			</div>
 
 			<div class="search-container">
-			    <form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+			    <form method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}' novalidate>
 			        <input id='search_input' type="text" placeholder="Искать..." name="searche_good">
 			        <button id='search_sumbit' type="submit">Поиск</button>
 			    </form>
@@ -59,7 +59,8 @@
 						<li class='pushy-link' id='admin_bottom'><a href='/admin'>Админ</a></li>
 					{% endif %}
 					{% if perms.admin.add_good %}
-						<li class='pushy-link' id='working_excel'><a href=''>Запуск</a></li>
+						<li class='pushy-link' id='working_excel'><a href=''>Обработка excel</a></li>
+						<li class='pushy-link' id='download_photo'><a href=''>Скачать фота</a></li>
 					{% endif %}
 					{% if user.is_authenticated %}
 						<li class="pushy-link"><a href="{% url 'history_order' %}" id='action_actions'>История заказов</a></li>
@@ -144,6 +145,35 @@
 
 
 
+    			// Для запуска скрипта скачивания фото для товаров
+    			$('#download_photo').click(function(){
+
+    				$.ajax({
+    					type: 'POST',
+    					url: 'download_photo',
+    					data: {
+    						code: 'lala',
+    					},
+    					success:function(data){
+    						console.log(data)
+    					}
+
+    				})
+    			})
+
+
+
+
+    			$('#search_input').on('click', function(){
+    				
+    				$(this).animate({
+						width: '374px',
+						left: "+=50",
+
+						}, 350, function() {
+						// Animation complete.
+					});
+    			})
 
 
     			$('#search_input').on('input', function(){
@@ -164,6 +194,11 @@
 
     				})
     			})
+
+
+
+
+
 
 
 

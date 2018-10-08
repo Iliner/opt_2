@@ -1,9 +1,16 @@
+import os
+import urllib.request
+import urllib3
+
 from django.db import models
 from django.db.models.fields import PositiveSmallIntegerField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.contrib.sessions.models import Session
+from django.core.files import File
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Goods(models.Model):
@@ -18,7 +25,7 @@ class Goods(models.Model):
 	price_3 = models.FloatField(null=True, blank=True)	
 	price_5 = models.FloatField(null=True, blank=True)
 	price_6 = models.FloatField(null=True, blank=True)
-	photo = models.ForeignKey('Photo', blank=True, null=True)
+	photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
 	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
 	
 	def get_in_stock(self):
@@ -64,18 +71,18 @@ class Photo(models.Model):
 	date = models.DateTimeField(auto_now=True)	
 	photo_width = models.IntegerField(default=0)
 	photo_height = models.IntegerField(default=0)
-	photo = models.ImageField()
+	photo = models.ImageField(null=True, blank=True)
 	code = models.IntegerField()
-
 	image_url = models.URLField(null=True, blank=True)
 
 
-	def get_remote_image(self):
+	def get_remote_image(self, path):
 		if self.image_url and not self.photo:
-			result = urllib.urlretrieve(self.image_url)
-			self.photo.save(os.path.basename(self.name + self.image_url.rsplit('.')[-1]), File(open(result[0])))
+			result = urllib.request.urlretrieve(self.image_url)
+			print('result', result)
+			self.photo.save('.' + path + self.name + self.image_url.rsplit('.')[-1], File(open(result[0], 'rb')))
+			#self.photo.save(os.path.basename(self.name + self.image_url.rsplit('.')[-1]), File(open(result[0], 'rb')))
 			self.save()
-
 
 
 

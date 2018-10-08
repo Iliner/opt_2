@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     #my app
-    
     'main_page',
     'basket',
     'imagepool',
     'customers',
     'searcher',
     'addons',
+    'photo_download',
 ]
 
 

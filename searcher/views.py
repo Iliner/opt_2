@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView
 from .forms import *
 from django.views.decorators.csrf import csrf_exempt
 from main_page.models import Goods
+from main_page.models import Photo
 
 # Create your views here.
 
@@ -43,7 +44,34 @@ def searche_good(request):
 			).distinct()[:10]
 		print('search', result)
 		for good in result:
-			link = "<div class='search_output_row'><a href='/good/{}/'>{} {}</a></div>".format(good.code, good.code, good.producer)
+			try:
+				photo_url = good.photo.photo.url
+			except:
+				photo_url = Photo.objects.get(name='Default').photo.url
+
+			link = """
+			<div class='search_output_row'>
+				<a href='/good/{code}/'>
+				<div class='search_output_wrapper'>
+					<div class='search_output_row_img'><img src='{src}'></div>
+					<div class='search_output_wrapper_data'>
+						<div class='search_output_characteristics'>
+							<div class='search_output_producer'>{producer}</div>
+							<div class='search_output_articul'>{articul}</div>
+							<div class='search_output_code'>{code}</div>
+						</div>
+						<div class='search_output_description'>{description}</div>
+					</div>
+				</div>
+				</a>
+			</div>
+			""".format(
+				code=good.code,
+				producer=good.producer, 
+				articul=good.articul, 
+				description=good.description,
+				src=photo_url
+				)
 			result_str += link
 	print(result_str)
 	return HttpResponse(result_str)

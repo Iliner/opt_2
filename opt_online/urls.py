@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'', include('basket.urls')),
     url(r'', include('searcher.urls')),
     url(r'', include('addons.urls')),
+    url(r'', include('photo_download.urls')),
     
 ]
 
