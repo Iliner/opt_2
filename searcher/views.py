@@ -6,9 +6,8 @@ from .forms import *
 from django.views.decorators.csrf import csrf_exempt
 from main_page.models import Goods
 from main_page.models import Photo
-
-# Create your views here.
-
+from functools import reduce
+import operator
 
 
 
@@ -35,14 +34,20 @@ def searche_good(request):
 	result_str = ""
 	if request.method == "POST":
 		query = request.POST.get('input_data')
-		print(query)
+
+		idseq = request.POST.get('input_data').split()
+		print('idseq', idseq)
+		tag_qs = reduce(operator.or_, (Q(tag__id=x) for x in idseq))
+		print('tag_qs', tag_qs)
+		result = Goods.objects.filter(..., tag_qs)
+		print(result)
+
 		goods = Goods.objects.all()
 		search_articles = goods.filter(code=query)
-		result = goods.filter(
-			Q(code__icontains=query)|
-			Q(articul__icontains=query) 
-			).distinct()[:10]
-		print('search', result)
+		# result = goods.filter(
+		# 	Q(code__icontains=query)|
+		# 	Q(articul__icontains=query) 
+		# 	).distinct()[:10]
 		for good in result:
 			try:
 				photo_url = good.photo.photo.url
@@ -73,5 +78,4 @@ def searche_good(request):
 				src=photo_url
 				)
 			result_str += link
-	print(result_str)
 	return HttpResponse(result_str)

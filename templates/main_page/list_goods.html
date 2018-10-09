@@ -5,44 +5,44 @@
 <div class='main'>
 	<table class='table table-hover table_list_goods'>
 		<thead>
-			<th>Код</th>
-			<th>Производитель</th>
-			<th>Артикул</th>
-			<th>Описание</th>
-			<th class='row_th_img'>Фото</th>
-			<th>Цена</th>
+			<th style="width:  8.5%" class='table_tr_code'>Код</th>
+			<th style="width:  12.5%" class='table_tr_producer'>Производитель</th>
+			<th style="width:  12.5%" class='table_tr_articul'>Артикул</th>
+			<th >Описание</th>
+			<th style="width:  12.5%" class='row_th_img'>Фото</th>
+			<th style="width:  9.5%" >Цена</th>
 			{% if user.is_authenticated %}
-				<th>Опт-цена</th>
+				<th style="width:  9.5%" >Опт-цена</th>
 			{% endif %}
-			<th>Заказать</th>
+			<th style="width:  6.5%">Заказать</th>
 		</thead>
 		<tbody>
 			{% for good in object_list %}
 					<tr>
-						<th><a href="{% url 'good_page' code=good.code %}?page={{page_obj.number}}">{{good.code}}</a></th>
-						<th>{{good.producer}}</th>
-						<th>{{good.articul}}</th>
-						<th>{{good.description}}</th>
+						<th style="width:  8.5%" class='table_tr_code' ><a href="{% url 'good_page' code=good.code %}?page={{page_obj.number}}">{{good.code}}</a></th>
+						<th style="width:  12.5%" class='table_tr_producer'>{{good.producer}}</th>
+						<th style="width:  12.5%" class='table_tr_articul'>{{good.articul}}</th>
+						<th class='table_tr_description' >{{good.description}}</th>
 						{% if not good.photo %}
-							<th class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
+							<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
 						{% else %}
-							<th class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
+							<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
-						<th>{{good.price}}</th>
+						<th style="width:  9.5%" >{{good.price}}</th>
 						{% if user.is_authenticated %}
 							{% if opt_user == 2 %}
-								<th>{{good.price_2}}</th>
+								<th style="width:  9.5%">{{good.price_2}}</th>
 							{% elif opt_user == 3 %}
-								<th>{{good.price_2}}</th>
+								<th style="width:  9.5%">{{good.price_2}}</th>
 							{% elif opt_user == 5 %}
-								<th>{{good.price_5}}</th>
+								<th style="width:  9.5%">{{good.price_5}}</th>
 							{% elif opt_user == 6 %}
-								<th>{{good.price_6}}</th>
+								<th style="width:  9.5%">{{good.price_6}}</th>
 							{% else %}
-								<th>Админ</th>
+								<th style="width:  9.5%">Админ</th>
 							{% endif %}
 						{% endif %}
-						<th>
+						<th style="width:  6.5%">
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
 						        {% csrf_token %}
 								{% for field in form.hidden_fields %}

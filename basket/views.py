@@ -383,6 +383,7 @@ def confirm_order(request):
 
 
 	for item in cart.items.all():
+		print('item.product.articul', item.product.articul)
 		body_text = "{}\n Артикул: {} Цена: {}".format(
 			body_text, 
 			item.product.articul, 

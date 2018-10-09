@@ -7,18 +7,72 @@
 	<div id='card_description'>
 		<div id='card_description_img'>
 			{% if not good.photo %}
-				<img src="/media/{{default_img}}">
+				<img class='img_full' src="/media/{{default_img}}">
 			{% else %}
-				<img src="/media/{{good.photo.photo}}">
+				<img class='img_full' src="/media/{{good.photo.photo}}">
 			{% endif %}
 		</div>
 
 		<div id='card_description_des'>
-			<h3>Код: {{good.code}}</h3>
-			<h3>Цена: {{good.price}}</h3>
-			<h3>Описание: {{good.description}}</h3>
+			<div id='card_description_block_meta'>
+				<div>Производитель: {{good.producer}}</div>
+				<div>Артикул: {{good.articul}}</div>
+				<div>Код: {{good.code}}</div>
+			</div>
+			<div id='card_description_block_price'>
+				<div>Цена: {{good.price}}</div>
+				<div>Оптовая цена:
+					{% if user.is_authenticated %}
+						{% if opt_user == 2 %}
+							{{good.price_2}}
+						{% elif opt_user == 3 %}
+							{{good.price_2}}
+						{% elif opt_user == 5 %}
+							{{good.price_5}}
+						{% elif opt_user == 6 %}
+							{{good.price_6}}
+						{% else %}
+							{{good.price}}
+						{% endif %}
+					{% endif %}
+				</div>
+				<div>
+					Заказать
+				    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+				        {% csrf_token %}
+						{% for field in form.hidden_fields %}
+							{{ field }}
+						{% endfor %}
+						{% for field in form.visible_fields %}
+							{% if field.name == 'honeypot' %}
+								<div class='honeypot'>{{ field }}</div>
+							{% else %}
+								<div class='form_field'>
+									{% if field.errors|length > 0 %}
+										<div class='eror_list'>
+											{% for error in field.errors %}
+												<div class='error_description'>{{ error }}</div>
+											{% endfor %}
+										</div>
+									{% endif %}
+									{% if field.label %}
+										<div class='label'>{{ field.label }}</div>
+									{% endif %}
+									<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+									{% if field.help_text %}
+										<div class='help'>{{ field.help_text }}</div>
+									{% endif %}
+								</div>
+							{% endif %}
+						{% endfor %}
+					</form>
+				</div>
+			</div>
+			<div id='card_description_block_description'>{{good.description}}</div>
+			{% comment "Optional note" %}
 			<div><a href="{% url 'add_cart' code=good.code %}">Добавить в корзину</a></div>
-			<a href="{% url 'index' %}?page={{pn}}">back</a>
+			{% endcomment %}
+			<a href="{% url 'index' %}?page={{pn}}">Назад</a>
 		</div>
 	</div>
 

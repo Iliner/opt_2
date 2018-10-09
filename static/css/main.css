@@ -18,6 +18,7 @@
         width: 1266px;
         box-shadow: 0px 0px 13px 8px rgba(0,0,0,0.5);
         background-color: #fff;
+        text-align: center;
     }
 
     #cart_history_wrapper {
@@ -35,7 +36,9 @@
 
 
 
-
+.main > table.table_list_goods{
+    text-align: center;
+}
 
 
 footer {
@@ -118,6 +121,16 @@ nav.navbar {
 }
 
 
+
+
+
+
+#card_description_img {
+    border: 1px solid black;
+}
+
+
+
 #card_description_img > img{
 	max-width: 371px;
     max-height: 371px;
@@ -127,9 +140,61 @@ nav.navbar {
 	display: flex;
 }
 
+
+#card_description_des {
+    padding-top: 30px;
+}
+
+#card_description_block_meta{
+    display: flex;
+    justify-content: space-between;
+}
+
+#card_description_block_meta div:first-child{
+    border-bottom: 2px solid #101086;
+}
+
+#card_description_block_meta div:nth-child(2){
+    border-bottom: 2px solid #307c47;
+}
+
+#card_description_block_meta div:nth-child(3){
+    border-bottom: 2px solid #961a2d;
+}
+
+#card_description_block_price{
+    border-bottom: 1px solid;
+    display: flex;
+    margin-top: 88px;
+    justify-content: space-between;
+}
+
+#card_description_block_description{
+    margin-top: 30px;
+}
+
 #card_admin_do{
 	text-align: center;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -400,6 +465,7 @@ nav.navbar {
 }
 
 #search_input {
+    margin-right: 9px;
     width: 99px;
     background: rgb(52, 58, 64);
     border: none;
@@ -469,7 +535,7 @@ nav.navbar {
 
 
 .search_output_row{
-    height: 72px;
+/*    height: 72px;*/
     border-bottom: 1px solid #000;
 /*    border-left: 1px solid #000;
     border-right: 1px solid #000;*/
@@ -481,7 +547,7 @@ nav.navbar {
     width: 100%;
 }
 
-.search_output_row:hover {
+.search_output_row:hover .search_output_wrapper_data{
     background: #d4d4d4;
     /*box-shadow: rgb(55, 61, 66) 0px 0px 20px 6px;*/
 }
@@ -543,3 +609,49 @@ nav.navbar {
     border-bottom: 1px solid #b3b3b3;
 }
 
+
+
+.table_tr_code {
+    color: #961a2d;
+}
+.table_tr_code > a{
+    color: #961a2d;
+    text-decoration: none;
+}
+
+.table_tr_articul {
+    color: #307c47;
+}
+
+.table_tr_producer {
+    color: #101086;
+}
+
+
+.table_tr_description{
+    text-align: -webkit-auto;
+}
+
+
+.form_field {
+    margin: 0px;
+}
+
+
+
+
+
+
+#img_big_wrapper {
+    display: none;
+}
+
+#img_big_wrapper_block {
+    text-align: center;
+    max-width: 70%; 
+}
+
+#img_big_wrapper_img {
+    max-width: 70%;
+    box-shadow: rgb(55, 61, 66) 0px 0px 20px 6px;
+}

@@ -155,8 +155,38 @@ class GoodDetailView(DetailView, CategoryListMixin):
 	model = Goods
 	context_object_name = 'good'
 	# pk_url_kwargs = 'code'
+	cart = None 
+	opt_user = None
+	customer = None
+	form = None
 
-	
+	def get(self, request, *args, **kwargs):
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+		else:
+			return redirect('login')
+
+		if self.customer.baskets.all().exists():
+			for basket in self.customer.baskets.all():
+				if not basket.paid_for:
+					self.cart = basket
+					request.session['cart_id'] = basket.id
+		else:
+			cart = Cart()
+			cart.save()
+			cart_id = cart.id
+			self.customer.baskets.add(cart)
+			request.session['cart_id'] = cart_id
+			self.cart = Cart.objects.get(id=cart_id)
+		
+		self.form = CartItemCount
+		return super(GoodDetailView, self).get(request, *args, **kwargs)
+
 	def get_context_data(self, **kwargs):
 		"""Вот решение: вы можете создать подкласс от DetailView 
 		и переопределить в нем метод get_context_data. 
@@ -171,6 +201,9 @@ class GoodDetailView(DetailView, CategoryListMixin):
 		except KeyError:
 			context['pn'] = 1
 		context['cats'] = Category.objects.order_by('name')
+		context['cart'] = self.cart
+		context['form'] = self.form
+		context['opt_user'] = self.opt_user
 		return context
 
 

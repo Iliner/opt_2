@@ -10,6 +10,7 @@
 						<div class='basket_history_date'>{{cart.date}}</div>
 						<div class='basket_history_total_count'>Сумма корзины: {{cart.cart_total}}</div>
 					</div>
+					{% comment "Optional note" %}
 					<table class='table table-hover basket_history_table'>
 						<thead>
 							<th>Код</th>
@@ -38,6 +39,37 @@
 								<th>{{good.item_total}}</th>	
 							</tr>		
 						{% endfor %}
+						</tbody>	
+					</table>
+					{% endcomment %}
+					<table class='table table-hover basket_history_table'>
+						<thead>
+							<th style="width:  8.5%" class='table_tr_code'>Код</th>
+							<th style="width:  12.5%" class='table_tr_producer'>Производитель</th>
+							<th style="width:  12.5%" class='table_tr_articul'>Артикул</th>
+							<th >Описание</th>
+							<th style="width:  12.5%" class='row_th_img'>Фото</th>
+							<th style="width:  9.5%" >Цена</th>
+							<th style="width:  9.5%" >Кол-во</th>
+							<th style="width:  6.5%">Итог</th>
+						</thead>
+						<tbody>
+							{% for good in cart.items.all %}
+								<tr>
+									<th style="width:  8.5%" class='table_tr_code' ><a href="{% url 'good_page' code=good.product.code %}?page={{page_obj.number}}">{{good.product.code}}</a></th>
+									<th style="width:  12.5%" class='table_tr_producer'>{{good.product.producer}}</th>
+									<th style="width:  12.5%" class='table_tr_articul'>{{good.product.articul}}</th>
+									<th class='table_tr_description' >{{good.product.description}}</th>
+									{% if not good.product.photo %}
+										<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{default_img.url}}"></th>
+									{% else %}
+										<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{good.product.photo.photo.url}}"></th>
+									{% endif %}
+									<th>{{good.price}}</th>
+									<th>{{good.count}}</th>
+									<th>{{good.item_total}}</th>
+								</tr>	
+							{% endfor %}
 						</tbody>	
 					</table>
 				</div>
