@@ -68,6 +68,10 @@ class GoodListView(ListView, CategoryListMixin):
 		записей, этот самый список.
 		(То есть инициализирует сам context)
 		"""
+		try:
+			print("request.session['search_query']", request.session['search_query'])
+		except:
+			print("request.session['search_query']", 'netu')
 
 		if request.user.is_authenticated():
 			try:
@@ -83,6 +87,7 @@ class GoodListView(ListView, CategoryListMixin):
 				if not basket.paid_for:
 					self.cart = basket
 					request.session['cart_id'] = basket.id
+					request.session['goods_card'] = dict()
 		else:
 			cart = Cart()
 			cart.save()

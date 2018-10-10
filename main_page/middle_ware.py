@@ -13,7 +13,10 @@ class AuthRequiredMiddleware:
 		return self.process_request(request)
 
 	def process_request(self, request):
-		if not request.user.is_authenticated():
+		print(request.get_full_path())
+		print(request.COOKIES.get('sessionid'))
+		if not request.user.is_authenticated() and request.get_full_path() != '/login/':
 			return HttpResponseRedirect(reverse('login')) # or http response
-		none = None
-		return HttpResponse(request.GET['url'])
+		if request.COOKIES.get('sessionid'):
+			none = None
+			return HttpResponse(none)

@@ -3,18 +3,21 @@
 
 {% block content %}
 <div class='main'>
+	
+
+	{% include "includes/lenta_meta_table.html" %}
 	<table class='table table-hover table_list_goods'>
 		<thead>
 			<th style="width:  8.5%" class='table_tr_code'>Код</th>
 			<th style="width:  12.5%" class='table_tr_producer'>Производитель</th>
 			<th style="width:  12.5%" class='table_tr_articul'>Артикул</th>
-			<th >Описание</th>
+			<th class='row_th_description'>Описание</th>
 			<th style="width:  12.5%" class='row_th_img'>Фото</th>
-			<th style="width:  9.5%" >Цена</th>
+			<th style="width:  9.5%" class='row_th_price'>Цена</th>
 			{% if user.is_authenticated %}
-				<th style="width:  9.5%" >Опт-цена</th>
+				<th style="width:  9.5%" class='row_th_opt_price'>Опт-цена</th>
 			{% endif %}
-			<th style="width:  6.5%">Заказать</th>
+			<th style="width:  6.5%" class='row_th_order'>Заказать</th>
 		</thead>
 		<tbody>
 			{% for good in object_list %}

@@ -15,29 +15,46 @@
 
 		<div id='card_description_des'>
 			<div id='card_description_block_meta'>
-				<div>Производитель: {{good.producer}}</div>
-				<div>Артикул: {{good.articul}}</div>
-				<div>Код: {{good.code}}</div>
+				<div id='card_description_block_meta_one'>
+					<div>ПРОИВОДИТЕЛЬ</div>
+					<div class='card_description_block_meta_producer'>{{good.producer}}</div>
+				</div>
+				<div id='card_description_block_meta_two'>
+					<div>АРТИКУЛ</div>
+					<div class='card_description_block_meta_articul'>{{good.articul}}</div>
+				</div>
+				<div id='card_description_block_meta_three'>
+					<div>КОД</div>
+					<div class='card_description_block_meta_code'>{{good.code}}</div>
+				</div>
 			</div>
 			<div id='card_description_block_price'>
-				<div>Цена: {{good.price}}</div>
-				<div>Оптовая цена:
-					{% if user.is_authenticated %}
-						{% if opt_user == 2 %}
-							{{good.price_2}}
-						{% elif opt_user == 3 %}
-							{{good.price_2}}
-						{% elif opt_user == 5 %}
-							{{good.price_5}}
-						{% elif opt_user == 6 %}
-							{{good.price_6}}
-						{% else %}
-							{{good.price}}
+				<div id='card_description_block_price_price'>
+					<div class='card_description_block_price_price_wrapper'>
+						<span>РОЗНИЧНАЯ ЦЕНА</span>
+						<span>{{good.price}}</span>
+					</div>
+					<div class='card_description_block_price_price_wrapper'>
+						{% if user.is_authenticated %}
+							<span>ОТОВАЯ ЦЕНА</span>
+							<span>
+								{% if opt_user == 2 %}
+									{{good.price_2}}
+								{% elif opt_user == 3 %}
+									{{good.price_2}}
+								{% elif opt_user == 5 %}
+									{{good.price_5}}
+								{% elif opt_user == 6 %}
+									{{good.price_6}}
+								{% else %}
+									{{good.price}}
+								{% endif %}
+							</span>
 						{% endif %}
-					{% endif %}
+					</div>
 				</div>
-				<div>
-					Заказать
+				<div id='card_description_block_price_order'>
+					<span>ЗАКАЗАТЬ</span>
 				    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
 				        {% csrf_token %}
 						{% for field in form.hidden_fields %}
@@ -70,16 +87,17 @@
 			</div>
 			<div id='card_description_block_description'>{{good.description}}</div>
 			{% comment "Optional note" %}
-			<div><a href="{% url 'add_cart' code=good.code %}">Добавить в корзину</a></div>
+				<div><a href="{% url 'add_cart' code=good.code %}">Добавить в корзину</a></div>
 			{% endcomment %}
-			<a href="{% url 'index' %}?page={{pn}}">Назад</a>
+			<div id='card_description_block_back'><a href="{% url 'index' %}?page={{pn}}">назад</a></div>
 		</div>
 	</div>
-
-	<div id='card_admin_do'>
-		<a href="{% url 'good_edit'  code=good.code %}?page={{page_obj.number}}">Изменить</a>
-		<a href="{% url 'good_delete' code=good.pk %}?page={{page_obj.number}}">Удалить</a>				
-	</div>
+	{% if perms.admin.add_good %}
+		<div id='card_admin_do'>
+			<a href="{% url 'good_edit'  code=good.code %}?page={{page_obj.number}}">Изменить</a>
+			<a href="{% url 'good_delete' code=good.pk %}?page={{page_obj.number}}">Удалить</a>				
+		</div>
+	{% endif %}
 </div>	
 </div>
 {% endblock %}

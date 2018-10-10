@@ -252,6 +252,9 @@ def add_view(request):
 	if request.method == 'POST':
 		product = Goods.objects.get(code=request.POST['code'])
 		if int(request.POST['count']) > 0:
+			request.session['goods_card'][request.POST['code']] = int(request.POST['count'])
+			print('goods_card', request.session['goods_card'])
+			print('url', request.get_full_path())
 			price = opt_price(product, opt_user)
 			if cart.items.all().exists():
 				for item in cart.items.all():
@@ -292,6 +295,8 @@ def add_view(request):
 				cart.save()
 
 		elif int(request.POST['count']) == 0:
+			request.session['goods_card'].pop(request.POST['code'])
+
 			price = opt_price(product, opt_user)
 			if cart.items.all().filter(product__code=request.POST['code']).exists():
 				cart.items.all().filter(product__code=request.POST['code']).delete()

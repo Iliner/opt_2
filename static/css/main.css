@@ -26,8 +26,8 @@
     }
 
     #main_card_good{
-        width: 1266px;
-        height: 1000px;
+/*        width: 1266px;
+        height: 1000px;*/
         background-color: #fff;
         box-shadow: 0px 0px 13px 8px rgba(0,0,0,0.5);
     }
@@ -105,6 +105,7 @@ nav.navbar {
     max-width: 100px;
     min-height: 100px;
     min-width: 100px;
+    cursor: pointer;
 }
 
 .row_th_img {
@@ -118,6 +119,9 @@ nav.navbar {
 /*	position:  absolute;
 	display: flex;
 	flex-direction: column;*/
+    margin-top: 36px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 
@@ -126,7 +130,7 @@ nav.navbar {
 
 
 #card_description_img {
-    border: 1px solid black;
+    cursor: pointer;
 }
 
 
@@ -138,6 +142,8 @@ nav.navbar {
 
 #card_description {
 	display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
@@ -148,42 +154,127 @@ nav.navbar {
 #card_description_block_meta{
     display: flex;
     justify-content: space-between;
+    justify-content: center;
+}
+
+#card_description_block_meta > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#card_description_block_meta_one{
+    margin-left: 10px;
 }
 
 #card_description_block_meta div:first-child{
-    border-bottom: 2px solid #101086;
+
+}
+
+.card_description_block_meta_producer {
+    padding: 9px;
+    border-radius: 4px;
+    background: #101086;
+    color: #fff;
+    font-weight: bold;
+    min-width: 150px;
+}
+
+#card_description_block_meta_two {
+
 }
 
 #card_description_block_meta div:nth-child(2){
-    border-bottom: 2px solid #307c47;
+
+
 }
 
-#card_description_block_meta div:nth-child(3){
-    border-bottom: 2px solid #961a2d;
+.card_description_block_meta_articul {
+    padding: 9px;
+    border-radius: 4px;
+    background: #307c47;
+    color: #fff;
+    font-weight: bold;
+    min-width: 150px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
+
+#card_description_block_meta_three {
+    margin-right: 10px;
+}
+#card_description_block_meta div:nth-child(3){
+    margin-right: 10px;
+}
+
+.card_description_block_meta_code {
+    padding: 9px;
+    border-radius: 4px;
+    background: #961a2d;
+    color: #fff;
+    font-weight: bold;
+    min-width: 150px;
+}
+
+
+
+
+
 
 #card_description_block_price{
-    border-bottom: 1px solid;
+    border-bottom: 3px solid #373d42;
     display: flex;
-    margin-top: 88px;
+    flex-direction: column;
+    margin-top: 50px;
     justify-content: space-between;
 }
 
+#card_description_block_price_price {
+    display: flex;
+    justify-content: space-around;
+}
+
+#card_description_block_price_order{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
+#card_description_block_price_order span:nth-child(1) {
+    margin-right: 8px;
+}
+
+
+
 #card_description_block_description{
     margin-top: 30px;
+    max-width: 510px;
+    padding: 10px;
 }
 
 #card_admin_do{
 	text-align: center;
 }
 
+.card_description_block_price_price_wrapper span:nth-child(2){
+    font-weight: bold;
+    color: red;
+}
 
 
 
 
 
-
-
+#card_description_block_back {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    color: #000;
+    font-weight: bold;
+}
 
 
 
@@ -477,7 +568,9 @@ nav.navbar {
 }
 
 
-
+#search_form{
+    display: flex;
+}
 
 #search_input::placeholder {
   color: #b3b3b3;
@@ -491,8 +584,13 @@ nav.navbar {
     border: 1px solid;
     height: 26px;
     width: 63px;
+    text-align: center;
 }
 
+#search_sumbit > a {
+    color: #28a745;
+    text-decoration: none;
+}
 
 
 #search_output {
@@ -652,6 +750,41 @@ nav.navbar {
 }
 
 #img_big_wrapper_img {
-    max-width: 70%;
-    box-shadow: rgb(55, 61, 66) 0px 0px 20px 6px;
+    /*max-width: 70%;*/
+    box-shadow: rgb(55, 61, 66) 0px 0px 20px 3px;
+}
+
+#lenta_table_meta {
+    background: #fff;
+    display: flex;
+    z-index: 1;
+    position: fixed;
+    top: 81px;
+    border-bottom: 1px solid #9c9c9c;
+    font-weight: bold;
+}
+
+#lenta_table_meta > div {
+    padding: .75rem;
+    text-align: center;
+}
+
+#lenta_code {
+    color: #961a2d;
+}
+
+#lenta_producer {
+    color: #101086;
+}
+
+#lenta_articul {
+    color: #307c47;
+}
+
+#footer_wrapper_main{
+    display: flex;
+}
+
+#footer_meta{
+    color: #262a2d00;
 }

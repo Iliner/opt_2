@@ -1,0 +1,13 @@
+
+<div id='lenta_table_meta'>
+	<div id='lenta_code'>Код</div>
+	<div id='lenta_producer'>Производитель</div>
+	<div id='lenta_articul'>Артикул</div>
+	<div id='lenta_description'>Описание</div>
+	<div id='lenta_photo'>Фото</div>
+	<div id='lenta_price'>Цена</div>
+	{% if user.is_authenticated %}
+		<div id='lenta_opt_price'>Опт-цена</div>
+	{% endif %}
+	<div id='lenta_order'>Заказать</div>
+</div>
