@@ -333,6 +333,7 @@
 
 					$('#open_big_img_banner').css('display', 'flex');
 					$('#blur_for_banner').css('display', 'flex');
+					$('#content_block').css('height', '1300px')
 					if(height_window < 780){	
 						$('.big_img_banner').css({'max-height': 'none', 'max-width': 'none'});
 					}else{
@@ -355,6 +356,7 @@
 				$('.big_img_banner').click(function(e){
 					$('#open_big_img_banner').css('display', 'none');
 					$('#blur_for_banner').css('display', 'none');
+					$('#content_block').css('min-height', '927px')
 					$('#wrapper_for_open_big_img_banner').css('display', 'none');
 					$('#open_big_img_banner').css('position', 'absolute');
 				})

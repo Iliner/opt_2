@@ -16,14 +16,14 @@
 			<div id='div_column_for_stock_banner_one'>		
 			{% for bunner in object_list %}
 					{% if forloop.counter|divide:2 == 0 %}
-						<div class='div_for_stock_img'><img class='banner_stock_img  img_full' src='{{bunner.img.url}}'></div>
+						<div class='div_for_stock_img'><img class='banner_stock_img' src='{{bunner.img.url}}'></div>
 					{% endif %}
 			{% endfor %}
 			</div>
 			<div id='div_column_for_stock_banner_two'>
 				{% for bunner in object_list %}
 					{% if forloop.counter|divide:2 != 0 %}
-							<div class='div_for_stock_img'><img class='banner_stock_img  img_full' src='{{bunner.img.url}}'></div>
+							<div class='div_for_stock_img'><img class='banner_stock_img' src='{{bunner.img.url}}'></div>
 					{% endif %}
 				{% endfor %}
 			</div>
