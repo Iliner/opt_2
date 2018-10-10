@@ -65,7 +65,6 @@
 					{% if user.is_authenticated %}
 						<li class="pushy-link"><a href="{% url 'history_order' %}" id='action_actions'>История заказов</a></li>
 					{% endif %}
-					<li class="pushy-link"><a href="{% url 'test' %}" id='action_actions'>Test</a></li>
 					{% if user.is_authenticated %}
 						<li class="pushy-link"><a class='position-absolute login_img_link' href="/logout" title='Выйти'>Выйти</a></li>
 					{% else %}
