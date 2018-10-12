@@ -1,19 +1,29 @@
 import decimal
+import csv
+
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import TemplateView, ContextMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from .models import Cart, CartItem
-from .forms import CartItemCount, CartItemFormset
-from main_page.models import Goods, Photo
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
+from .models import Cart, CartItem, Manager
+from .forms import CartItemCount, CartItemFormset
+from main_page.models import Goods, Photo
+
 import smtplib
+import mimetypes
+from email.mime.multipart import MIMEMultipart
+from email import encoders
+from email.message import Message
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
 from email.mime.text import MIMEText
 from email.header import Header
-
 
 
 class CartCommonMixin(ContextMixin):
@@ -30,8 +40,24 @@ class CartView(TemplateView, CartCommonMixin):
 	cart_id = None
 	cart = None
 	opt_user = None
-
+	manager = None
+	customer = None
+	manager = None
 	def get(self, request, *args, **kwargs):
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
+
+
 		self.form = CartItemCount
 		self.cart = cart_init(request)
 		self.opt_user = request.user.customer_set.first().opt
@@ -49,6 +75,12 @@ class CartView(TemplateView, CartCommonMixin):
 		context['cart'] = self.cart
 		context['opt_user'] = self.opt_user
 		# context['cart_id'] = self.cart_id
+
+		if self.manager:
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
 		return context
 
 	def post(self, request, *args, **kwargs):
@@ -60,76 +92,8 @@ class CartView(TemplateView, CartCommonMixin):
 
 
 
-
-
-
-
-
-
-
-
-# class CartView(TemplateView, CartCommonMixin):
-# 	template_name = 'basket/cart.html'
-# 	formset = None
-# 	cart_id = None
-
-# 	def get(self, request, *args, **kwargs):
-# 		self.formset = CartItemFormset()
-# 		try:
-# 			cart_id = request.session['cart_id']
-# 			cart = Cart.objects.get(id=cart_id)
-# 			#request.session['total'] = cart.cart_total
-# 		except:
-# 			cart = Cart()
-# 			cart.save()
-# 			self.cart_id = cart.id
-# 			request.session['cart_id'] = self.cart_id
-# 		return super(CartView, self).get(request, *args, **kwargs)
-
-# 	def get_context_data(self, **kwargs):
-# 		context = super(CartView, self).get_context_data(**kwargs)
-# 		cart_items = CartItem.objects.all()
-# 		dict_count = {}
-# 		for items in cart_items.all():
-# 			dict_count[items.product.code] = items.count
-# 		#print(dict_count)
-# 		context['dict_count'] = dict_count
-# 		context['formset'] = self.formset
-# 		context['cart'] = Cart.objects.first()
-# 		context['cart_id'] = self.cart_id
-# 		return context
-
-# 	def post(self, request, *args, **kwargs):
-# 		if self.formset.is_valid():
-# 			self.formset.save()
-# 		else:
-# 			return super(CartView, self).post(request, *args, **kwargs)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class MenegerView(TemplateView):
+	template_name = 'main_page/footer_manager_data.html'
 
 
 class DeletePosition(DeleteView):
@@ -154,25 +118,6 @@ class DeletePosition(DeleteView):
 		self.success_url = reverse_lazy('index')
 		return super(DeletePosition, self).post(request, *args, **kwargs)
 
-
-
-
-
-
-
-
-
-
-
-
-
-# def cart_view(request):
-# 	cart = Cart.objects.first()
-# 	context = {
-# 		'cart': cart,
-# 		'default_img': Photo.objects.get(name="Default").photo
-# 	}
-# 	return render(request, 'basket/cart.html', context)
 
 
 
@@ -211,17 +156,7 @@ def cart_init(request):
 		customer.baskets.add(cart)
 		request.session['cart_id'] = cart_id
 		cart = Cart.objects.get(id=cart_id)
-	
-	# try:
-	# 	cart_id = request.session['cart_id']
-	# 	cart = Cart.objects.get(id=cart_id)
-	# except:
-	# 	cart = Cart()
-	# 	cart.save()
-	# 	cart_id = cart.id
-	# 	customer.baskets.add(cart)
-	# 	request.session['cart_id'] = cart_id
-	# 	cart = Cart.objects.get(id=cart_id)
+
 	return cart
 
 
@@ -238,6 +173,34 @@ def opt_price(good, opt):
 		price = good.price_5
 	elif opt == '6':
 		price = good.price_6
+	elif opt == '7':
+		price = good.price_7
+	elif opt == '8':
+		price = good.price_8
+	elif opt == '9':
+		price = good.price_9
+	elif opt == '10':
+		price = good.price_10
+	elif opt == '11':
+		price = good.price_11
+	elif opt == '12':
+		price = good.price_12
+	elif opt == '13':
+		price = good.price_13
+	elif opt == '14':
+		price = good.price_14
+	elif opt == '15':
+		price = good.price_15
+	elif opt == '6':
+		price = good.price_6
+	elif opt == '17':
+		price = good.price_17
+	elif opt == '18':
+		price = good.price_18
+	elif opt == '19':
+		price = good.price_19
+	elif opt == '20':
+		price = good.price_20
 	return price
 
 
@@ -309,40 +272,7 @@ def add_view(request):
 
 
 
-	# if request.method == 'POST':
-	# 	product = Goods.objects.get(code=request.POST['code'])
-	# 	if int(request.POST['count']) > 0:
-	# 		if CartItem.objects.filter(product__code=request.POST['code']).exists():
-	# 			need_item = CartItem.objects.get(product__code=request.POST['code'])
-	# 			need_item.count = request.POST['count']
-	# 			need_item.item_total = int(request.POST['count']) * int(need_item.product.price)
-				
-	# 			need_item.save()
-	# 			cart.items.add(need_item)
-	# 			print(cart.id, 'cart id exists')
-	# 			cart.save()
-	# 		else:			
-	# 			# print('not exists')
-	# 			# print(request.POST['count'], request.POST['code'], 'here')
-	# 			print(cart.id, 'cart id exists no')
-	# 			cart_item = CartItem
-	# 			new_cart_object = cart_item.objects.create(product=product, count=request.POST['count'], item_total=product.price * int(request.POST['count']))
-	# 			cart.items.add(new_cart_object)
-	# 			cart.save()
-	# 	elif int(request.POST['count']) == 0:
-	# 		need_item = CartItem.objects.get(product__code=request.POST['code']).delete()
-				
-
-	# cart.cart_total = cart.cart_total_summ()
-	# cart.save()
-	# return HttpResponse(cart.cart_total)
-	#return HttpResponse(2)
-
-                                                                                                                            
-
-
-
-
+                                                                                                                          
 
 
 
@@ -352,7 +282,11 @@ def smtp_send(
 	smtp_host, smtp_port, 
 	smtp_login, smtp_password, 
 	send_to, message_text, 
-	header_text):
+	header_text, admin=None, attachment=None):
+	# if admin:
+	
+	# else:
+	print('h', smtp_login, smtp_password)
 	msg = MIMEText(message_text, 'plain', 'utf-8')
 	msg['Subject'] = Header(header_text, 'utf-8')
 	msg['From'] = smtp_login
@@ -368,51 +302,9 @@ def smtp_send(
 
 @csrf_exempt
 def confirm_order(request):
-	cart = cart_init(request)
-	cart.paid_for = True
-	cart_id = cart.id
-	cart.save()
+	send_mail_us(request)
+	send_mail_customer(request)
 	paid_for = 'True'
-
-	user = request.user
-	user_email = user.email
-	user_customer = user.customer_set.first()
-
-	smtp_host = "smtp.mail.ru"
-	smtp_port = "465"
-	smtp_login = "stock@kvam.ru"
-	smtp_password = "AT3TeC&5lshf"
-	body_text = ""
-
-	
-
-
-	for item in cart.items.all():
-		print('item.product.articul', item.product.articul)
-		body_text = "{}\n Артикул: {} Цена: {}".format(
-			body_text, 
-			item.product.articul, 
-			item.product.price)
-
-	header_text_to_customer = "opt-online.ru Ваш заказ №{}".format(cart_id)
-	header_text_to_admin = "Заказчик {} {} Стоймость {}".format(
-		user.first_name, 
-		user.last_name, 
-		cart.cart_total)
-	
-	send_to = str(user_email)
-	send_to_admin = 'mynamekasatkin@gmail.com'
-	message_text = body_text
-	smtp_send(
-		smtp_host, smtp_port, 
-		smtp_login, smtp_password, 
-		send_to_admin, message_text, 
-		header_text_to_admin)
-	smtp_send(
-		smtp_host, smtp_port, 
-		smtp_login, smtp_password, 
-		send_to, message_text, 
-		header_text_to_customer)
 	reverse_lazy('index')
 	return HttpResponse(paid_for)
 
@@ -421,8 +313,124 @@ def confirm_order(request):
 
 
 
+def mail_data(request):
+	cart = cart_init(request)
+	cart.paid_for = True
+	cart_id = cart.id
+	cart.save()
 
 
+
+def send_mail_us(request):
+	cart = cart_init(request)
+	cart.paid_for = True
+	cart_id = cart.id
+	cart.save()
+	paid_for = 'True'
+	user = request.user
+	path_csv = "uploads/basket/csv_to_send/{}_{}_{}.csv".format(user.first_name, user.last_name, cart_id)
+	name_csv = "{}_{}_{}.csv".format(user.first_name, user.last_name, cart_id)
+	with open(path_csv, 'w', newline='') as csvfile:
+	    spamwriter = csv.writer(
+	    	csvfile, 
+	    	delimiter=';',
+          	quotechar='|', 
+          	quoting=csv.QUOTE_MINIMAL
+          	)
+
+	    for item in cart.items.all():	
+	    	spamwriter.writerow([item.product.code, item.count])
+
+
+	email_admin = User.objects.get(username='ivan').email
+	emailto = email_admin
+	fileToSend = path_csv
+	smtp_login = "stock@kvam.ru"
+	username = smtp_login
+	password = "AT3TeC&5lshf"
+	header_text_to_admin = "Заказчик {} {} Стоймость {}".format(
+		user.first_name, 
+		user.last_name, 
+		cart.cart_total)
+
+	msg = MIMEMultipart()
+	msg["From"] = smtp_login
+	msg["To"] = emailto
+	msg["Subject"] = header_text_to_admin
+	msg.preamble = "help I cannot send an attachment to save my life"
+
+	ctype, encoding = mimetypes.guess_type(fileToSend)
+	if ctype is None or encoding is not None:
+	    ctype = "application/octet-stream"
+
+	maintype, subtype = ctype.split("/", 1)
+
+	if maintype == "text":
+	    fp = open(fileToSend)
+	    attachment = MIMEText(fp.read(), _subtype=subtype)
+	    fp.close()
+	elif maintype == "image":
+	    fp = open(fileToSend, "rb")
+	    attachment = MIMEImage(fp.read(), _subtype=subtype)
+	    fp.close()
+	elif maintype == "audio":
+	    fp = open(fileToSend, "rb")
+	    attachment = MIMEAudio(fp.read(), _subtype=subtype)
+	    fp.close()
+	else:
+	    fp = open(fileToSend, "rb")
+	    attachment = MIMEBase(maintype, subtype)
+	    attachment.set_payload(fp.read())
+	    fp.close()
+	    encoders.encode_base64(attachment)
+
+	attachment.add_header("Content-Disposition", "attachment", filename=name_csv)
+	msg.attach(attachment)
+	server = smtplib.SMTP('smtp.mail.ru:587')
+	server.starttls()
+	server.login(username,password)
+	server.sendmail(smtp_login, emailto, msg.as_string())
+	server.quit()
+
+
+
+
+def send_mail_customer(request):
+	cart = cart_init(request)
+	cart.paid_for = True
+	cart_id = cart.id
+	cart.save()
+	paid_for = 'True'
+
+	user = request.user
+	user_email = str(user.email)
+	user_email_brand = user_email.split('@')[-1]
+	user_customer = user.customer_set.first()
+
+	smtp_login = "stock@kvam.ru"
+	smtp_password = "AT3TeC&5lshf"
+	smtp_port = "465"
+	smtp_host = "smtp.mail.ru"
+	body_text = ""
+
+	
+	for item in cart.items.all():
+		print('item.product.articul', item.product.articul)
+		body_text = "{}\n Артикул: {} Цена: {} Кол-во: {}".format(
+			body_text, 
+			item.product.articul, 
+			item.product.price,
+			item.count,
+			)
+
+	header_text_to_customer = "opt-online.ru Ваш заказ №{}".format(cart_id)
+	send_to = str(user_email)
+	message_text = body_text
+	smtp_send(
+		smtp_host, smtp_port, 
+		smtp_login, smtp_password, 
+		send_to, message_text, 
+		header_text_to_customer)
 
 
 
@@ -431,16 +439,27 @@ class HistoryOrderView(ListView, CartCommonMixin):
 	template_name = 'basket/history_order.html'
 	paginate_by = 100
 	customer = None
-
+	manager = None
+	
 	def get(self, request, *args, **kwargs):
 		self.customer = request.user.customer_set.first()
 		for cart in self.customer.baskets.all().filter(paid_for=True).order_by('-date'):
 			for item in cart.items.all():
 				print(item.product.code)
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
+
 		return super(HistoryOrderView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
 		context = super(HistoryOrderView, self).get_context_data(**kwargs) 
+		if self.manager:
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
 		return context
 
 	def get_queryset(self): 

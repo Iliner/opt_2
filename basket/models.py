@@ -63,6 +63,20 @@ OPTS = (
 	(3, 3),
 	(5, 5),
 	(6, 6),
+	(7, 7),
+	(8, 8),
+	(9, 9),
+	(10, 10),
+	(11, 11),
+	(12, 12),
+	(13, 13),
+	(14, 14),
+	(15, 15),
+	(16, 16),
+	(17, 17),
+	(18, 18),
+	(18, 18),
+	(19, 12),
 	)
 
 
@@ -77,3 +91,22 @@ class Customer(models.Model):
 	class Meta:
 		verbose_name = 'Клиент'
 		verbose_name_plural = 'Клиенты'
+
+
+
+class Manager(models.Model):
+	first_name = models.CharField(max_length=30, verbose_name='Имя')
+	last_name = models.CharField(max_length=30, verbose_name='Фамилия')
+	third_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='Отчество')
+	mail_own = models.EmailField(null=True, blank=True, verbose_name='личная почта')
+	mail_work = models.EmailField(null=True, blank=True, verbose_name='почта рабочая')
+	phone_number_own = models.CharField(max_length=30, null=True, blank=True, verbose_name='личный номер тел')
+	phone_number_work = models.CharField(max_length=30, null=True, blank=True, verbose_name='рабочий номер тел')
+	customers = models.ManyToManyField(Customer,  blank=True, verbose_name='Клиенты')
+
+	def __str__(self):
+		return "{} {}".format(self.first_name, self.last_name)
+
+	class Meta:
+		verbose_name = 'Менеджер'
+		verbose_name_plural = 'Менеджеры'

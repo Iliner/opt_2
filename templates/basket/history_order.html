@@ -26,7 +26,7 @@
 						{% for good in cart.items.all %}
 							<tr class='basket_history_table_row'>
 								<th><a href="{% url 'good_page' code=good.product.code %}?page={{page_obj.number}}">{{good.product.code}}</a></th>
-								<th>{{good.product.producer}}</th>
+								<th>{{good.product.producer.name}}</th>
 								<th>{{good.product.articul}}</th>
 								<th>{{good.product.description}}</th>
 								{% if not good.product.photo %}
@@ -57,7 +57,7 @@
 							{% for good in cart.items.all %}
 								<tr>
 									<th style="width:  8.5%" class='table_tr_code' ><a href="{% url 'good_page' code=good.product.code %}?page={{page_obj.number}}">{{good.product.code}}</a></th>
-									<th style="width:  12.5%" class='table_tr_producer'>{{good.product.producer}}</th>
+									<th style="width:  12.5%" class='table_tr_producer'>{{good.product.producer.name}}</th>
 									<th style="width:  12.5%" class='table_tr_articul'>{{good.product.articul}}</th>
 									<th class='table_tr_description' >{{good.product.description}}</th>
 									{% if not good.product.photo %}

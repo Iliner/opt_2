@@ -94,7 +94,7 @@ def searche_good(request, query_full=None):
 					<div class='search_output_row_img'><img src='{src}'></div>
 					<div class='search_output_wrapper_data'>
 						<div class='search_output_characteristics'>
-							<div class='search_output_producer'>{producer}</div>
+							<div class='search_output_producer'>{producer.name}</div>
 							<div class='search_output_articul'>{articul}</div>
 							<div class='search_output_code'>{code}</div>
 						</div>
@@ -152,40 +152,6 @@ def get_query(query_string, search_fields):
 
 
 
-# class SearchGoodsFull(TemplateView):
-# 	template_name = 'search/search_full_list.html'
-# 	list_goods = None 
-
-# 	def get(self, request, *args, **kwargs):
-# 	 	query = request.session['search_query']
-# 	 	if query:
-# 	 		self.list_goods = searche_good(query)
-
-
-# 	 def get_context_data(self, **kwargs):
-# 		"""
-# 		Создает контекст данных
-# 		"""
-
-# 		# Формирует сам контекст данных и заполнит его начальными данными, 
-# 		# в частности значениями полученными контроллером параметров.
-
-# 		context = super(GoodListView, self).get_context_data(**kwargs) 
-# 		context['categorymy'] = self.cat
-# 		context['cart'] = self.cart
-# 		context['form'] = self.form
-# 		context['opt_user'] = self.opt_user
-# 		return context
-
-# 	def get_queryset(self): 
-# 		return self.list_goods
-
-
-# 	def post(self, request, *args, **kwargs):
-# 		if self.form.is_valid():
-# 			self.form.save()
-# 		else:
-# 			return super(GoodListView, self).post(request, *args, **kwargs)
 
 
 

@@ -1,4 +1,5 @@
 {% extends "main_page/index.html" %}
+{% load staticfiles %}
 
 
 {% block content %}
@@ -11,6 +12,7 @@
 			<th style="width:  12.5%" class='table_tr_articul'>Артикул</th>
 			<th class='row_th_description'>Описание</th>
 			<th style="width:  12.5%" class='row_th_img'>Фото</th>
+			<th class='row_th_stock'>Наличие</th>
 			<th style="width:  9.5%" class='row_th_price'>Цена</th>
 			{% if user.is_authenticated %}
 				<th style="width:  9.5%" class='row_th_opt_price'>Опт-цена</th>
@@ -21,7 +23,7 @@
 			{% for good in object_list %}
 					<tr>
 						<th style="width:  8.5%" class='table_tr_code' ><a href="{% url 'good_page' code=good.code %}?page={{page_obj.number}}">{{good.code}}</a></th>
-						<th style="width:  12.5%" class='table_tr_producer'>{{good.producer}}</th>
+						<th style="width:  12.5%" class='table_tr_producer'>{{good.producer.name}}</th>
 						<th style="width:  12.5%" class='table_tr_articul'>{{good.articul}}</th>
 						<th class='table_tr_description' >{{good.description}}</th>
 						{% if not good.photo %}
@@ -29,6 +31,17 @@
 						{% else %}
 							<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
+						<th class='row_th_stock' style="width:  9.5%" >
+							{% if good.in_stock >= 50 %}
+								<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_3.svg" %}'>
+							{% elif good.in_stock >= 10 %}
+								<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_2.svg" %}'>
+							{% elif good.in_stock > 0 %}
+								<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_1.svg" %}'>
+							{% else %}
+								<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_0.svg" %}'>
+							{% endif %}
+						</th>
 						<th style="width:  9.5%" >{{good.price}}</th>
 						{% if user.is_authenticated %}
 							{% if opt_user == 2 %}
@@ -83,7 +96,7 @@
 		<div id='pagination'>
 			{% if category %}
 				{% if page_obj.has_previous %}
-					<div id='previous-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.previous_page_number }}">&lt;</a></div>
+					<div id='previous-page'><a href="{% url 'searche_goods_full' %}{{category.pk}}/?page={{ page_obj.previous_page_number }}">&lt;</a></div>
 				{% endif %}
 				<div id='num-pages'>
 					{% for pn in page_obj.paginator.page_range %}
@@ -92,11 +105,11 @@
 						{% endif %}
 						{% if category %}
 							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
+								<a href="{% url 'search_goods_full' %}{{category.pk}}/?page={{ pn }}">
 							{% endif %}
 						{% else %}
 							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}?page={{ pn }}">
+								<a href="{% url 'searche_goods_full' %}?page={{ pn }}">
 							{% endif %}
 						{% endif %}
 						{{ pn }}
@@ -106,11 +119,11 @@
 					{% endfor %}
 				</div>	
 				{% if page_obj.has_next %}
-					<div id='next-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.next_page_number }}">&gt;</a></div>
+					<div id='next-page'><a href="{% url 'searche_goods_full' %}{{category.pk}}/?page={{ page_obj.next_page_number }}">&gt;</a></div>
 				{% endif %}
 			{% else %}
 				{% if page_obj.has_previous%}
-					<div id='previous-page'><a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">&lt;</a></div>
+					<div id='previous-page'><a href="{% url 'searche_goods_full' %}?page={{ page_obj.previous_page_number }}">&lt;</a></div>
 				{% endif %}
 				<div id='num-pages'>
 					{% for pn in page_obj.paginator.page_range %}
@@ -119,11 +132,11 @@
 						{% endif %}
 						{% if category %}
 							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
+								<a href="{% url 'searche_goods_full' %}{{category.pk}}/?page={{ pn }}">
 							{% endif %}
 						{% else %}
 							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}?page={{ pn }}">
+								<a href="{% url 'searche_goods_full' %}?page={{ pn }}">
 							{% endif %}
 						{% endif %}
 						{{ pn }}
@@ -133,7 +146,7 @@
 					{% endfor %}
 				</div>	
 				{% if page_obj.has_next%}
-					<div id='next-page'><a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">&gt;</a></div>
+					<div id='next-page'><a href="{% url 'searche_goods_full' %}?page={{ page_obj.next_page_number }}">&gt;</a></div>
 				{% endif %}
 			{% endif %}
 		</div>

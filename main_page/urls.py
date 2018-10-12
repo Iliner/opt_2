@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 urlpatterns = [
 	url(r'^(?:(?P<cat_id>\d+)/)?$', GoodListView.as_view(), name='index'),
-	url(r'^test/$', Test.as_view(), name='test'),
 	url(r'^goods/new_position/$', GoodListViewNew.as_view(), name='new_position'),
 	url(r'good/(?:(?P<code>\d+)/)$', GoodDetailView.as_view(), name='good_page'),
 	url(r'^(?P<cat_id>\d+)/add/$', GoodCreate.as_view(), name='good_add'),
@@ -16,6 +15,7 @@ urlpatterns = [
 	url(r'^good/(?P<code>\d+)/delete/$', GoodDelete.as_view(), name='good_delete'),
 	url(r'^add_file/$', login_required(AddFiles.as_view()), name='add_file'),
 	url(r'^add_img/$', uploads_photo, name='add_img'),
+	url(r'^producer/(?P<id>[\d]+)$', ProducerListView.as_view(), name='producer_list'),
 	#working_excel для запуска обработки прайса
 
     # url(r'^add-to-cart/(?P<item_id>[-\w]+)/$', add_to_cart, name="add_to_cart"),

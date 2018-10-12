@@ -19,12 +19,26 @@ class Goods(models.Model):
 	producer = models.ForeignKey('Producers')
 	description = models.TextField()
 	category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
-	in_stock = models.CharField(max_length=20, null=True)
-	price = models.FloatField()
+	in_stock = models.IntegerField(default=0, null=True, blank=True)
+	price = models.FloatField(null=True, blank=True)
 	price_2 = models.FloatField(null=True, blank=True)
 	price_3 = models.FloatField(null=True, blank=True)	
 	price_5 = models.FloatField(null=True, blank=True)
 	price_6 = models.FloatField(null=True, blank=True)
+	price_7 = models.FloatField(null=True, blank=True)
+	price_8 = models.FloatField(null=True, blank=True)
+	price_9 = models.FloatField(null=True, blank=True)
+	price_10 = models.FloatField(null=True, blank=True)
+	price_11 = models.FloatField(null=True, blank=True)
+	price_12 = models.FloatField(null=True, blank=True)
+	price_13 = models.FloatField(null=True, blank=True)
+	price_14 = models.FloatField(null=True, blank=True)
+	price_15 = models.FloatField(null=True, blank=True)
+	price_16 = models.FloatField(null=True, blank=True)
+	price_17 = models.FloatField(null=True, blank=True)
+	price_18 = models.FloatField(null=True, blank=True)
+	price_19 = models.FloatField(null=True, blank=True)
+	price_20 = models.FloatField(null=True, blank=True)
 	photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
 	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
 	
@@ -142,9 +156,12 @@ class Producers(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.TextField(null=True, blank=True)
 	photo = models.ForeignKey(Photo, blank=True, null=True)
+	rating = models.IntegerField(null=True, blank=True, verbose_name='рейтинг')
+	visibility = models.BooleanField(default=False, db_index=True, verbose_name='отображать')
+
 
 	def __str__(self):
-		return self.name
+		return "{}, рейтинг:{}, отобржать: {}".format(self.name, self.rating, self.visibility)
 
 	class Meta:
 		verbose_name = 'Производитель'

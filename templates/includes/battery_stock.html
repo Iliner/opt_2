@@ -1,0 +1,13 @@
+{% load staticfiles %}
+
+<th class='row_th_stock' style="width:  9.5%" >
+{% if good.in_stock >= 50 %}
+	<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_3.svg" %}'>
+{% elif good.in_stock >= 10 %}
+	<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_2.svg" %}'>
+{% elif good.in_stock > 0 %}
+	<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_1.svg" %}'>
+{% else %}
+	<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_0.svg" %}'>
+{% endif %}
+</th>

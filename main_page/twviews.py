@@ -2,6 +2,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.base import ContextMixin
 from django.views.generic.base import TemplateView
+from django.views import View
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, InvalidPage
 from django.http import HttpResponse, Http404
@@ -14,6 +15,7 @@ from django import forms
 from .models import *
 from .forms import *
 from basket.models import Cart
+from basket.models import Manager
 from basket.forms import CartItemCount
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -35,6 +37,42 @@ class Navbar(TemplateView):
 
 
 
+class ManagersCommon(View):
+	opt_user = None
+	customer = None
+	manager = None
+
+	def get(self, request, *args, **kwargs):
+		try:
+			print("request.session['search_query']", request.session['search_query'])
+		except:
+			print("request.session['search_query']", 'netu')
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()	
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+		else:
+			return redirect('login')
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)
+		return super(ManagersCommon, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+
+		context = super(ManagersCommon, self).get_context_data(**kwargs)
+		if self.manager: 
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
+		return context
+
 
 
 
@@ -44,12 +82,18 @@ class CategoryListMixin(ContextMixin):
 		context = super(CategoryListMixin, self).get_context_data(**kwargs)
 		context['cats'] = Category.objects.order_by('name')
 		context['default_img'] = Photo.objects.get(name="Default").photo
+		if self.manager:
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
+			context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
 		return context
 
 
 
 
-class GoodListView(ListView, CategoryListMixin):
+class GoodListView(ListView, CategoryListMixin, ManagersCommon):
 	"""
 	Класс удобный для вывода СПИСКА чего либа 
 	"""
@@ -61,6 +105,8 @@ class GoodListView(ListView, CategoryListMixin):
 	cart = None
 	opt_user = None
 	customer = None
+	manager = None
+
 	def get(self, request, *args, **kwargs):
 		"""
 		Присваивает gеременной контекста данных
@@ -75,13 +121,19 @@ class GoodListView(ListView, CategoryListMixin):
 
 		if request.user.is_authenticated():
 			try:
-				self.customer = request.user.customer_set.first()
+				self.customer = request.user.customer_set.first()	
 				self.opt_user = request.user.customer_set.first().opt
 			except Exception as err:
 				print(err)
 		else:
 			return redirect('login')
 
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)
+		
 		if self.customer.baskets.all().exists():
 			for basket in self.customer.baskets.all():
 				if not basket.paid_for:
@@ -152,7 +204,7 @@ class GoodListView(ListView, CategoryListMixin):
 
 
 
-class GoodDetailView(DetailView, CategoryListMixin):
+class GoodDetailView(DetailView, CategoryListMixin, ManagersCommon):
 	"""Ищет объект по pk
 	если его нет то ищет по pk_url_kwargs
 	"""
@@ -162,8 +214,9 @@ class GoodDetailView(DetailView, CategoryListMixin):
 	# pk_url_kwargs = 'code'
 	cart = None 
 	opt_user = None
-	customer = None
 	form = None
+	customer = None
+	manager = None
 
 	def get(self, request, *args, **kwargs):
 
@@ -188,6 +241,11 @@ class GoodDetailView(DetailView, CategoryListMixin):
 			self.customer.baskets.add(cart)
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
 		
 		self.form = CartItemCount
 		return super(GoodDetailView, self).get(request, *args, **kwargs)
@@ -209,6 +267,8 @@ class GoodDetailView(DetailView, CategoryListMixin):
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
+
+
 		return context
 
 
@@ -414,6 +474,7 @@ class GoodListViewNew(ListView, CategoryListMixin):
 	cart = None
 	opt_user = None
 	customer = None
+	manager = None
 
 	def get(self, request, *args, **kwargs):
 
@@ -436,7 +497,12 @@ class GoodListViewNew(ListView, CategoryListMixin):
 			self.customer.baskets.add(cart)
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
-	
+		
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
+		
 		self.form = CartItemCount
 		return super(GoodListViewNew, self).get(request, *args, **kwargs)
 
@@ -479,38 +545,49 @@ class GoodListViewNew(ListView, CategoryListMixin):
 
 
 
-class Test(ListView, CategoryListMixin):
-	"""
-	Класс удобный для вывода СПИСКА чего либа 
-	"""
 
-	template_name = 'main_page/test.html'
+
+
+
+class ProducerListView(ListView, CategoryListMixin, ManagersCommon):
+	template_name = 'main_page/producer_list.html'
 	paginate_by = 100
 	cat = None
 	form = None
 	cart = None
 	opt_user = None
 	customer = None
+	manager = None
+	producer_id= None
+
 	def get(self, request, *args, **kwargs):
-		"""
-		Присваивает gеременной контекста данных
-		в которой должен храниться список
-		записей, этот самый список.
-		(То есть инициализирует сам context)
-		"""
+		self.producer_id =  kwargs['id']
+		try:
+			print("request.session['search_query']", request.session['search_query'])
+		except:
+			print("request.session['search_query']", 'netu')
 
 		if request.user.is_authenticated():
 			try:
-				self.customer = request.user.customer_set.first()
+				self.customer = request.user.customer_set.first()	
 				self.opt_user = request.user.customer_set.first().opt
 			except Exception as err:
 				print(err)
+		else:
+			return redirect('login')
 
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)
+		
 		if self.customer.baskets.all().exists():
 			for basket in self.customer.baskets.all():
 				if not basket.paid_for:
 					self.cart = basket
 					request.session['cart_id'] = basket.id
+					request.session['goods_card'] = dict()
 		else:
 			cart = Cart()
 			cart.save()
@@ -521,202 +598,28 @@ class Test(ListView, CategoryListMixin):
 
 	
 		self.form = CartItemCount
-		# if self.kwargs['cat_id']:
-		# 	self.cat = Category.objects.get(pk=kwargs['cat_id'])
-		# # request.session['basket_goods'] = {}
-		# try:
-		# 	cart_id = request.session['cart_id']
-		# 	self.cart = Cart.objects.get(id=cart_id)
-		# except:
-		# 	cart = Cart()
-		# 	cart.save()
-		# 	cart_id = cart.id
-		# 	request.session['cart_id'] = cart_id
-		# 	self.cart = Cart.objects.get(id=cart_id)
-		# print(self.cart.id, 'cart_id')
-		return super(Test, self).get(request, *args, **kwargs)
+		return super(ProducerListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		"""
-		Создает контекст данных
-		"""
 
-		# Формирует сам контекст данных и заполнит его начальными данными, 
-		# в частности значениями полученными контроллером параметров.
-
-		context = super(Test, self).get_context_data(**kwargs) 
+		context = super(ProducerListView, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
 		context['login_img'] = Photo.objects.get(name='login')
 		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
+		context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
+		context['producer_id'] = self.producer_id
+
 		return context
 
 	def get_queryset(self): 
-		"""
-		Этот метод вызврощает спичсок 
-		записей которые будут выводиться 
-		на экран 
-		""" 
-
-		if self.cat:
-			return Goods.objects.filter(category=self.cat).order_by('code')
-		else:
-			return Goods.objects.all().order_by('code')
+		return Goods.objects.filter(producer__id=self.producer_id)
 
 
 	def post(self, request, *args, **kwargs):
 		if self.form.is_valid():
 			self.form.save()
 		else:
-			return super(Test, self).post(request, *args, **kwargs)
-
-
-
-
-
-
-
-
-# def my_profile(request):
-# 	my_user_profile = Profile.objects.filter(user=request.user).first()
-# 	my_orders = Order.objects.filter(is_ordered=True, owner=my_user_profile)
-# 	context = {
-# 		'my_orders': my_orders
-# 	}
-
-# 	return render(request, 'main_page/profile.html', context)
-
-
-
-
-
-
-# def get_user_pending_order(request):
-#     # get order for the correct user
-#     user_profile = get_object_or_404(Profile, user=request.user)
-#     order = Order.objects.filter(owner=user_profile, is_ordered=False)
-#     if order.exists():
-#         # get the only order in the list of filtered orders
-#         return order[0]
-#     return 0
-
-
-# @login_required()
-# def add_to_cart(request, **kwargs):
-#     # get the user profile
-#     user_profile = get_object_or_404(Profile, user=request.user)
-#     # filter products by id
-#     product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-#     # check if the user already owns this product
-#     if product in request.user.profile.ebooks.all():
-#         messages.info(request, 'You already own this ebook')
-#         return redirect(reverse('products:product-list')) 
-#     # create orderItem of the selected product
-#     order_item, status = OrderItem.objects.get_or_create(product=product)
-#     # create order associated with the user
-#     user_order, status = Order.objects.get_or_create(owner=user_profile, is_ordered=False)
-#     user_order.items.add(order_item)
-#     if status:
-#         # generate a reference code
-#         user_order.ref_code = generate_order_id()
-#         user_order.save()
-
-#     # show confirmation message and redirect back to the same page
-#     messages.info(request, "item added to cart")
-#     return redirect(reverse('products:product-list'))
-
-
-# @login_required()
-# def delete_from_cart(request, item_id):
-#     item_to_delete = OrderItem.objects.filter(pk=item_id)
-#     if item_to_delete.exists():
-#         item_to_delete[0].delete()
-#         messages.info(request, "Item has been deleted")
-#     return redirect(reverse('shopping_cart:order_summary'))
-
-
-# @login_required()
-# def order_details(request, **kwargs):
-#     existing_order = get_user_pending_order(request)
-#     context = {
-#         'order': existing_order
-#     }
-#     return render(request, 'shopping_cart/order_summary.html', context)
-
-
-# @login_required()
-# def checkout(request):
-#     existing_order = get_user_pending_order(request)
-#     publishKey = settings.STRIPE_PUBLISHABLE_KEY
-#     if request.method == 'POST':
-#         try:
-#             token = request.POST['stripeToken']
-
-#             charge = stripe.Charge.create(
-#                 amount=100*existing_order.get_cart_total(),
-#                 currency='usd',
-#                 description='Example charge',
-#                 source=token,
-#             )
-#             return redirect(reverse('shopping_cart:update_records',
-#                         kwargs={
-#                             'token': token
-#                         })
-#                     )
-
-#         except stripe.CardError as e:
-#             message.info(request, "Your card has been declined.")
-            
-#     context = {
-#         'order': existing_order,
-#         'STRIPE_PUBLISHABLE_KEY': publishKey
-#     }
-
-#     return render(request, 'shopping_cart/checkout.html', context)
-
-
-# @login_required()
-# def update_transaction_records(request, token):
-#     # get the order being processed
-#     order_to_purchase = get_user_pending_order(request)
-
-#     # update the placed order
-#     order_to_purchase.is_ordered=True
-#     order_to_purchase.date_ordered=datetime.datetime.now()
-#     order_to_purchase.save()
-    
-#     # get all items in the order - generates a queryset
-#     order_items = order_to_purchase.items.all()
-
-#     # update order items
-#     order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())
-
-#     # Add products to user profile
-#     user_profile = get_object_or_404(Profile, user=request.user)
-#     # get the products from the items
-#     order_products = [item.product for item in order_items]
-#     user_profile.ebooks.add(*order_products)
-#     user_profile.save()
-
-    
-#     # create a transaction
-#     transaction = Transaction(profile=request.user.profile,
-#                             token=token,
-#                             order_id=order_to_purchase.id,
-#                             amount=order_to_purchase.get_cart_total(),
-#                             success=True)
-#     # save the transcation (otherwise doesn't exist)
-#     transaction.save()
-
-
-#     # send an email to the customer
-#     # look at tutorial on how to send emails with sendgrid
-#     messages.info(request, "Thank you! Your purchase was successful!")
-#     return redirect(reverse('accounts:my_profile'))
-
-
-# def success(request, **kwargs):
-#     # a view signifying the transcation was successful
-#     return render(request, 'shopping_cart/purchase_success.html', {})
+			return super(ProducerListView, self).post(request, *args, **kwargs)

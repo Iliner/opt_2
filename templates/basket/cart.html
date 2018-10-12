@@ -28,7 +28,7 @@
 				{% for good in cart.items.all %}
 						<tr>
 							<th>{{good.product.code}}<br>
-							<th>{{good.product.producer}}
+							<th>{{good.product.producer.name}}
 							</th>
 							<th>{{good.product.articul}}</th>
 							<th>{{good.product.description}}</th>
@@ -50,7 +50,7 @@
 								<th>{{good.product.price}}</th>
 							{% endif %}
 							<th>
-							    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+							    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'  onkeypress="if(event.keyCode == 13) return false;">
 							        {% csrf_token %}
 									{% for field in form.hidden_fields %}
 										{{ field }}

@@ -29,7 +29,7 @@
 /*        width: 1266px;
         height: 1000px;*/
         background-color: #fff;
-        box-shadow: 0px 0px 13px 8px rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 18px 4px rgba(0,0,0,0.5);
     }
 
 }
@@ -114,6 +114,10 @@ nav.navbar {
 
 
 
+
+/*#good_wrapper_main{
+    cursor: pointer;
+}*/
 
 #main_card_good {
 /*	position:  absolute;
@@ -232,14 +236,16 @@ nav.navbar {
 #card_description_block_price_price {
     display: flex;
     justify-content: space-around;
+    font-weight: bold;
 }
 
 #card_description_block_price_order{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-right: 20px;
     margin-top: 20px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 
@@ -249,10 +255,23 @@ nav.navbar {
 
 
 
+#card_description_block_price_order_stock{
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+#card_description_block_price_order_order{
+    display: flex;
+    align-items: center;
+}
+
 #card_description_block_description{
     margin-top: 30px;
     max-width: 510px;
     padding: 10px;
+    font-family: 'Istok Web', sans-serif;
+    font-size: 21px;
 }
 
 #card_admin_do{
@@ -783,8 +802,90 @@ nav.navbar {
 
 #footer_wrapper_main{
     display: flex;
+    color: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-#footer_meta{
-    color: #262a2d00;
+#footer_name{
+    display: flex;
 }
+
+#footer_name > span{
+    margin-right: 5px;
+}
+
+
+#footer_name > div:nth-child(2){
+    margin-right: 5px;
+}
+
+
+
+#footer_meta{
+    display: flex;
+    flex-direction: column;
+}
+
+#footer_meta > div {
+    display: flex;
+}
+
+#footer_meta_phone > span{
+    margin-right: 5px;
+}
+
+#footer_meta_mail > span{
+    margin-right: 5px;
+}
+
+
+
+
+#books_producers_wrapper {
+    display: flex;
+    position: fixed;
+    bottom: 5px;
+    width: 100%;
+    justify-content: center;
+}
+
+#books_producers_producer{
+    flex-grow: 1;
+    height: 20px;
+    border: solid #000000 1px;
+    border-radius: 4px;
+    margin: 0 2px 0 2px;
+    text-align: center;
+    padding: 2px;
+    background-color: #373d42;
+    cursor: pointer;
+    line-height: 1;
+}
+
+
+#books_producers_producer:hover{
+    background: #951b2d;
+}
+
+#books_producers_producer:hover a.books_producers_producer_link{
+    color: #000;
+}
+
+
+a.books_producers_producer_link{
+    color: #307b47;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/*th.row_th_stock{
+    vertical-align: baseline;
+}*/
+
+.row_th_stock_img{
+    width: 50px;
+}
+

@@ -1,10 +1,7 @@
 {% extends "main_page/index.html" %}
 
-
 {% block content %}
 <div class='main'>
-	
-
 	{% include "includes/lenta_meta_table.html" %}
 	<table class='table table-hover table_list_goods'>
 		<thead>
@@ -13,6 +10,7 @@
 			<th style="width:  12.5%" class='table_tr_articul'>Артикул</th>
 			<th class='row_th_description'>Описание</th>
 			<th style="width:  12.5%" class='row_th_img'>Фото</th>
+			<th class='row_th_stock'>Наличие</th>
 			<th style="width:  9.5%" class='row_th_price'>Цена</th>
 			{% if user.is_authenticated %}
 				<th style="width:  9.5%" class='row_th_opt_price'>Опт-цена</th>
@@ -23,7 +21,7 @@
 			{% for good in object_list %}
 					<tr>
 						<th style="width:  8.5%" class='table_tr_code' ><a href="{% url 'good_page' code=good.code %}?page={{page_obj.number}}">{{good.code}}</a></th>
-						<th style="width:  12.5%" class='table_tr_producer'>{{good.producer}}</th>
+						<th style="width:  12.5%" class='table_tr_producer'>{{good.producer.name}}</th>
 						<th style="width:  12.5%" class='table_tr_articul'>{{good.articul}}</th>
 						<th class='table_tr_description' >{{good.description}}</th>
 						{% if not good.photo %}
@@ -31,6 +29,7 @@
 						{% else %}
 							<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
+						{% include 'includes/battery_stock.html' %}
 						<th style="width:  9.5%" >{{good.price}}</th>
 						{% if user.is_authenticated %}
 							{% if opt_user == 2 %}
@@ -46,7 +45,7 @@
 							{% endif %}
 						{% endif %}
 						<th style="width:  6.5%">
-						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'>
+						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'  onkeypress="if(event.keyCode == 13) return false;">
 						        {% csrf_token %}
 								{% for field in form.hidden_fields %}
 									{{ field }}
@@ -144,3 +143,10 @@
 {% endblock %}
 
 
+{% block books_producers%}
+	<div id='books_producers_wrapper'>
+	{% for producer in producers %}
+		<div id='books_producers_producer'><a href="{% url 'producer_list' id=producer.id %}" class='books_producers_producer_link'>{{producer.name}}</a></div>
+	{% endfor %}
+	</div>
+{% endblock %}

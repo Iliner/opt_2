@@ -10,17 +10,86 @@ from django.template.loader import get_template
 from django.http import HttpResponse
 from .models import *
 from xhtml2pdf import pisa
+from basket.models import Manager
 
 class BannerView(ListView):
 	template_name = 'addons/banner.html'
 	paginate_by = 100
+	customer = None
+	manager = None
+
+	def get(self, request, *args, **kwargs):
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+				self.opt_user = request.user.customer_set.first().opt
+			except Exception as err:
+				print(err)
+		else:
+			return redirect('login')
+
+
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
+		
+		return super(BannerView, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(BannerView, self).get_context_data(**kwargs)
+
+		if self.manager:
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
+
+		return context
+
+
 
 	def get_queryset(self): 
 		return BannerStock.objects.filter(visibility=True).order_by('-date')
 
 
+
+
 class CatalogImgView(ListView):
 	template_name = 'addons/catalog_pdf.html'
+	customer = None
+	manager = None
+
+	def get(self, request, *args, **kwargs):
+
+		if request.user.is_authenticated():
+			try:
+				self.customer = request.user.customer_set.first()
+			except Exception as err:
+				print(err)
+		else:
+			return redirect('login')
+
+
+		try:
+			self.manager = Manager.objects.get(customers=self.customer)
+		except Exception as err:
+			print(err)	
+		
+		return super(CatalogImgView, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(CatalogImgView, self).get_context_data(**kwargs)
+
+		if self.manager:
+			context['manager_first_name'] = self.manager.first_name
+			context['manager_last_name'] = self.manager.last_name
+			context['manager_mail_work'] = self.manager.mail_work
+			context['manager_phone_number_work'] = self.manager.phone_number_work
+
+		return context
 
 	def get_queryset(self): 
 		return PdfCatalogs.objects.all().order_by('-date')
@@ -64,6 +133,8 @@ class CatalogOpenView(View):
 			return response
 		pdf.closed
 		
+
+
 
 	# def get(self, request, *args, **kwargs):
  #         template = get_template('addons/catalog_open.html')
