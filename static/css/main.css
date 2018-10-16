@@ -889,3 +889,69 @@ a.books_producers_producer_link{
     width: 50px;
 }
 
+
+
+
+#producers_all_navbar_list {
+    display: none;
+    position: absolute;
+    min-width: 311px; 
+    height: 500px;
+    top: 19%;
+    left: 200px;
+    background-color: white;
+    border: 1px solid #191918;
+    overflow-y: auto;   
+    overflow-x: hidden;
+}
+
+#producers_all_navbar:hover #producers_all_navbar_list{
+    display: block;
+}
+
+
+
+.menu_main {
+    position: fixed;
+    height: 100%;
+    z-index: 2;
+    min-width: 200px;
+    background-color: #191918;
+}
+
+.menu_main_content{
+    margin-top: 119px;
+}
+
+
+.menu_main_link {
+    display: flex;
+    align-items: center;
+}
+
+.menu_main_link > a{
+    display: block;
+    color: #b3b3b1;
+    padding: 15px 30px;
+    text-decoration: none;
+
+}
+
+.menu_main_link:hover >a {
+    color: #fff;
+}
+
+.menu_main_link_photo > img {
+    max-width: 111px;
+    max-height: 30px;
+}
+
+.main_menu_producer_link > a{
+    color: #191918;
+}
+
+
+.main_menu_producer_link:hover {
+    color: #191918;
+    background: #a3162b;
+}

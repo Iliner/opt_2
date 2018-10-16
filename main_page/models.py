@@ -155,7 +155,7 @@ class FileUpload(models.Model):
 class Producers(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.TextField(null=True, blank=True)
-	photo = models.ForeignKey(Photo, blank=True, null=True)
+	photo = models.ImageField(upload_to = "goods/producers_photos", blank=True, null=True)
 	rating = models.IntegerField(null=True, blank=True, verbose_name='рейтинг')
 	visibility = models.BooleanField(default=False, db_index=True, verbose_name='отображать')
 

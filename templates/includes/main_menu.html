@@ -1,0 +1,27 @@
+<nav class='menu_main menu_main_style'>
+	<div class='menu_main_content'>
+		<ul>
+			<li class="menu_main_link"><a href="">Акции</a></li>
+		 	<li class="menu_main_link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
+            {% include "includes/producers_all_navbar.html" %}
+  			<li class="menu_main_link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
+  			<li class="menu_main_link"><a href="{% url 'download_excel' %}" id='download_excel'>Скачать прайс</a></li>
+  			<li class="menu_main_link"><a href="{% url 'catalog_pdf' %}" id='catalog_pdf'>Каталоги</a></li>
+			{% if perms.admin.add_good %}
+				<li class='menu_main_link' id='admin_bottom'><a href='/admin'>Админ</a></li>
+			{% endif %}
+			{% if perms.admin.add_good %}
+				<li class='menu_main_link' id='working_excel'><a href=''>Обработка excel</a></li>
+				<li class='menu_main_link' id='download_photo'><a href=''>Скачать фота</a></li>
+			{% endif %}
+			{% if user.is_authenticated %}
+				<li class="menu_main_link"><a href="{% url 'history_order' %}" id='action_actions'>История заказов</a></li>
+			{% endif %}
+			{% if user.is_authenticated %}
+				<li class="menu_main_link"><a class='position-absolute login_img_link' href="/logout" title='Выйти'>Выйти</a></li>
+			{% else %}
+				<li class="menu_main_link"><a class='position-absolute login_img_link' href="/login" title='Войти'>Войти</a></li>
+			{% endif %}
+		</ul>
+	</div>
+</nav>

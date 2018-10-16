@@ -111,10 +111,3 @@
 {% endblock %}
 
 
-{% block books_producers%}
-	<div id='books_producers_wrapper'>
-	{% for producer in producers %}
-		<div id='books_producers_producer'><a href="{% url 'producer_list' id=producer.id %}" class='books_producers_producer_link'>{{producer.name}}</a></div>
-	{% endfor %}
-	</div>
-{% endblock %}

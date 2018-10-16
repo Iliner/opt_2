@@ -76,6 +76,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                #my
+                'main_page.context_processors.producers_book',
+                'main_page.context_processors.producers_all_navbar',
             ],
         },
     },

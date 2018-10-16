@@ -28,6 +28,7 @@
 			<div class="btn-group">
 				<ul class='navbar-nav'>
 					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Меню</a></li>
+					<li class="nav-item" id='menu_2'><a class="nav-link" href=''>&#9776; Меню_2</a></li>
 					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% url 'cart' %}"><img src='{% static "basket/cart_img/shopping-cart.svg" %}' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
 					{% block navbar_link %}
 					{% endblock %}
@@ -52,6 +53,7 @@
 			</div>
 		</nav>
 
+		{% include 'includes/main_menu.html' %}
 		<nav class="pushy pushy-left" data-focus="#first-link" id='main_left_menu'>
 		    <div class="pushy-content">
 		        <ul>
@@ -62,6 +64,7 @@
 		                </ul>
 		            </li>
 		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
+		            {% include "includes/producers_all_navbar.html" %}
 		  			<li class="pushy-link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
 		  			<li class="pushy-link"><a href="{% url 'download_excel' %}" id='download_excel'>Скачать прайс</a></li>
 		  			<li class="pushy-link"><a href="{% url 'catalog_pdf' %}" id='catalog_pdf'>Каталоги</a></li>
@@ -109,8 +112,12 @@
 			</div>
 	
 
-		{% block books_producers%}
-		{% endblock %}
+		<div id='books_producers_wrapper'>
+		{% for producer in producers_books %}
+			<div id='books_producers_producer'><a href="{% url 'producer_list' id=producer.id %}" class='books_producers_producer_link'>{{producer.name}}</a></div>
+		{% endfor %}
+		</div>
+
 		<footer>
 			<div id='footer_wrapper_main'>
 				<div id='footer_name'>
