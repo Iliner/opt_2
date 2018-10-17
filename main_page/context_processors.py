@@ -16,11 +16,19 @@ def producers_all_navbar(request):
 	return context
 
 
-
-# {% block books_producers%}
-# 	<div id='books_producers_wrapper'>
-# 	{% for producer in producers %}
-# 		<div id='books_producers_producer'><a href="{% url 'producer_list' id=producer.id %}" class='books_producers_producer_link'>{{producer.name}}</a></div>
-# 	{% endfor %}
-# 	</div>
-# {% endblock %}
+def users_manager(request):
+		context = {}
+		try:
+			customer = request.user.customer_set.first()
+			opt_user = request.user.customer_set.first().opt
+		except Exception as err:
+			print(err)
+		try:
+			manager = Manager.objects.get(customers=customer)
+			context['manager_first_name'] = manager.first_name
+			context['manager_last_name'] = manager.last_name
+			context['manager_mail_work'] = manager.mail_work
+			context['manager_phone_number_work'] = manager.phone_number_work
+		except Exception as err:
+			print(err)
+		return context

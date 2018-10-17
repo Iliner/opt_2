@@ -7,6 +7,8 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+	
 
 		<link href="https://fonts.googleapis.com/css?family=Istok+Web" rel="stylesheet">
 		
@@ -27,8 +29,10 @@
 			<a href="{% url 'index' %}"  class='navbar-brand'><img src="{% static 'logo/logotype-header.png' %}" alt='logo' width="150", height="55"></a>
 			<div class="btn-group">
 				<ul class='navbar-nav'>
+					{% comment "just" %}
 					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Меню</a></li>
-					<li class="nav-item" id='menu_2'><a class="nav-link" href=''>&#9776; Меню_2</a></li>
+					{% endcomment %}
+					<li class="nav-item" id='menu_open_link'><a class="nav-link">&#9776; Меню</a></li>
 					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% url 'cart' %}"><img src='{% static "basket/cart_img/shopping-cart.svg" %}' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
 					{% block navbar_link %}
 					{% endblock %}
@@ -121,7 +125,7 @@
 		<footer>
 			<div id='footer_wrapper_main'>
 				<div id='footer_name'>
-					<span>Ваш менеджер:</span>
+					<span>Ваш менеджер</span>
 					<div>{{manager_first_name}}</div>
 					<div>{{manager_last_name}}</div>
 				</div>
@@ -149,7 +153,22 @@
 
 
 
+    			$('.hidden_opt').click(function(){
+					$.ajax({
+						type: 'POST',
+						url: 'hidden_opt',
+						data: {
+							status: 'hidden',
+							url: window.location.href,
+						},
+						success:function(data){
+							window.location.replace(data);
+						}
 
+					})
+
+
+    			})
 
 
     			$(".input_count > input").keydown(function(){
@@ -481,7 +500,24 @@
 
 
 
-
+			// Open menu-bar
+			$('#menu_open_link').click(function(){
+				display = $('.menu_main').css('display')
+				if (display == 'none'){
+					$('.menu_main').css('display', 'block')
+					// $(".menu_main").slideToggle("slow")
+					// $('.menu_main').animate({'width': 'toggle'});
+					// $( ".menu_main" ).animate({
+					//     height: "toggle"
+					//   }, 300, function(){});
+					$('.menu_main').stop().animate("fast");
+					// $(".menu_main").show('slide', {direction: 'right'}, 1000);
+					// $('.menu_main').css('display', 'block')
+				}else{
+					$(".menu_main").hide();
+					// $('.menu_main').css('display', 'none')
+				} 
+			})
 
 
 
@@ -554,6 +590,7 @@
 				var price_width = $('.row_th_price').css('width')
 				var price_height = $('.row_th_price').css('height')
 				var opt_price_width = $('.row_th_opt_price').css('width')
+				console.log('opt_price', opt_price_width)
 				var opt_price_height = $('.row_th_opt_price').css('height')
 				var order_width = $('.row_th_order').css('width')
 				var order_height = $('.row_th_order').css('height')
@@ -569,7 +606,11 @@
 				$('#lenta_photo').css({'width': photo_width, 'height': photo_height})
 				$('#lenta_stock').css({'width': stock_width, 'height': stock_height})
 				$('#lenta_price').css({'width': price_width, 'height': price_height})
-				$('#lenta_opt_price').css({'width': opt_price_width, 'height': opt_price_height})
+				if (opt_price_width){
+					$('#lenta_opt_price').css({'width': opt_price_width, 'height': opt_price_height})
+				}else{
+					$('#lenta_opt_price').css('display', 'none')
+				}
 				$('#lenta_order').css({'width': order_width, 'height': order_height})
 
 

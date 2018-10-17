@@ -12,10 +12,8 @@
 			<th class='row_th_description'>Описание</th>
 			<th style="width:  12.5%" class='row_th_img'>Фото</th>
 			<th class='row_th_stock'>Наличие</th>
-			<th style="width:  9.5%" class='row_th_price'>Цена</th>
-			{% if user.is_authenticated %}
-				<th style="width:  9.5%" class='row_th_opt_price'>Опт-цена</th>
-			{% endif %}
+			<th style="width:  9.5%" class='row_th_price' >Цена</th>
+			{% include "includes/table_opt_row_header.html" %}
 			<th style="width:  6.5%" class='row_th_order'>Заказать</th>
 		</thead>
 		<tbody>
@@ -32,19 +30,7 @@
 						{% endif %}
 						{% include 'includes/battery_stock.html' %}
 						<th style="width:  9.5%" >{{good.price}}</th>
-						{% if user.is_authenticated %}
-							{% if opt_user == 2 %}
-								<th style="width:  9.5%">{{good.price_2}}</th>
-							{% elif opt_user == 3 %}
-								<th style="width:  9.5%">{{good.price_2}}</th>
-							{% elif opt_user == 5 %}
-								<th style="width:  9.5%">{{good.price_5}}</th>
-							{% elif opt_user == 6 %}
-								<th style="width:  9.5%">{{good.price_6}}</th>
-							{% else %}
-								<th style="width:  9.5%">Админ</th>
-							{% endif %}
-						{% endif %}
+						{% include "includes/table_opt_row.html" %}
 						<th style="width:  6.5%">
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'  onkeypress="if(event.keyCode == 13) return false;">
 						        {% csrf_token %}

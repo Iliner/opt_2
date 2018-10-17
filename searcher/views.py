@@ -168,7 +168,7 @@ class SearchGoodsFull(ListView, CategoryListMixin):
 
 	def get(self, request, *args, **kwargs):
 		print('i work two')
-		print(request.session['search_query'])
+		print('.;', request.session['search_query'])
 		if request.user.is_authenticated():
 			try:
 				self.customer = request.user.customer_set.first()
@@ -196,7 +196,7 @@ class SearchGoodsFull(ListView, CategoryListMixin):
 		self.form = CartItemCount
 
 		query = request.session['search_query']
-		print(query)	 	
+		print('asdasd', query)	 	
 		if query:
 			self.list_goods = searche_good(request, query_full=query)
 			print('self.list_goods', self.list_goods)

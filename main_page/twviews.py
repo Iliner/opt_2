@@ -37,41 +37,6 @@ class Navbar(TemplateView):
 
 
 
-class ManagersCommon(View):
-	opt_user = None
-	customer = None
-	manager = None
-
-	def get(self, request, *args, **kwargs):
-		try:
-			print("request.session['search_query']", request.session['search_query'])
-		except:
-			print("request.session['search_query']", 'netu')
-
-		if request.user.is_authenticated():
-			try:
-				self.customer = request.user.customer_set.first()	
-				self.opt_user = request.user.customer_set.first().opt
-			except Exception as err:
-				print(err)
-		else:
-			return redirect('login')
-
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)
-		return super(ManagersCommon, self).get(request, *args, **kwargs)
-
-	def get_context_data(self, **kwargs):
-
-		context = super(ManagersCommon, self).get_context_data(**kwargs)
-		if self.manager: 
-			context['manager_first_name'] = self.manager.first_name
-			context['manager_last_name'] = self.manager.last_name
-			context['manager_mail_work'] = self.manager.mail_work
-			context['manager_phone_number_work'] = self.manager.phone_number_work
-		return context
 
 
 
@@ -82,18 +47,14 @@ class CategoryListMixin(ContextMixin):
 		context = super(CategoryListMixin, self).get_context_data(**kwargs)
 		context['cats'] = Category.objects.order_by('name')
 		context['default_img'] = Photo.objects.get(name="Default").photo
-		if self.manager:
-			context['manager_first_name'] = self.manager.first_name
-			context['manager_last_name'] = self.manager.last_name
-			context['manager_mail_work'] = self.manager.mail_work
-			context['manager_phone_number_work'] = self.manager.phone_number_work
-			context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
+		context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
+		context['opt_status'] = self.opt_status
 		return context
 
 
 
 
-class GoodListView(ListView, CategoryListMixin, ManagersCommon):
+class GoodListView(ListView, CategoryListMixin):
 	"""
 	Класс удобный для вывода СПИСКА чего либа 
 	"""
@@ -105,7 +66,7 @@ class GoodListView(ListView, CategoryListMixin, ManagersCommon):
 	cart = None
 	opt_user = None
 	customer = None
-	manager = None
+	opt_status = None
 
 	def get(self, request, *args, **kwargs):
 		"""
@@ -129,10 +90,6 @@ class GoodListView(ListView, CategoryListMixin, ManagersCommon):
 			return redirect('login')
 
 
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)
 		
 		if self.customer.baskets.all().exists():
 			for basket in self.customer.baskets.all():
@@ -163,6 +120,9 @@ class GoodListView(ListView, CategoryListMixin, ManagersCommon):
 		# 	request.session['cart_id'] = cart_id
 		# 	self.cart = Cart.objects.get(id=cart_id)
 		# print(self.cart.id, 'cart_id')
+
+		self.opt_status = request.session.get('opt_status')
+		print('ps', self.opt_status)
 		return super(GoodListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -204,7 +164,7 @@ class GoodListView(ListView, CategoryListMixin, ManagersCommon):
 
 
 
-class GoodDetailView(DetailView, CategoryListMixin, ManagersCommon):
+class GoodDetailView(DetailView, CategoryListMixin):
 	"""Ищет объект по pk
 	если его нет то ищет по pk_url_kwargs
 	"""
@@ -216,7 +176,7 @@ class GoodDetailView(DetailView, CategoryListMixin, ManagersCommon):
 	opt_user = None
 	form = None
 	customer = None
-	manager = None
+	opt_status = None
 
 	def get(self, request, *args, **kwargs):
 
@@ -242,12 +202,9 @@ class GoodDetailView(DetailView, CategoryListMixin, ManagersCommon):
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
 
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)	
 		
 		self.form = CartItemCount
+		self.opt_status = request.session.get('opt_status')
 		return super(GoodDetailView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -474,7 +431,6 @@ class GoodListViewNew(ListView, CategoryListMixin):
 	cart = None
 	opt_user = None
 	customer = None
-	manager = None
 
 	def get(self, request, *args, **kwargs):
 
@@ -497,11 +453,7 @@ class GoodListViewNew(ListView, CategoryListMixin):
 			self.customer.baskets.add(cart)
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
-		
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)	
+			
 		
 		self.form = CartItemCount
 		return super(GoodListViewNew, self).get(request, *args, **kwargs)
@@ -549,7 +501,7 @@ class GoodListViewNew(ListView, CategoryListMixin):
 
 
 
-class ProducerListView(ListView, CategoryListMixin, ManagersCommon):
+class ProducerListView(ListView, CategoryListMixin):
 	template_name = 'main_page/producer_list.html'
 	paginate_by = 100
 	cat = None
@@ -557,8 +509,8 @@ class ProducerListView(ListView, CategoryListMixin, ManagersCommon):
 	cart = None
 	opt_user = None
 	customer = None
-	manager = None
 	producer_id= None
+	opt_status = None
 
 	def get(self, request, *args, **kwargs):
 		self.producer_id =  kwargs['id']
@@ -577,10 +529,6 @@ class ProducerListView(ListView, CategoryListMixin, ManagersCommon):
 			return redirect('login')
 
 
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)
 		
 		if self.customer.baskets.all().exists():
 			for basket in self.customer.baskets.all():
@@ -598,6 +546,8 @@ class ProducerListView(ListView, CategoryListMixin, ManagersCommon):
 
 	
 		self.form = CartItemCount
+
+		self.opt_status = request.session.get("opt_status")
 		return super(ProducerListView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):

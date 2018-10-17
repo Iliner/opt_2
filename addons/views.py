@@ -7,6 +7,9 @@ from django.views.generic.list import ListView
 from django.views.generic.base import ContextMixin
 from django.views.generic.base import TemplateView
 from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from .models import *
 from xhtml2pdf import pisa
@@ -181,3 +184,14 @@ class CatalogOpenView(View):
 #              response['Content-Disposition'] = content
 #              return response
 #          return HttpResponse("Not found")
+
+
+@csrf_exempt
+def hidden_opt(request):
+	opt_status = request.session.get('opt_status')
+	if opt_status == 'hidden':
+		request.session['opt_status'] = None
+	else:
+		request.session['opt_status'] = 'hidden'
+	
+	return HttpResponse(request.POST.get('url'))

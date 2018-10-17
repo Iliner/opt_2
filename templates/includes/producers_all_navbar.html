@@ -5,12 +5,14 @@
 	<a href="" id='action_actions'>Все бренды</a>
 	<ul id="producers_all_navbar_list">
 		{% for producer in producers_all_navbar %}
-			<li class='menu_main_link main_menu_producer_link'>
-				<a href="{% url 'producer_list' id=producer.id %}">{{producer.name}}</a>
-				{% if producer.photo %}
-					<div class='menu_main_link_photo'><img src="{{producer.photo.url}}"></div>
-				{% endif %}
-			</li>
+			<a href="{% url 'producer_list' id=producer.id %}" class='menu_producer_link'>
+				<div class='main_menu_producer_link'>
+					<span>{{producer.name}}</span>
+					{% if producer.photo %}
+						<div class='menu_main_link_photo'><img src="{{producer.photo.url}}"></div>
+					{% endif %}
+				</div>
+			</a>
 		{% endfor %}
 	</ul>
 </li>

@@ -80,6 +80,7 @@ TEMPLATES = [
                 #my
                 'main_page.context_processors.producers_book',
                 'main_page.context_processors.producers_all_navbar',
+                'main_page.context_processors.users_manager',
             ],
         },
     },

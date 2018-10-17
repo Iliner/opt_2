@@ -129,77 +129,149 @@ class Excel:
 
 @csrf_exempt
 def working_excel(request):
-	try:
-		excel = ExcelImport.objects.all().filter(check=False).first()
-		if excel:
-			name = str(excel.file)
-			BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-			full_path = "{}/uploads/{}".format(BASE_DIR, name)	
-			print(full_path)
-			object_excel = Excel(
-				full_path, 
-				code=1,
-				producer=2,
-				articul=3,
-				description=4,
-				stock=5,
-				opt_6=6,
-				opt_5=7, 
-				opt_3=8,
-				opt_2=9,
-				opt_1=10
-				)
-			
-			object_excel.create_list_pyexcel()
-			for prosition in object_excel.common_list:
-				code = prosition[object_excel.name_column['code']]
-				check = Goods.objects.filter(code=code).exists()
-				print(check)
-				if not check:
-					new_good = Goods()
-					new_good.code = code
-					new_good.articul = prosition[object_excel.name_column['articul']]
-					check_producer = Producers.objects.filter(name=prosition[object_excel.name_column['producer']]).exists()
-					if check_producer: 
-						new_good.producer = Producers.objects.get(name=prosition[object_excel.name_column['producer']])
-					else:
-						new_producer = create_producer(prosition[object_excel.name_column['producer']]) 
-						new_good.producer = new_producer
-					new_good.description = prosition[object_excel.name_column['description']]
-					new_good.in_stock = prosition[object_excel.name_column['stock']]
-					new_good.price = prosition[object_excel.name_column['opt_1']]
-					new_good.price_2 = prosition[object_excel.name_column['opt_2']]
-					new_good.price_3 = prosition[object_excel.name_column['opt_3']]
-					new_good.price_5 = prosition[object_excel.name_column['opt_5']]
-					new_good.price_6 = prosition[object_excel.name_column['opt_6']]
-					new_good.save()
-					new_position = NewGoods()
-					new_position.position = new_good
-					new_position.save()
+	# try:
+	excel = ExcelImport.objects.all().filter(check=False).first()
+	if excel:
+		name = str(excel.file)
+		BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		full_path = "{}/uploads/{}".format(BASE_DIR, name)	
+		print(full_path)
+		meta = {}
+
+		meta['code'] = excel.code
+		if excel.producer:
+			meta['producer'] = excel.producer
+		if excel.articul:
+			meta['articul'] = excel.articul
+		if excel.description:
+			meta['description'] = excel.description
+		if excel.stock:
+			meta['stock'] = excel.stock
+		if excel.price:
+			meta['price'] = excel.price
+		if excel.opt_1:
+			meta['opt_1'] = excel.opt_1
+		if excel.opt_2:
+			meta['opt_2'] = excel.opt_2
+		if excel.opt_3:
+			meta['opt_3'] = excel.opt_3
+		if excel.opt_4:
+			meta['opt_4'] = excel.opt_4
+		if excel.opt_5:
+			meta['opt_5'] = excel.opt_5
+		if excel.opt_6:
+			meta['opt_6'] = excel.opt_6
+		if excel.opt_7:
+			meta['opt_7'] = excel.opt_7
+		if excel.opt_8:
+			meta['opt_8'] = excel.opt_8
+		if excel.opt_9:
+			meta['opt_9'] = excel.opt_9
+		if excel.opt_10:
+			meta['opt_10'] = excel.opt_10
+		if excel.opt_11:
+			meta['opt_11'] = excel.opt_11
+		if excel.opt_12:
+			meta['opt_12'] = excel.opt_12
+		if excel.opt_13:
+			meta['opt_13'] = excel.opt_13
+		if excel.opt_14:
+			meta['opt_14'] = excel.opt_14
+		if excel.opt_15:
+			meta['opt_15'] = excel.opt_15
+		if excel.opt_16:
+			meta['opt_16'] = excel.opt_16
+		if excel.opt_17:
+			meta['opt_17'] = excel.opt_17
+		if excel.opt_18:
+			meta['opt_18'] = excel.opt_18
+		if excel.opt_19:
+			meta['opt_19'] = excel.opt_19
+		if excel.opt_20:
+			meta['opt_20'] = excel.opt_20
+
+		print('meta', meta)
+		object_excel = Excel(
+			full_path,
+			**meta, 
+		)
+		object_excel.create_list_pyexcel()
+		for prosition in object_excel.common_list:
+			code = prosition[object_excel.name_column['code']]
+			good = Goods.objects.filter(code=code)[0]#.exists()
+			if not good:
+				print('new', prosition[object_excel.name_column['code']])
+				new_good = Goods()
+				new_good.code = code
+				new_good.articul = prosition[object_excel.name_column['articul']]
+				check_producer = Producers.objects.filter(name=prosition[object_excel.name_column['producer']]).exists()
+				if check_producer: 
+					new_good.producer = Producers.objects.get(name=prosition[object_excel.name_column['producer']])
 				else:
-					pass
-			
-			excel.check = True
-			excel.save()
-		else:
-			print('нет новых экселей')
-	except Exception as err:
-		print('my print' ,err)
+					new_producer = create_producer(prosition[object_excel.name_column['producer']]) 
+					new_good.producer = new_producer
+				new_good.description = prosition[object_excel.name_column['description']]
+				if excel.stock:
+					new_good.in_stock = prosition[object_excel.name_column['stock']]
+				if excel.price:
+					new_good.price = prosition[object_excel.name_column['opt_1']]
+				if excel.opt_2:
+					new_good.price_2 = prosition[object_excel.name_column['opt_2']]
+				new_good.price_3 = prosition[object_excel.name_column['opt_3']]
+				new_good.price_5 = prosition[object_excel.name_column['opt_5']]
+				new_good.price_6 = prosition[object_excel.name_column['opt_6']]
+				new_good.price_7 = prosition[object_excel.name_column['opt_7']]
+				new_good.price_8 = prosition[object_excel.name_column['opt_8']]
+				new_good.price_9 = prosition[object_excel.name_column['opt_9']]
+				new_good.price_10 = prosition[object_excel.name_column['opt_10']]
+				new_good.price_11 = prosition[object_excel.name_column['opt_11']]
+				new_good.price_12 = prosition[object_excel.name_column['opt_12']]
+				new_good.price_13 = prosition[object_excel.name_column['opt_13']]
+				new_good.price_14 = prosition[object_excel.name_column['opt_14']]
+				new_good.price_15 = prosition[object_excel.name_column['opt_15']]
+				new_good.price_16 = prosition[object_excel.name_column['opt_16']]
+				new_good.price_17 = prosition[object_excel.name_column['opt_17']]
+				new_good.price_18 = prosition[object_excel.name_column['opt_18']]
+				new_good.price_19 = prosition[object_excel.name_column['opt_19']]
+				new_good.price_20 = prosition[object_excel.name_column['opt_20']]
+				new_good.save()
+				new_position = NewGoods()
+				new_position.position = new_good
+				new_position.save()
+			else:
+				print('old', prosition[object_excel.name_column['code']])
+				good.articul = prosition[object_excel.name_column['articul']] 
+				good.description = prosition[object_excel.name_column['description']]
+				good.in_stock = prosition[object_excel.name_column['stock']]
+				good.price = prosition[object_excel.name_column['opt_1']]
+				good.price_2 = prosition[object_excel.name_column['opt_2']]
+				good.price_3 = prosition[object_excel.name_column['opt_3']]
+				good.price_5 = prosition[object_excel.name_column['opt_5']]
+				good.price_6 = prosition[object_excel.name_column['opt_6']]
+				good.price_7 = prosition[object_excel.name_column['opt_7']]
+				good.price_8 = prosition[object_excel.name_column['opt_8']]
+				good.price_9 = prosition[object_excel.name_column['opt_9']]
+				good.price_10 = prosition[object_excel.name_column['opt_10']]
+				good.price_11 = prosition[object_excel.name_column['opt_11']]
+				good.price_12 = prosition[object_excel.name_column['opt_12']]
+				good.price_13 = prosition[object_excel.name_column['opt_13']]
+				good.price_14 = prosition[object_excel.name_column['opt_14']]
+				good.price_15 = prosition[object_excel.name_column['opt_15']]
+				good.price_16 = prosition[object_excel.name_column['opt_16']]
+				good.price_17 = prosition[object_excel.name_column['opt_17']]
+				good.price_18 = prosition[object_excel.name_column['opt_18']]
+				good.price_19 = prosition[object_excel.name_column['opt_19']]
+				good.price_20 = prosition[object_excel.name_column['opt_20']]
+				good.save()
+				
 		
-		# smtp_host = "smtp.mail.ru"
-		# smtp_port = "465"
-		# smtp_login = "stock@kvam.ru"
-		# smtp_password = "AT3TeC&5lshf"
-		# send_to = "ivan_1995i@mail.ru"
-
-		# message_text = str(err)
-
-		# smtp_send(smtp_host, smtp_port, smtp_login, smtp_password, send_to, message_text)
-
-
-
-
-
+		excel.check = True
+		excel.save()
+	else:
+		print('нет новых экселей')
+	# except Exception as err:
+	# 	print('ОШИБКА ПРИ ОБРАБОТКИ ЭКСЕЛЯ' ,err)
+		
 
 	response = 'hello'
 	return HttpResponse(response)

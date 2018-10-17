@@ -30,25 +30,59 @@
 			<div id='card_description_block_price'>
 				<div id='card_description_block_price_price'>
 					<div class='card_description_block_price_price_wrapper'>
-						<span>РОЗНИЧНАЯ ЦЕНА</span>
+					{% if opt_status != 'hidden' %}
+						<span class='hidden_opt'>РОЗНИЧНАЯ ЦЕНА</span>
+					{% else %}
+						<span class='hidden_opt'>ЦЕНА</span>
+					{% endif %}
 						<span>{{good.price}}</span>
 					</div>
 					<div class='card_description_block_price_price_wrapper'>
-						{% if user.is_authenticated %}
-							<span>ОПТОВАЯ ЦЕНА</span>
-							<span>
-								{% if opt_user == 2 %}
-									{{good.price_2}}
-								{% elif opt_user == 3 %}
-									{{good.price_2}}
-								{% elif opt_user == 5 %}
-									{{good.price_5}}
-								{% elif opt_user == 6 %}
-									{{good.price_6}}
-								{% else %}
-									{{good.price}}
-								{% endif %}
-							</span>
+						{% if opt_status != 'hidden' %}
+							{% if user.is_authenticated %}
+								<span>ВАША ЦЕНА</span>
+								<span>
+									{% if opt_user == 2 %}
+										{{good.price_2}}
+									{% elif opt_user == 3 %}
+										{{good.price_2}}
+									{% elif opt_user == 5 %}
+										{{good.price_5}}
+									{% elif opt_user == 6 %}
+										{{good.price_6}}
+									{% elif opt_user == 7 %}
+										{{good.price_7}}	
+									{% elif opt_user == 8 %}
+										{{good.price_8}}	
+									{% elif opt_user == 9 %}
+										{{good.price_9}}	
+									{% elif opt_user == 10 %}
+										{{good.price_10}}	
+									{% elif opt_user == 11 %}
+										{{good.price_11}}	
+									{% elif opt_user == 12 %}
+										{{good.price_12}}	
+									{% elif opt_user == 13 %}
+										{{good.price_13}}	
+									{% elif opt_user == 14 %}
+										{{good.price_14}}	
+									{% elif opt_user == 15 %}
+										{{good.price_15}}	
+									{% elif opt_user == 16 %}
+										{{good.price_16}}	
+									{% elif opt_user == 17 %}
+										{{good.price_17}}	
+									{% elif opt_user == 18 %}
+										{{good.price_18}}	
+									{% elif opt_user == 19 %}
+										{{good.price_19}}	
+									{% elif opt_user == 20 %}
+										{{good.price_20}}	
+									{% else %}
+										{{good.price}}
+									{% endif %}
+								</span>
+							{% endif %}
 						{% endif %}
 					</div>
 				</div>
