@@ -18,41 +18,32 @@ class Goods(models.Model):
 	articul = models.CharField(max_length=30)
 	producer = models.ForeignKey('Producers')
 	description = models.TextField()
+	photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
 	category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
 	in_stock = models.IntegerField(default=0, null=True, blank=True)
-	price = models.FloatField(null=True, blank=True)
-	price_2 = models.FloatField(null=True, blank=True)
-	price_3 = models.FloatField(null=True, blank=True)
-	# price_4 = models.FloatField(null=True, blank=True)	
-	price_5 = models.FloatField(null=True, blank=True)
-	price_6 = models.FloatField(null=True, blank=True)
-	price_7 = models.FloatField(null=True, blank=True)
-	price_8 = models.FloatField(null=True, blank=True)
-	price_9 = models.FloatField(null=True, blank=True)
-	price_10 = models.FloatField(null=True, blank=True)
-	price_11 = models.FloatField(null=True, blank=True)
-	price_12 = models.FloatField(null=True, blank=True)
-	price_13 = models.FloatField(null=True, blank=True)
-	price_14 = models.FloatField(null=True, blank=True)
-	price_15 = models.FloatField(null=True, blank=True)
-	price_16 = models.FloatField(null=True, blank=True)
-	price_17 = models.FloatField(null=True, blank=True)
-	price_18 = models.FloatField(null=True, blank=True)
-	price_19 = models.FloatField(null=True, blank=True)
-	price_20 = models.FloatField(null=True, blank=True)
-	photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
+	price = models.FloatField(null=True, blank=True, verbose_name='Розничная цена')
+	opt_1 = models.FloatField(null=True, blank=True, verbose_name='опт 1')
+	opt_2 = models.FloatField(null=True, blank=True, verbose_name='опт 2')
+	opt_3 = models.FloatField(null=True, blank=True, verbose_name='опт 3')
+	opt_4 = models.FloatField(null=True, blank=True, verbose_name='опт 4')
+	opt_5 = models.FloatField(null=True, blank=True, verbose_name='опт 5')
+	opt_6 = models.FloatField(null=True, blank=True, verbose_name='опт 6')
+	opt_7 = models.FloatField(null=True, blank=True, verbose_name='отп 7')
+	opt_8 = models.FloatField(null=True, blank=True, verbose_name='отп 8')
+	opt_9 = models.FloatField(null=True, blank=True, verbose_name='отп 9')
+	opt_10 = models.FloatField(null=True, blank=True, verbose_name='отп 10')
+	opt_11 = models.FloatField(null=True, blank=True, verbose_name='отп 11')
+	opt_12 = models.FloatField(null=True, blank=True, verbose_name='отп 12')
+	opt_13 = models.FloatField(null=True, blank=True, verbose_name='опт 13')
+	opt_14 = models.FloatField(null=True, blank=True, verbose_name='опт 14')
+	opt_15 = models.FloatField(null=True, blank=True, verbose_name='опт 15')
+	opt_16 = models.FloatField(null=True, blank=True, verbose_name='опт 16')
+	opt_17 = models.FloatField(null=True, blank=True, verbose_name='опт 17')
+	opt_18 = models.FloatField(null=True, blank=True, verbose_name='опт 18')
+	opt_19 = models.FloatField(null=True, blank=True, verbose_name='отп 19')
+	opt_20 = models.FloatField(null=True, blank=True, verbose_name='опт 20')
+
 	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
-	
-	def get_in_stock(self):
-		if in_stock:
-			return '+'
-		else:
-			return ''
-
-
-
-
-
 
 	def __str__(self):
 		return "{}".format(self.code)

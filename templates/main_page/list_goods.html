@@ -1,5 +1,7 @@
 {% extends "main_page/index.html" %}
 {% load poll_extras %}
+{% load rangepaginator %}
+
 
 {% block content %}
 <div class='main'>
@@ -29,7 +31,7 @@
 							<th style="width:  12.5%" class='row_th_img'><img id='row_img' class='img_full' src="{{good.photo.photo.url}}"></th>
 						{% endif %}
 						{% include 'includes/battery_stock.html' %}
-						<th style="width:  9.5%" >{{good.price}}</th>
+						<th style="width:  9.5%" >{{good.opt_1}}</th>
 						{% include "includes/table_opt_row.html" %}
 						<th style="width:  6.5%">
 						    <form class='my-ajax-form' method='POST' action='.' data-url='{{ request.build_absolute_uri|safe }}'  onkeypress="if(event.keyCode == 13) return false;">
@@ -53,18 +55,21 @@
 												<div class='label'>{{ field.label }}</div>
 											{% endif %}
 
-
-											{% for mykey,myvalue in dict_count.items %}
-													{% if mykey == good.code %}
-														{% with value_count=myvalue  %}
-															<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
-														{% endwith %}
-													{% else %}
-														{% if forloop.last %}
-															<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% if dict_count %}
+												{% for mykey,myvalue in dict_count.items %}
+														{% if mykey == good.code %}
+															{% with value_count=myvalue  %}
+																<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
+															{% endwith %}
+														{% else %}
+															{% if forloop.last %}
+																<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+															{% endif %}
 														{% endif %}
-													{% endif %}
-											{% endfor %}
+												{% endfor %}
+											{% else %}
+												<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% endif %}
 
 											{% if field.help_text %}
 												<div class='help'>{{ field.help_text }}</div>
@@ -73,13 +78,52 @@
 									{% endif %}
 								{% endfor %}
     						</form>
-						</th>
-						<th>
 						</th>	
 					</tr>	
 			{% endfor %}
 		</tbody>	
 	</table>
+	
+	
+
+	
+	
+		{% if page_obj.paginator.num_pages > 1 %}
+			<div id='pagination'>
+				<div>{{page_obj.number}}</div>
+				
+				{% comment %}
+				{% if page_obj.has_previous %}
+					<div>{{page_obj.previous_page_number}}</div>
+				{% endif %}
+				{% if page_obj.has_next%}
+					<div>{{page_obj.next_page_number}}</div>
+				{% endif %}
+				{% if page_obj.number > 7 %}
+				{% endif %}
+				{% endcomment %}
+
+				<a href="{% url 'index' %}?page={{ 1 }}"><div>1</div></a>
+				
+					{% for pn in page_obj.paginator.page_range|slice:"1:5" %}
+						{% if forloop.last %}
+						
+						{% elif forloop.first %}
+						
+						{% else %}
+							<a href="{% url 'index' %}?page={{ pn }}">
+								<div class='paginator_page_number'>{{ pn }}</div>
+							</a>
+						{% endif %}	
+					{% endfor %}
+				
+				<div><a href="{% url 'index' %}?page={{ paginator.num_pages }}"><div>{{paginator.num_pages}}</div></a>
+			</div>
+		{% endif %}
+	
+
+
+	{% comment %}
 	{% if page_obj.paginator.num_pages > 1 %}
 		<div id='pagination'>
 			{% if category %}
@@ -139,6 +183,7 @@
 			{% endif %}
 		</div>
 	{% endif %}
+	{% endcomment %}
 </div>
 {% endblock %}
 

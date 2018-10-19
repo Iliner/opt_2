@@ -53,35 +53,6 @@ def searche_good(request, query_full=None):
 	if request.method == "POST" and not query_full:
 		query = request.POST.get('input_data')
 
-		# idseq = request.POST.get('input_data').split()
-		# print('idseq', idseq)
-		# tag_qs = reduce(operator.or_, (Q(code=x) for x in idseq))
-		# print('tag_qs', tag_qs)
-		# result = Goods.objects.filter(..., tag_qs)
-		# print(result)
-
-		# goods = Goods.objects.all()
-		# search_articles = goods.filter(code=query)
-		# result = goods.filter(
-		# 	Q(code__icontains=query)|
-		# 	Q(articul__icontains=query) 
-		# 	).distinct()[:10]
-
-
-		# or_lookup = (
-		# 	Q(code__icontains=query)|
-		# 	Q(articul__icontains=query)
-		# 	)
-		# result = Goods.objects.filter(or_lookup).distinct()[:10]
-		
-		
-		# idseq = request.POST.get('input_data').split()
-		# result = Goods.objects.filter(
-		# 	code__icontains=query,
-		# 	articul__icontains=query
-		# 	).distinct()[:10]
-
-
 		query_string = ''
 		found_entries = None
 		query_string = request.POST.get('input_data')
@@ -211,30 +182,14 @@ class SearchGoodsFull(ListView, CategoryListMixin):
 		return super(SearchGoodsFull, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		"""
-		Создает контекст данных
-		"""
-
-		# Формирует сам контекст данных и заполнит его начальными данными, 
-		# в частности значениями полученными контроллером параметров.
-
 		context = super(SearchGoodsFull, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
-		context['login_img'] = Photo.objects.get(name='login')
-		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
 		return context
 
 	def get_queryset(self): 
-		"""
-		Этот метод вызврощает спичсок 
-		записей которые будут выводиться 
-		на экран 
-		""" 
-
-
 		return self.list_goods
 
 

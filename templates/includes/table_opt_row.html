@@ -1,43 +1,47 @@
 {% if opt_status != 'hidden' %}
 	{% if user.is_authenticated %}
-		{% if opt_user == 2 %}
-			<th style="width:  11.5%">{{good.price_2}}</th>
+		{% if opt_user == 0 %}
+			<th style="width:  11.5%">{{good.opt_0}}</th>
+		{% elif opt_user == 1 %}
+			<th style="width:  11.5%">{{good.opt_1}}</th>
+		{% elif opt_user == 2 %}
+			<th style="width:  11.5%">{{good.opt_2}}</th>
 		{% elif opt_user == 3 %}
-			<th style="width:  11.5%">{{good.price_3}}</th>
+			<th style="width:  11.5%">{{good.opt_3}}</th>
 		{% elif opt_user == 4 %}
-			<th style="width:  11.5%">{{good.price_4}}</th>
+			<th style="width:  11.5%">{{good.opt_4}}</th>
 		{% elif opt_user == 5 %}
-			<th style="width:  11.5%">{{good.price_5}}</th>
+			<th style="width:  11.5%">{{good.opt_5}}</th>
 		{% elif opt_user == 6 %}
-			<th style="width:  11.5%">{{good.price_6}}</th>
+			<th style="width:  11.5%">{{good.opt_6}}</th>
 		{% elif opt_user == 7 %}
-			<th style="width:  11.5%">{{good.price_7}}</th>
+			<th style="width:  11.5%">{{good.opt_7}}</th>
 		{% elif opt_user == 8 %}
-			<th style="width:  11.5%">{{good.price_8}}</th>
+			<th style="width:  11.5%">{{good.opt_8}}</th>
 		{% elif opt_user == 9 %}
-			<th style="width:  11.5%">{{good.price_9}}</th>
+			<th style="width:  11.5%">{{good.opt_9}}</th>
 		{% elif opt_user == 10 %}
-			<th style="width:  11.5%">{{good.price_10}}</th>
+			<th style="width:  11.5%">{{good.opt_10}}</th>
 		{% elif opt_user == 11 %}
-			<th style="width:  11.5%">{{good.price_11}}</th>
+			<th style="width:  11.5%">{{good.opt_11}}</th>
 		{% elif opt_user == 12 %}
-			<th style="width:  11.5%">{{good.price_12}}</th>
+			<th style="width:  11.5%">{{good.opt_12}}</th>
 		{% elif opt_user == 13 %}
-			<th style="width:  11.5%">{{good.price_13}}</th>
+			<th style="width:  11.5%">{{good.opt_13}}</th>
 		{% elif opt_user == 14 %}
-			<th style="width:  11.5%">{{good.price_14}}</th>
+			<th style="width:  11.5%">{{good.opt_14}}</th>
 		{% elif opt_user == 15 %}
-			<th style="width:  11.5%">{{good.price_15}}</th>
+			<th style="width:  11.5%">{{good.opt_15}}</th>
 		{% elif opt_user == 16 %}
-			<th style="width:  11.5%">{{good.price_16}}</th>
+			<th style="width:  11.5%">{{good.opt_16}}</th>
 		{% elif opt_user == 17 %}
-			<th style="width:  11.5%">{{good.price_17}}</th>
+			<th style="width:  11.5%">{{good.opt_17}}</th>
 		{% elif opt_user == 18 %}
-			<th style="width:  11.5%">{{good.price_18}}</th>
+			<th style="width:  11.5%">{{good.opt_18}}</th>
 		{% elif opt_user == 19 %}
-			<th style="width:  11.5%">{{good.price_19}}</th>
+			<th style="width:  11.5%">{{good.opt_19}}</th>
 		{% elif opt_user == 20 %}
-			<th style="width:  11.5%">{{good.price_20}}</th>														
+			<th style="width:  11.5%">{{good.opt_20}}</th>														
 		{% endif %}
 	{% endif %}
 {% endif %}

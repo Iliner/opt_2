@@ -1041,3 +1041,10 @@ a.books_producers_producer_link{
     font-size: 18px;
 }
 
+
+
+.paginator_page_number{
+    padding: 2px 8px 2px 8px;
+    border: 1px solid black;
+
+}

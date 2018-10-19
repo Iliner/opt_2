@@ -42,16 +42,48 @@
 								<img class='row_th_stock_img' src='{% static "goods/battery_stock/battery_0.svg" %}'>
 							{% endif %}
 						</th>
-						<th style="width:  9.5%" >{{good.price}}</th>
+						<th style="width:  9.5%" >{{good.opt_1}}</th>
 						{% if user.is_authenticated %}
-							{% if opt_user == 2 %}
-								<th style="width:  9.5%">{{good.price_2}}</th>
+							{% if opt_user == 1 %}
+								<th style="width:  9.5%">{{good.opt_1}}</th>
+							{% elif opt_user == 2 %}
+								<th style="width:  9.5%">{{good.opt_2}}</th>
 							{% elif opt_user == 3 %}
-								<th style="width:  9.5%">{{good.price_2}}</th>
+								<th style="width:  9.5%">{{good.opt_3}}</th>		
+							{% elif opt_user == 4 %}
+								<th style="width:  9.5%">{{good.opt_4}}</th>
 							{% elif opt_user == 5 %}
-								<th style="width:  9.5%">{{good.price_5}}</th>
+								<th style="width:  9.5%">{{good.opt_5}}</th>
 							{% elif opt_user == 6 %}
-								<th style="width:  9.5%">{{good.price_6}}</th>
+								<th style="width:  9.5%">{{good.opt_6}}</th>
+							{% elif opt_user == 7 %}
+								<th style="width:  9.5%">{{good.opt_7}}</th>
+							{% elif opt_user == 8 %}
+								<th style="width:  9.5%">{{good.opt_8}}</th>
+							{% elif opt_user == 9 %}
+								<th style="width:  9.5%">{{good.opt_9}}</th>
+							{% elif opt_user == 10 %}
+								<th style="width:  9.5%">{{good.opt_10}}</th>
+							{% elif opt_user == 11 %}
+								<th style="width:  9.5%">{{good.opt_11}}</th>
+							{% elif opt_user == 12 %}
+								<th style="width:  9.5%">{{good.opt_12}}</th>
+							{% elif opt_user == 13 %}
+								<th style="width:  9.5%">{{good.opt_13}}</th>
+							{% elif opt_user == 14 %}
+								<th style="width:  9.5%">{{good.opt_14}}</th>
+							{% elif opt_user == 15 %}
+								<th style="width:  9.5%">{{good.opt_15}}</th>
+							{% elif opt_user == 16 %}
+								<th style="width:  9.5%">{{good.opt_16}}</th>
+							{% elif opt_user == 17 %}
+								<th style="width:  9.5%">{{good.opt_17}}</th>
+							{% elif opt_user == 18 %}
+								<th style="width:  9.5%">{{good.opt_18}}</th>
+							{% elif opt_user == 19 %}
+								<th style="width:  9.5%">{{good.opt_19}}</th>
+							{% elif opt_user == 20 %}
+								<th style="width:  9.5%">{{good.opt_20}}</th>				
 							{% else %}
 								<th style="width:  9.5%">Админ</th>
 							{% endif %}
@@ -77,17 +109,21 @@
 											{% if field.label %}
 												<div class='label'>{{ field.label }}</div>
 											{% endif %}
-											{% for mykey,myvalue in dict_count.items %}
-													{% if mykey == good.code %}
-														{% with value_count=myvalue  %}
-															<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
-														{% endwith %}
-													{% else %}
-														{% if forloop.last %}
-															<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% if dict_count %}
+												{% for mykey,myvalue in dict_count.items %}
+														{% if mykey == good.code %}
+															{% with value_count=myvalue  %}
+																<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
+															{% endwith %}
+														{% else %}
+															{% if forloop.last %}
+																<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+															{% endif %}
 														{% endif %}
-													{% endif %}
-											{% endfor %}											
+												{% endfor %}
+											{% else %}
+												<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% endif %}											
 											
 											{% if field.help_text %}
 												<div class='help'>{{ field.help_text }}</div>
@@ -97,8 +133,6 @@
 								{% endfor %}
     						</form>
 						</th>
-						<th>
-						</th>	
 					</tr>	
 			{% endfor %}
 		</tbody>	

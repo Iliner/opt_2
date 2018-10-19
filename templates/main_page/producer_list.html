@@ -63,17 +63,21 @@
 												<div class='label'>{{ field.label }}</div>
 											{% endif %}
 
-											{% for mykey,myvalue in dict_count.items %}
-													{% if mykey == good.code %}
-														{% with value_count=myvalue  %}
-															<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
-														{% endwith %}
-													{% else %}
-														{% if forloop.last %}
-															<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% if dict_count %}
+												{% for mykey,myvalue in dict_count.items %}
+														{% if mykey == good.code %}
+															{% with value_count=myvalue  %}
+																<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
+															{% endwith %}
+														{% else %}
+															{% if forloop.last %}
+																<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+															{% endif %}
 														{% endif %}
-													{% endif %}
-											{% endfor %}
+												{% endfor %}
+											{% else %}
+												<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+											{% endif %}
 											
 											{% if field.help_text %}
 												<div class='help'>{{ field.help_text }}</div>
@@ -83,8 +87,6 @@
 								{% endfor %}
     						</form>
 						</th>
-						<th>
-						</th>	
 					</tr>	
 			{% endfor %}
 		</tbody>	

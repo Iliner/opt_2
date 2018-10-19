@@ -139,10 +139,13 @@ def cart_init(request):
 		cart = customer.baskets.all().filter(paid_for=False).first()
 		request.session['cart_id'] = cart.id
 	else:
+		print('get it')
 		cart = Cart()
+		cart.paid_for = False
 		cart.save()
 		cart_id = cart.id
 		customer.baskets.add(cart)
+		print('i crate car id', cart_id)
 		request.session['cart_id'] = cart_id
 		cart = Cart.objects.get(id=cart_id)
 
@@ -152,44 +155,46 @@ def cart_init(request):
 def opt_price(good, opt):
 	price = None
 	opt = str(opt)
-	if opt == '1':
-		price = good.price
+	if opt == '0':
+		price = good.opt_0
+	elif opt == '1':
+		price = good.opt_1
 	elif opt == '2':
-		price = good.price_2
+		price = good.opt_2
 	elif opt == '3':
-		price = good.price_3
+		price = good.opt_3
 	elif opt == '5':
-		price = good.price_5
+		price = good.opt_5
 	elif opt == '6':
-		price = good.price_6
+		price = good.opt_6
 	elif opt == '7':
-		price = good.price_7
+		price = good.opt_7
 	elif opt == '8':
-		price = good.price_8
+		price = good.opt_8
 	elif opt == '9':
-		price = good.price_9
+		price = good.opt_9
 	elif opt == '10':
-		price = good.price_10
+		price = good.opt_10
 	elif opt == '11':
-		price = good.price_11
+		price = good.opt_11
 	elif opt == '12':
-		price = good.price_12
+		price = good.opt_12
 	elif opt == '13':
-		price = good.price_13
+		price = good.opt_13
 	elif opt == '14':
-		price = good.price_14
+		price = good.opt_14
 	elif opt == '15':
-		price = good.price_15
+		price = good.opt_15
 	elif opt == '6':
-		price = good.price_6
+		price = good.opt_6
 	elif opt == '17':
-		price = good.price_17
+		price = good.opt_17
 	elif opt == '18':
-		price = good.price_18
+		price = good.opt_18
 	elif opt == '19':
-		price = good.price_19
+		price = good.opt_19
 	elif opt == '20':
-		price = good.price_20
+		price = good.opt_20
 	return price
 
 
@@ -304,7 +309,6 @@ def confirm_order(request):
 
 def mail_data(request):
 	cart = cart_init(request)
-	cart.paid_for = True
 	cart_id = cart.id
 	cart.save()
 
@@ -312,7 +316,6 @@ def mail_data(request):
 
 def send_mail_us(request):
 	cart = cart_init(request)
-	cart.paid_for = True
 	cart_id = cart.id
 	cart.save()
 	paid_for = 'True'
@@ -386,6 +389,7 @@ def send_mail_us(request):
 
 def send_mail_customer(request):
 	cart = cart_init(request)
+	print('h 1')
 	cart.paid_for = True
 	cart_id = cart.id
 	cart.save()

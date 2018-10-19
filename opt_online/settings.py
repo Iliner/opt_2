@@ -42,11 +42,10 @@ INSTALLED_APPS = [
     #my app
     'main_page',
     'basket',
-    'imagepool',
-    'customers',
     'searcher',
     'addons',
     'photo_download',
+    'django_rangepaginator',
 ]
 
 
@@ -145,7 +144,7 @@ USE_TZ = True
 
 # TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
-
+RANGE_PAGINATOR_TEMPLATE = 'django_rangepaginator/bootstrap4.html'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 

@@ -30,7 +30,6 @@ class Navbar(TemplateView):
 	template_name = 'includes/navbar.html'
 	def get_context_data(self, **kwargs):
 		context = super(Navbar, self).get_context_data(**kwargs)
-		context['login_img'] = Photo.objects.get(name='login').photo
 		return context
 
 
@@ -50,9 +49,11 @@ class CategoryListMixin(ContextMixin):
 		context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
 		context['opt_status'] = self.opt_status
 		dict_count = {}
+
 		for items in self.cart.items.all():
 			dict_count[items.product.code] = items.count
-		context['dict_count'] = dict_count 
+		context['dict_count'] = dict_count
+		print('dict_count', dict_count) 
 		return context
 
 
@@ -73,12 +74,6 @@ class GoodListView(ListView, CategoryListMixin):
 	opt_status = None
 
 	def get(self, request, *args, **kwargs):
-		"""
-		Присваивает gеременной контекста данных
-		в которой должен храниться список
-		записей, этот самый список.
-		(То есть инициализирует сам context)
-		"""
 		try:
 			print("request.session['search_query']", request.session['search_query'])
 		except:
@@ -95,13 +90,14 @@ class GoodListView(ListView, CategoryListMixin):
 
 
 		
-		if self.customer.baskets.all().exists():
+		if self.customer.baskets.filter(paid_for=False).exists():
 			for basket in self.customer.baskets.all():
 				if not basket.paid_for:
 					self.cart = basket
 					request.session['cart_id'] = basket.id
 					request.session['goods_card'] = dict()
 		else:
+			print('else')
 			cart = Cart()
 			cart.save()
 			cart_id = cart.id
@@ -109,22 +105,8 @@ class GoodListView(ListView, CategoryListMixin):
 			request.session['cart_id'] = cart_id
 			self.cart = Cart.objects.get(id=cart_id)
 
-	
+		print(self.cart)
 		self.form = CartItemCount
-		# if self.kwargs['cat_id']:
-		# 	self.cat = Category.objects.get(pk=kwargs['cat_id'])
-		# # request.session['basket_goods'] = {}
-		# try:
-		# 	cart_id = request.session['cart_id']
-		# 	self.cart = Cart.objects.get(id=cart_id)
-		# except:
-		# 	cart = Cart()
-		# 	cart.save()
-		# 	cart_id = cart.id
-		# 	request.session['cart_id'] = cart_id
-		# 	self.cart = Cart.objects.get(id=cart_id)
-		# print(self.cart.id, 'cart_id')
-
 		self.opt_status = request.session.get('opt_status')
 		print('ps', self.opt_status)
 		return super(GoodListView, self).get(request, *args, **kwargs)
@@ -142,8 +124,6 @@ class GoodListView(ListView, CategoryListMixin):
 
 
 		context['categorymy'] = self.cat
-		context['login_img'] = Photo.objects.get(name='login')
-		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
@@ -468,8 +448,6 @@ class GoodListViewNew(ListView, CategoryListMixin):
 	def get_context_data(self, **kwargs):
 		context = super(GoodListViewNew, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
-		context['login_img'] = Photo.objects.get(name='login')
-		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
@@ -561,8 +539,6 @@ class ProducerListView(ListView, CategoryListMixin):
 
 		context = super(ProducerListView, self).get_context_data(**kwargs) 
 		context['categorymy'] = self.cat
-		context['login_img'] = Photo.objects.get(name='login')
-		context['logout_img'] = Photo.objects.get(name='logout')
 		context['cart'] = self.cart
 		context['form'] = self.form
 		context['opt_user'] = self.opt_user
