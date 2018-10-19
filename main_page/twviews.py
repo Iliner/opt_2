@@ -49,6 +49,10 @@ class CategoryListMixin(ContextMixin):
 		context['default_img'] = Photo.objects.get(name="Default").photo
 		context['producers'] = Producers.objects.filter(visibility=True).order_by('rating')
 		context['opt_status'] = self.opt_status
+		dict_count = {}
+		for items in self.cart.items.all():
+			dict_count[items.product.code] = items.count
+		context['dict_count'] = dict_count 
 		return context
 
 
@@ -133,7 +137,10 @@ class GoodListView(ListView, CategoryListMixin):
 		# Формирует сам контекст данных и заполнит его начальными данными, 
 		# в частности значениями полученными контроллером параметров.
 
-		context = super(GoodListView, self).get_context_data(**kwargs) 
+		context = super(GoodListView, self).get_context_data(**kwargs)
+		
+
+
 		context['categorymy'] = self.cat
 		context['login_img'] = Photo.objects.get(name='login')
 		context['logout_img'] = Photo.objects.get(name='logout')

@@ -20,6 +20,12 @@ class CategoryListMixin(ContextMixin):
 		context = super(CategoryListMixin, self).get_context_data(**kwargs)
 		context['cats'] = Category.objects.order_by('name')
 		context['default_img'] = Photo.objects.get(name="Default").photo
+
+		dict_count = {}
+		for items in self.cart.items.all():
+			dict_count[items.product.code] = items.count
+		context['dict_count'] = dict_count 
+
 		return context
 
 class SearchInput(TemplateView):

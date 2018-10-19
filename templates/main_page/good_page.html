@@ -45,7 +45,9 @@
 									{% if opt_user == 2 %}
 										{{good.price_2}}
 									{% elif opt_user == 3 %}
-										{{good.price_2}}
+										{{good.price_3}}
+									{% elif opt_user == 4 %}
+										{{good.price_4}}
 									{% elif opt_user == 5 %}
 										{{good.price_5}}
 									{% elif opt_user == 6 %}
@@ -113,7 +115,19 @@
 										{% if field.label %}
 											<div class='label'>{{ field.label }}</div>
 										{% endif %}
-										<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+
+										{% for mykey,myvalue in dict_count.items %}
+												{% if mykey == good.code %}
+													{% with value_count=myvalue  %}
+														<div class='input_count control' id='form_{{good.code}}' count='{{ value_count }}'>{{ field }}</div>
+													{% endwith %}
+												{% else %}
+													{% if forloop.last %}
+														<div class='control input_count' id='form_{{good.code}}'>{{ field }}</div>
+													{% endif %}
+												{% endif %}
+										{% endfor %}
+										
 										{% if field.help_text %}
 											<div class='help'>{{ field.help_text }}</div>
 										{% endif %}

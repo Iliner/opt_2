@@ -42,7 +42,7 @@ class CartView(TemplateView, CartCommonMixin):
 	opt_user = None
 	manager = None
 	customer = None
-	manager = None
+
 	def get(self, request, *args, **kwargs):
 
 		if request.user.is_authenticated():
@@ -51,12 +51,6 @@ class CartView(TemplateView, CartCommonMixin):
 				self.opt_user = request.user.customer_set.first().opt
 			except Exception as err:
 				print(err)
-
-		try:
-			self.manager = Manager.objects.get(customers=self.customer)
-		except Exception as err:
-			print(err)	
-
 
 		self.form = CartItemCount
 		self.cart = cart_init(request)
@@ -76,11 +70,6 @@ class CartView(TemplateView, CartCommonMixin):
 		context['opt_user'] = self.opt_user
 		# context['cart_id'] = self.cart_id
 
-		if self.manager:
-			context['manager_first_name'] = self.manager.first_name
-			context['manager_last_name'] = self.manager.last_name
-			context['manager_mail_work'] = self.manager.mail_work
-			context['manager_phone_number_work'] = self.manager.phone_number_work
 		return context
 
 	def post(self, request, *args, **kwargs):

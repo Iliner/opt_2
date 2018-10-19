@@ -198,7 +198,11 @@ def working_excel(request):
 		object_excel.create_list_pyexcel()
 		for prosition in object_excel.common_list:
 			code = prosition[object_excel.name_column['code']]
-			good = Goods.objects.filter(code=code)[0]#.exists()
+			
+			good = Goods.objects.filter(code=code).exists()
+			
+			if good:
+				good = Goods.objects.filter(code=code)[0]
 			if not good:
 				print('new', prosition[object_excel.name_column['code']])
 				new_good = Goods()
@@ -214,54 +218,109 @@ def working_excel(request):
 				if excel.stock:
 					new_good.in_stock = prosition[object_excel.name_column['stock']]
 				if excel.price:
-					new_good.price = prosition[object_excel.name_column['opt_1']]
+					new_good.price = round(prosition[object_excel.name_column['price']], 2)				
 				if excel.opt_2:
-					new_good.price_2 = prosition[object_excel.name_column['opt_2']]
-				new_good.price_3 = prosition[object_excel.name_column['opt_3']]
-				new_good.price_5 = prosition[object_excel.name_column['opt_5']]
-				new_good.price_6 = prosition[object_excel.name_column['opt_6']]
-				new_good.price_7 = prosition[object_excel.name_column['opt_7']]
-				new_good.price_8 = prosition[object_excel.name_column['opt_8']]
-				new_good.price_9 = prosition[object_excel.name_column['opt_9']]
-				new_good.price_10 = prosition[object_excel.name_column['opt_10']]
-				new_good.price_11 = prosition[object_excel.name_column['opt_11']]
-				new_good.price_12 = prosition[object_excel.name_column['opt_12']]
-				new_good.price_13 = prosition[object_excel.name_column['opt_13']]
-				new_good.price_14 = prosition[object_excel.name_column['opt_14']]
-				new_good.price_15 = prosition[object_excel.name_column['opt_15']]
-				new_good.price_16 = prosition[object_excel.name_column['opt_16']]
-				new_good.price_17 = prosition[object_excel.name_column['opt_17']]
-				new_good.price_18 = prosition[object_excel.name_column['opt_18']]
-				new_good.price_19 = prosition[object_excel.name_column['opt_19']]
-				new_good.price_20 = prosition[object_excel.name_column['opt_20']]
+					new_good.price_2 = round(prosition[object_excel.name_column['opt_2']], 2)				
+				if excel.opt_3:
+					new_good.price_3 = round(prosition[object_excel.name_column['opt_3']], 2)
+				if excel.opt_4:
+					good.price_4 = round(prosition[object_excel.name_column['opt_4']], 2)					
+				if excel.opt_5:
+					new_good.price_5 = round(prosition[object_excel.name_column['opt_5']], 2)			
+				if excel.opt_6:
+					new_good.price_6 = round(prosition[object_excel.name_column['opt_6']], 2)		
+				if excel.opt_7:
+					new_good.price_7 = round(prosition[object_excel.name_column['opt_7']], 2)				
+				if excel.opt_8:
+					new_good.price_8 = round(prosition[object_excel.name_column['opt_8']], 2)
+				if excel.opt_9:
+					new_good.price_9 = round(prosition[object_excel.name_column['opt_9']], 2)
+				if excel.opt_10:
+					new_good.price_10 = round(prosition[object_excel.name_column['opt_10']], 2)
+				if excel.opt_11:
+					new_good.price_11 = round(prosition[object_excel.name_column['opt_11']], 2)
+				if excel.opt_12:
+					new_good.price_12 = round(prosition[object_excel.name_column['opt_12']], 2)
+				if excel.opt_13:
+					new_good.price_13 = round(prosition[object_excel.name_column['opt_13']], 2)
+				if excel.opt_14:
+					new_good.price_14 = round(prosition[object_excel.name_column['opt_14']], 2)
+				if excel.opt_15:
+					new_good.price_15 = round(prosition[object_excel.name_column['opt_15']], 2)
+				if excel.opt_16:
+					new_good.price_16 = round(prosition[object_excel.name_column['opt_16']], 2)
+				if excel.opt_17:
+					new_good.price_17 = round(prosition[object_excel.name_column['opt_17']], 2)
+				if excel.opt_18:
+					new_good.price_18 = round(prosition[object_excel.name_column['opt_18']], 2)
+				if excel.opt_19:
+					new_good.price_19 = round(prosition[object_excel.name_column['opt_19']], 2)
+				if excel.opt_20:
+					new_good.price_20 = round(prosition[object_excel.name_column['opt_20']], 2)
 				new_good.save()
 				new_position = NewGoods()
 				new_position.position = new_good
 				new_position.save()
 			else:
 				print('old', prosition[object_excel.name_column['code']])
-				good.articul = prosition[object_excel.name_column['articul']] 
-				good.description = prosition[object_excel.name_column['description']]
-				good.in_stock = prosition[object_excel.name_column['stock']]
-				good.price = prosition[object_excel.name_column['opt_1']]
-				good.price_2 = prosition[object_excel.name_column['opt_2']]
-				good.price_3 = prosition[object_excel.name_column['opt_3']]
-				good.price_5 = prosition[object_excel.name_column['opt_5']]
-				good.price_6 = prosition[object_excel.name_column['opt_6']]
-				good.price_7 = prosition[object_excel.name_column['opt_7']]
-				good.price_8 = prosition[object_excel.name_column['opt_8']]
-				good.price_9 = prosition[object_excel.name_column['opt_9']]
-				good.price_10 = prosition[object_excel.name_column['opt_10']]
-				good.price_11 = prosition[object_excel.name_column['opt_11']]
-				good.price_12 = prosition[object_excel.name_column['opt_12']]
-				good.price_13 = prosition[object_excel.name_column['opt_13']]
-				good.price_14 = prosition[object_excel.name_column['opt_14']]
-				good.price_15 = prosition[object_excel.name_column['opt_15']]
-				good.price_16 = prosition[object_excel.name_column['opt_16']]
-				good.price_17 = prosition[object_excel.name_column['opt_17']]
-				good.price_18 = prosition[object_excel.name_column['opt_18']]
-				good.price_19 = prosition[object_excel.name_column['opt_19']]
-				good.price_20 = prosition[object_excel.name_column['opt_20']]
+				if excel.articul:
+					good.articul = prosition[object_excel.name_column['articul']]
+					print('articul', prosition[object_excel.name_column['articul']]) 
+				if excel.description:
+					good.description = prosition[object_excel.name_column['description']]
+					print('des')
+				if excel.stock:
+					good.in_stock = prosition[object_excel.name_column['stock']]
+					print('stock', prosition[object_excel.name_column['stock']])
+				if excel.price:
+					good.price = round(prosition[object_excel.name_column['price']], 2)
+					print('price', round(prosition[object_excel.name_column['price']], 2))
+				if excel.opt_2:
+					good.price_2 = round(prosition[object_excel.name_column['opt_2']], 2)
+					print('opt_2', round(prosition[object_excel.name_column['opt_2']], 2))
+				if excel.opt_3:
+					good.price_3 = round(prosition[object_excel.name_column['opt_3']], 2)
+					print('opt_3', round(prosition[object_excel.name_column['opt_3']], 2))				
+				if excel.opt_4:
+					good.price_4 = round(prosition[object_excel.name_column['opt_4']], 2)
+					print('opt_4', round(prosition[object_excel.name_column['opt_4']], 2))
+				if excel.opt_5:
+					good.price_5 = round(prosition[object_excel.name_column['opt_5']], 2)
+					print('opt_5', round(prosition[object_excel.name_column['opt_5']], 2))				
+				if excel.opt_6:
+					good.price_6 = round(prosition[object_excel.name_column['opt_6']], 2)
+					print('opt_6', round(prosition[object_excel.name_column['opt_6']], 2))
+				if excel.opt_7:
+					good.price_7 = round(prosition[object_excel.name_column['opt_7']], 2)
+					print('opt_7', round(prosition[object_excel.name_column['opt_7']], 2))
+				if excel.opt_8:
+					good.price_8 = round(prosition[object_excel.name_column['opt_8']], 2)
+					print('opt_8', round(prosition[object_excel.name_column['opt_8']], 2))			
+				if excel.opt_9:
+					good.price_9 = round(prosition[object_excel.name_column['opt_9']], 2)
+					print('opt_9', round(prosition[object_excel.name_column['opt_9']], 2))				
+				if excel.opt_10:
+					good.price_10 = round(prosition[object_excel.name_column['opt_10']], 2)
+				if excel.opt_11:
+					good.price_11 = round(prosition[object_excel.name_column['opt_11']], 2)
+				if excel.opt_12:
+					good.price_12 = round(prosition[object_excel.name_column['opt_12']], 2)
+				if excel.opt_13:
+					good.price_13 = round(prosition[object_excel.name_column['opt_13']], 2)
+				if excel.opt_14:
+					good.price_14 = round(prosition[object_excel.name_column['opt_14']], 2)
+				if excel.opt_15:
+					good.price_15 = round(prosition[object_excel.name_column['opt_15']], 2)
+				if excel.opt_16:
+					good.price_16 = round(prosition[object_excel.name_column['opt_16']], 2)
+				if excel.opt_17:
+					good.price_17 = round(prosition[object_excel.name_column['opt_17']], 2)
+				if excel.opt_18:
+					good.price_18 = round(prosition[object_excel.name_column['opt_18']], 2)
+				if excel.opt_19:
+					good.price_19 = round(prosition[object_excel.name_column['opt_19']], 2)
+				if excel.opt_20:
+					good.price_20 = round(prosition[object_excel.name_column['opt_20']], 2)
 				good.save()
 				
 		
