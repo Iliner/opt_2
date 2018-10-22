@@ -32,6 +32,9 @@
 			<a href="{% url 'index' %}"  class='navbar-brand'><img src="{% static 'logo/logotype-header.png' %}" alt='logo' width="150", height="55"></a>
 			<div class="btn-group">
 				<ul class='navbar-nav'>
+					{% comment "just" %}
+					<li class="nav-item menu-btn" id='menu_common'><a class="nav-link" href=''>&#9776; Меню</a></li>
+					{% endcomment %}
 					<li class="nav-item" id='menu_open_link'><a class="nav-link">&#9776; Меню</a></li>
 					<li class="nav-item" ><a class="nav-link" id='cart_link' href="{% url 'cart' %}"><img src='{% static "basket/cart_img/shopping-cart.svg" %}' id='cart_svg'><span class='badge' id='count_good'>{{ cart.cart_total }}</span></a></li>
 					{% block navbar_link %}
@@ -147,6 +150,8 @@
 			
 		</footer>
 
+		<script type="text/javascript"></script>
+		<script src="{% static '/pushy-master/js/pushy.min.js' %}"></script>
 		<script type="text/javascript">
 			
 			$( document ).ready(function() {

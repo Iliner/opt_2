@@ -58,6 +58,7 @@ footer {
 #navbar_header{
     position: fixed;
     width: 100%;
+    top: 0px;
 }
 
 nav.navbar {
@@ -80,6 +81,7 @@ nav.navbar {
 	margin-top: 20px;
 	display: flex;
 	justify-content: center;
+    margin-bottom: 16px;
 }
 
 #pagination #previous-page {
@@ -1052,3 +1054,4 @@ a.books_producers_producer_link{
 th.table_tr_description{
     max-width: 230px;
 }
+
