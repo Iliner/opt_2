@@ -1055,3 +1055,8 @@ th.table_tr_description{
     max-width: 230px;
 }
 
+
+tr > th:first-child:hover {
+    background: #cecece;
+    cursor: pointer;
+}

@@ -385,7 +385,11 @@
 
 
 
+    			$('tr > th:first-child').click(function(){
+    				var a = $(this).children().attr('href')
+    				window.location.replace(a);
 
+    			})
 
 
 
