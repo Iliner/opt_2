@@ -144,7 +144,6 @@ USE_TZ = True
 
 # TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
-RANGE_PAGINATOR_TEMPLATE = 'django_rangepaginator/bootstrap4.html'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
@@ -162,4 +161,4 @@ LOGIN_REDIRECT_URL = "/"
 SITE_ID = 2
 
 
-
+RANGE_PAGINATOR_TEMPLATE = 'django_rangepaginator/bootstrap4.html'

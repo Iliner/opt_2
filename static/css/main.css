@@ -1043,8 +1043,12 @@ a.books_producers_producer_link{
 
 
 
-.paginator_page_number{
-    padding: 2px 8px 2px 8px;
-    border: 1px solid black;
 
+
+#pagination > nav > ul > li > a{
+    color: #18426b;
+}
+
+th.table_tr_description{
+    max-width: 230px;
 }

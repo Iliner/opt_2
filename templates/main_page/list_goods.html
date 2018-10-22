@@ -1,6 +1,6 @@
 {% extends "main_page/index.html" %}
 {% load poll_extras %}
-{% load rangepaginator %}
+
 
 
 {% block content %}
@@ -84,42 +84,7 @@
 		</tbody>	
 	</table>
 	
-	
-
-	
-	
-		{% if page_obj.paginator.num_pages > 1 %}
-			<div id='pagination'>
-				<div>{{page_obj.number}}</div>
-				
-				{% comment %}
-				{% if page_obj.has_previous %}
-					<div>{{page_obj.previous_page_number}}</div>
-				{% endif %}
-				{% if page_obj.has_next%}
-					<div>{{page_obj.next_page_number}}</div>
-				{% endif %}
-				{% if page_obj.number > 7 %}
-				{% endif %}
-				{% endcomment %}
-
-				<a href="{% url 'index' %}?page={{ 1 }}"><div>1</div></a>
-				
-					{% for pn in page_obj.paginator.page_range|slice:"1:5" %}
-						{% if forloop.last %}
-						
-						{% elif forloop.first %}
-						
-						{% else %}
-							<a href="{% url 'index' %}?page={{ pn }}">
-								<div class='paginator_page_number'>{{ pn }}</div>
-							</a>
-						{% endif %}	
-					{% endfor %}
-				
-				<div><a href="{% url 'index' %}?page={{ paginator.num_pages }}"><div>{{paginator.num_pages}}</div></a>
-			</div>
-		{% endif %}
+		{% include 'includes/paginater.html' %}
 	
 
 

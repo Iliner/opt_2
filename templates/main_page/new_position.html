@@ -80,6 +80,10 @@
 			{% endfor %}
 		</tbody>	
 	</table>
+
+	{% include 'includes/paginater.html' %}
+
+	{% comment %}
 	{% if page_obj.paginator.num_pages > 1 %}
 		<div id='pagination'>
 			{% if category %}
@@ -139,6 +143,7 @@
 			{% endif %}
 		</div>
 	{% endif %}
+	{% endcomment %}
 </div>
 {% endblock %}
 

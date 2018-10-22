@@ -1,6 +1,6 @@
 {% extends "main_page/index.html" %}
 {% load staticfiles %}
-
+{% load rangepaginator %}
 {% block content %}
 <div class='main'>
 	{% include "includes/lenta_meta_table.html" %}
@@ -91,6 +91,9 @@
 			{% endfor %}
 		</tbody>	
 	</table>
+
+	{% include 'includes/paginater.html' %}
+	{% comment %}
 	{% if page_obj.paginator.num_pages > 1 %}
 		<div id='pagination'>
 			{% if category %}
@@ -150,6 +153,7 @@
 			{% endif %}
 		</div>
 	{% endif %}
+	{% endcomment %}
 </div>
 {% endblock %}
 
