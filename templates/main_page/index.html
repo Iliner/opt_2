@@ -73,8 +73,9 @@
 		                    <li class="pushy-link"><a href="{% url 'new_position' %}" id='news_admission'>Новинки</a></li>
 		                </ul>
 		            </li>
-		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
-		            {% include "includes/producers_all_navbar.html" %}
+		            <li class="pushy-link"><a href="#" id='main_filter_bottom'>Фильтр</a>
+		            	{% include "includes/producers_all_navbar.html" %}
+		            </li>
 		  			<li class="pushy-link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
 		  			<li class="pushy-link"><a href="{% url 'download_excel' %}" id='download_excel'>Скачать прайс</a></li>
 		  			<li class="pushy-link"><a href="{% url 'catalog_pdf' %}" id='catalog_pdf'>Каталоги</a></li>

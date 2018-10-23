@@ -852,14 +852,18 @@ a.books_producers_producer_link{
 }
 
 
+li#producers_all_navbar{
+    display: block;
+    position: relative;
+   /* align-items: none;*/
+}
 
-
-#producers_all_navbar_list {
+#producers_all_navbar_list {    
     display: none;
     position: absolute;
     min-width: 311px; 
     height: 500px;
-    top: 19%;
+    top: 0;
     left: 200px;
     background-color: white;
     border: 1px solid #191918;
