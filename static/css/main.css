@@ -913,6 +913,10 @@ li#producers_all_navbar{
     color: #fff;
 }
 
+.menu_main_link_photo{
+    margin-right: 18px;
+}
+
 .menu_main_link_photo > img {
     max-width: 111px;
     max-height: 30px;
@@ -944,6 +948,7 @@ li#producers_all_navbar{
 .main_menu_producer_link{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid #bdbcbc;
 }
 
