@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'searcher',
     'addons',
     'photo_download',
+    'filter',
     'django_rangepaginator',
 ]
 
@@ -80,6 +81,7 @@ TEMPLATES = [
                 'main_page.context_processors.producers_book',
                 'main_page.context_processors.producers_all_navbar',
                 'main_page.context_processors.users_manager',
+                'filter.context_processors.filter_goods',
             ],
         },
     },

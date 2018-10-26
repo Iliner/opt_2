@@ -10,6 +10,8 @@ from django.db.models.signals import post_save
 from django.contrib.sessions.models import Session
 from django.core.files import File
 
+from filter.models import *
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -42,9 +44,14 @@ class Goods(models.Model):
 	opt_18 = models.FloatField(null=True, blank=True, verbose_name='опт 18')
 	opt_19 = models.FloatField(null=True, blank=True, verbose_name='отп 19')
 	opt_20 = models.FloatField(null=True, blank=True, verbose_name='опт 20')
-
 	order_count = models.PositiveSmallIntegerField(blank=True, null=True)
 
+	filter_lvl_one = models.ForeignKey(LvlOne, null=True, blank=True, on_delete=models.SET_NULL)
+	filter_lvl_two = models.ForeignKey(LvlTwo, null=True, blank=True, on_delete=models.SET_NULL)
+	filter_lvl_three = models.ForeignKey(LvlThree, null=True, blank=True, on_delete=models.SET_NULL)
+	filter_lvl_four = models.ForeignKey(LvlFour, null=True, blank=True, on_delete=models.SET_NULL)
+	filter_lvl_five = models.ForeignKey(LvlFive, null=True, blank=True, on_delete=models.SET_NULL)
+	
 	def __str__(self):
 		return "{}".format(self.code)
 

@@ -4,23 +4,23 @@ import csv
 
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, InvalidPage
-from .models import *
-from basket.models import Cart
-from basket.forms import CartItemCount
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from main_page.twviews import *
 from django.views.generic.base import View
+
+from main_page.twviews import *
+from .models import *
+from filter.models import *
+from basket.models import Cart
+from basket.forms import CartItemCount
 
 import xlrd 
 import xlwt
 import pyexcel
 import openpyxl
-
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
-
 from io import BytesIO
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -188,133 +188,157 @@ def working_excel(request):
 			meta['opt_19'] = excel.opt_19
 		if excel.opt_20:
 			meta['opt_20'] = excel.opt_20
+		
+		if excel.filter_one:
+			meta['filter_one'] = excel.filter_one
+		if excel.filter_two:
+			meta['filter_two'] = excel.filter_two
+		if excel.filter_three:
+			meta['filter_three'] = excel.filter_three
+		if excel.filter_four:
+			meta['filter_four'] = excel.filter_four
+		if excel.filter_five:
+			meta['filter_five'] = excel.filter_five
+
 
 		object_excel = Excel(
 			full_path,
 			**meta, 
 		)
+
 		object_excel.create_list_pyexcel()
-		for prosition in object_excel.common_list:
-			code = prosition[object_excel.name_column['code']]
+		for position in object_excel.common_list:
+			code = position[object_excel.name_column['code']]
 			
 			good = Goods.objects.filter(code=code).exists()
 			
 			if good:
 				good = Goods.objects.filter(code=code)[0]
 			if not good:
-				print('new', prosition[object_excel.name_column['code']])
-				new_good = Goods()
-				new_good.code = code
-				new_good.articul = prosition[object_excel.name_column['articul']]
-				check_producer = Producers.objects.filter(name=prosition[object_excel.name_column['producer']]).exists()
-				if check_producer: 
-					new_good.producer = Producers.objects.get(name=prosition[object_excel.name_column['producer']])
-				else:
-					new_producer = create_producer(prosition[object_excel.name_column['producer']]) 
-					new_good.producer = new_producer
-				new_good.description = prosition[object_excel.name_column['description']]
-				if excel.stock:
-					new_good.in_stock = prosition[object_excel.name_column['stock']]
-				if excel.price:
-					new_good.price = round(prosition[object_excel.name_column['price']], 2)				
-				if excel.opt_0:
-					new_good.opt_0 = round(prosition[object_excel.name_column['opt_0']], 2)
-				if excel.opt_1:
-					new_good.opt_1 = round(prosition[object_excel.name_column['opt_1']], 2)
-				if excel.opt_2:
-					new_good.opt_2 = round(prosition[object_excel.name_column['opt_2']], 2)			
-				if excel.opt_3:
-					new_good.opt_3 = round(prosition[object_excel.name_column['opt_3']], 2)
-				if excel.opt_4:
-					new_good.opt_4 = round(prosition[object_excel.name_column['opt_4']], 2)				
-				if excel.opt_5:
-					new_good.opt_5 = round(prosition[object_excel.name_column['opt_5']], 2)			
-				if excel.opt_6:
-					new_good.opt_6 = round(prosition[object_excel.name_column['opt_6']], 2)		
-				if excel.opt_7:
-					new_good.opt_7 = round(prosition[object_excel.name_column['opt_7']], 2)				
-				if excel.opt_8:
-					new_good.opt_8 = round(prosition[object_excel.name_column['opt_8']], 2)
-				if excel.opt_9:
-					new_good.opt_9 = round(prosition[object_excel.name_column['opt_9']], 2)
-				if excel.opt_10:
-					new_good.opt_10 = round(prosition[object_excel.name_column['opt_10']], 2)
-				if excel.opt_11:
-					new_good.opt_11 = round(prosition[object_excel.name_column['opt_11']], 2)
-				if excel.opt_12:
-					new_good.opt_12 = round(prosition[object_excel.name_column['opt_12']], 2)
-				if excel.opt_13:
-					new_good.opt_13 = round(prosition[object_excel.name_column['opt_13']], 2)
-				if excel.opt_14:
-					new_good.opt_14 = round(prosition[object_excel.name_column['opt_14']], 2)
-				if excel.opt_15:
-					new_good.opt_15 = round(prosition[object_excel.name_column['opt_15']], 2)
-				if excel.opt_16:
-					new_good.opt_16 = round(prosition[object_excel.name_column['opt_16']], 2)
-				if excel.opt_17:
-					new_good.opt_17 = round(prosition[object_excel.name_column['opt_17']], 2)
-				if excel.opt_18:
-					new_good.opt_18 = round(prosition[object_excel.name_column['opt_18']], 2)
-				if excel.opt_19:
-					new_good.opt_19 = round(prosition[object_excel.name_column['opt_19']], 2)
-				if excel.opt_20:
-					new_good.opt_20 = round(prosition[object_excel.name_column['opt_20']], 2)
-				new_good.save()
-				new_position = NewGoods()
-				new_position.position = new_good
-				new_position.save()
+				if not excel.only_old:
+					print('new', position[object_excel.name_column['code']])
+					new_good = Goods()
+					new_good.code = code
+					new_good.articul = position[object_excel.name_column['articul']]
+					check_producer = Producers.objects.filter(name=position[object_excel.name_column['producer']]).exists()
+					if check_producer: 
+						new_good.producer = Producers.objects.get(name=position[object_excel.name_column['producer']])
+					else:
+						new_producer = create_producer(position[object_excel.name_column['producer']]) 
+						new_good.producer = new_producer
+					new_good.description = position[object_excel.name_column['description']]
+					if excel.stock:
+						new_good.in_stock = position[object_excel.name_column['stock']]
+					if excel.price:
+						new_good.price = round(position[object_excel.name_column['price']], 2)				
+					if excel.opt_0:
+						new_good.opt_0 = round(position[object_excel.name_column['opt_0']], 2)
+					if excel.opt_1:
+						new_good.opt_1 = round(position[object_excel.name_column['opt_1']], 2)
+					if excel.opt_2:
+						new_good.opt_2 = round(position[object_excel.name_column['opt_2']], 2)			
+					if excel.opt_3:
+						new_good.opt_3 = round(position[object_excel.name_column['opt_3']], 2)
+					if excel.opt_4:
+						new_good.opt_4 = round(position[object_excel.name_column['opt_4']], 2)				
+					if excel.opt_5:
+						new_good.opt_5 = round(position[object_excel.name_column['opt_5']], 2)			
+					if excel.opt_6:
+						new_good.opt_6 = round(position[object_excel.name_column['opt_6']], 2)		
+					if excel.opt_7:
+						new_good.opt_7 = round(position[object_excel.name_column['opt_7']], 2)				
+					if excel.opt_8:
+						new_good.opt_8 = round(position[object_excel.name_column['opt_8']], 2)
+					if excel.opt_9:
+						new_good.opt_9 = round(position[object_excel.name_column['opt_9']], 2)
+					if excel.opt_10:
+						new_good.opt_10 = round(position[object_excel.name_column['opt_10']], 2)
+					if excel.opt_11:
+						new_good.opt_11 = round(position[object_excel.name_column['opt_11']], 2)
+					if excel.opt_12:
+						new_good.opt_12 = round(position[object_excel.name_column['opt_12']], 2)
+					if excel.opt_13:
+						new_good.opt_13 = round(position[object_excel.name_column['opt_13']], 2)
+					if excel.opt_14:
+						new_good.opt_14 = round(position[object_excel.name_column['opt_14']], 2)
+					if excel.opt_15:
+						new_good.opt_15 = round(position[object_excel.name_column['opt_15']], 2)
+					if excel.opt_16:
+						new_good.opt_16 = round(position[object_excel.name_column['opt_16']], 2)
+					if excel.opt_17:
+						new_good.opt_17 = round(position[object_excel.name_column['opt_17']], 2)
+					if excel.opt_18:
+						new_good.opt_18 = round(position[object_excel.name_column['opt_18']], 2)
+					if excel.opt_19:
+						new_good.opt_19 = round(position[object_excel.name_column['opt_19']], 2)
+					if excel.opt_20:
+						new_good.opt_20 = round(position[object_excel.name_column['opt_20']], 2)
+					
+					
+
+					new_good = filter_add(new_good, excel, position, object_excel)
+
+
+
+					new_good.save()
+					new_position = NewGoods()
+					new_position.position = new_good
+					new_position.save()
+			
 			else:
-				print('old', prosition[object_excel.name_column['code']])
+				print('old', position[object_excel.name_column['code']])
 				if excel.articul:
-					good.articul = prosition[object_excel.name_column['articul']] 
+					good.articul = position[object_excel.name_column['articul']] 
 				if excel.description:
-					good.description = prosition[object_excel.name_column['description']]
+					good.description = position[object_excel.name_column['description']]
 				if excel.stock:
-					good.in_stock = prosition[object_excel.name_column['stock']]
+					good.in_stock = position[object_excel.name_column['stock']]
 				if excel.price:
-					good.price = round(prosition[object_excel.name_column['price']], 2)
+					good.price = round(position[object_excel.name_column['price']], 2)
 				if excel.opt_0:
-					good.opt_0 = round(prosition[object_excel.name_column['opt_0']], 2)
+					good.opt_0 = round(position[object_excel.name_column['opt_0']], 2)
 				if excel.opt_1:
-					good.opt_1 = round(prosition[object_excel.name_column['opt_1']], 2)
+					good.opt_1 = round(position[object_excel.name_column['opt_1']], 2)
 				if excel.opt_2:
-					good.opt_2 = round(prosition[object_excel.name_column['opt_2']], 2)
+					good.opt_2 = round(position[object_excel.name_column['opt_2']], 2)
 				if excel.opt_3:
-					good.opt_3 = round(prosition[object_excel.name_column['opt_3']], 2)			
+					good.opt_3 = round(position[object_excel.name_column['opt_3']], 2)			
 				if excel.opt_4:
-					good.opt_4 = round(prosition[object_excel.name_column['opt_4']], 2)
+					good.opt_4 = round(position[object_excel.name_column['opt_4']], 2)
 				if excel.opt_5:
-					good.opt_5 = round(prosition[object_excel.name_column['opt_5']], 2)				
+					good.opt_5 = round(position[object_excel.name_column['opt_5']], 2)				
 				if excel.opt_6:
-					good.opt_6 = round(prosition[object_excel.name_column['opt_6']], 2)
+					good.opt_6 = round(position[object_excel.name_column['opt_6']], 2)
 				if excel.opt_7:
-					good.opt_7 = round(prosition[object_excel.name_column['opt_7']], 2)
+					good.opt_7 = round(position[object_excel.name_column['opt_7']], 2)
 				if excel.opt_8:
-					good.opt_8 = round(prosition[object_excel.name_column['opt_8']], 2)			
+					good.opt_8 = round(position[object_excel.name_column['opt_8']], 2)			
 				if excel.opt_9:
-					good.opt_9 = round(prosition[object_excel.name_column['opt_9']], 2)			
+					good.opt_9 = round(position[object_excel.name_column['opt_9']], 2)			
 				if excel.opt_10:
-					good.opt_10 = round(prosition[object_excel.name_column['opt_10']], 2)
+					good.opt_10 = round(position[object_excel.name_column['opt_10']], 2)
 				if excel.opt_11:
-					good.opt_11 = round(prosition[object_excel.name_column['opt_11']], 2)
+					good.opt_11 = round(position[object_excel.name_column['opt_11']], 2)
 				if excel.opt_12:
-					good.opt_12 = round(prosition[object_excel.name_column['opt_12']], 2)
+					good.opt_12 = round(position[object_excel.name_column['opt_12']], 2)
 				if excel.opt_13:
-					good.opt_13 = round(prosition[object_excel.name_column['opt_13']], 2)
+					good.opt_13 = round(position[object_excel.name_column['opt_13']], 2)
 				if excel.opt_14:
-					good.opt_14 = round(prosition[object_excel.name_column['opt_14']], 2)
+					good.opt_14 = round(position[object_excel.name_column['opt_14']], 2)
 				if excel.opt_15:
-					good.opt_15 = round(prosition[object_excel.name_column['opt_15']], 2)
+					good.opt_15 = round(position[object_excel.name_column['opt_15']], 2)
 				if excel.opt_16:
-					good.opt_16 = round(prosition[object_excel.name_column['opt_16']], 2)
+					good.opt_16 = round(position[object_excel.name_column['opt_16']], 2)
 				if excel.opt_17:
-					good.opt_17 = round(prosition[object_excel.name_column['opt_17']], 2)
+					good.opt_17 = round(position[object_excel.name_column['opt_17']], 2)
 				if excel.opt_18:
-					good.opt_18 = round(prosition[object_excel.name_column['opt_18']], 2)
+					good.opt_18 = round(position[object_excel.name_column['opt_18']], 2)
 				if excel.opt_19:
-					good.opt_19 = round(prosition[object_excel.name_column['opt_19']], 2)
+					good.opt_19 = round(position[object_excel.name_column['opt_19']], 2)
 				if excel.opt_20:
-					good.opt_20 = round(prosition[object_excel.name_column['opt_20']], 2)
+					good.opt_20 = round(position[object_excel.name_column['opt_20']], 2)
+				
+				good = filter_add(good, excel, position, object_excel)	
 				good.save()
 				
 		
@@ -329,6 +353,88 @@ def working_excel(request):
 	response = 'hello'
 	return HttpResponse(response)
 
+
+def filter_add(good, excel, position, object_excel):
+	if excel.filter_one:
+		excel_one = position[object_excel.name_column['filter_one']].lower().strip()
+		if excel_one:
+			db_one = LvlOne.objects.filter(name=excel_one)
+			check_category = db_one.exists()
+			if check_category:
+				good.filter_lvl_one = db_one.first()
+			else:
+				new_lvl = create_filter_lvl(
+					excel_one, 
+					LvlOne,
+					)
+				good.filter_lvl_one = new_lvl
+
+	if excel.filter_two:
+		excel_two = position[object_excel.name_column['filter_two']].lower().strip()
+		if excel_two:
+			db_two = LvlTwo.objects.filter(name=excel_two)
+			check_category = db_two.exists()
+			if check_category:
+				good.filter_lvl_two = db_two.first()
+			else:
+				new_lvl = create_filter_lvl(
+					excel_two, 
+					LvlTwo,
+					)
+				good.filter_lvl_two = new_lvl
+	
+	if excel.filter_three:
+		excel_three = position[object_excel.name_column['filter_three']].lower().strip()
+		if excel_three:
+			db_three = LvlThree.objects.filter(name=excel_three)
+			check_category = db_three.exists()
+			if check_category:
+				good.filter_lvl_three = db_three.first()
+			else:
+				new_lvl = create_filter_lvl(
+					excel_three, 
+					LvlThree,
+					)
+				good.filter_lvl_three = new_lvl
+	
+	if excel.filter_four:
+		excel_four = position[object_excel.name_column['filter_four']].lower().strip()
+		if excel_four:
+			db_four = LvlFour.objects.filter(name=excel_four)
+			check_category = db_four.exists()
+			if check_category:
+				good.filter_lvl_four = db_four.first()
+			else:
+				new_lvl = create_filter_lvl(
+					excel_four, 
+					LvlFour,
+					)
+				good.filter_lvl_four = new_lvl
+	
+	if excel.filter_five:
+		excel_five = position[object_excel.name_column['filter_five']].lower().strip()
+		if excel_five:
+			db_five = LvlFive.objects.filter(name=excel_five)
+			check_category = db_five.exists()
+			if check_category:
+				good.filter_lvl_five = db_five.first()
+			else:
+				new_lvl = create_filter_lvl(
+					excel_five, 
+					LvlFive,
+					)
+				good.filter_lvl_five = new_lvl
+
+	return good
+
+
+
+
+def create_filter_lvl(name, lvl):
+	new_lvl = lvl()
+	new_lvl.name = name
+	new_lvl.save()
+	return new_lvl
 
 
 def create_producer(name):

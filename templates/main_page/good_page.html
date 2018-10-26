@@ -148,7 +148,27 @@
 			{% comment "Optional note" %}
 				<div><a href="{% url 'add_cart' code=good.code %}">Добавить в корзину</a></div>
 			{% endcomment %}
-			<div id='card_description_block_back'><a href="{% url 'index' %}?page={{pn}}">назад</a></div>
+			<div id='card_block_filter_back'>
+				<div id='card_block_filter'>
+					<span>Категории:</span>
+					{% if good.filter_lvl_one %}
+						<a href="{% url 'filter_request_one' category_id=good.filter_lvl_one.id %}">{{good.filter_lvl_one}}</a>
+					{% endif %}
+					{% if good.filter_lvl_two %}
+						<a href="{% url 'filter_request_two' category_id=good.filter_lvl_two.id %}">{{good.filter_lvl_two}}</a>
+					{% endif %}
+					{% if good.filter_lvl_three %}
+						<a href="{% url 'filter_request_three' category_id=good.filter_lvl_three.id %}">{{good.filter_lvl_three}}</a>
+					{% endif %}
+					{% if good.filter_lvl_four %}
+						<a href="{% url 'filter_request_four' category_id=good.filter_lvl_four.id %}">{{good.filter_lvl_four}}</a>
+					{% endif %}
+					{% if good.filter_lvl_five %}
+						<a href="{% url 'filter_request_five' category_id=good.filter_lvl_five.id %}">{{good.filter_lvl_five}}</a>
+					{% endif %}
+				</div>
+				<div id='card_description_block_back'><a href="{% url 'index' %}?page={{pn}}">Вернуться</a></div>
+			</div>
 		</div>
 	</div>
 	{% comment "Optional note" %}

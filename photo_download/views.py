@@ -17,6 +17,7 @@ import urllib3
 import re
 import csv
 import subprocess
+from addons.excel_views import Excel
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'
@@ -26,12 +27,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 @csrf_exempt
 def download_photo_view(request):
 	goods = Goods.objects.filter(photo=None)
+	for_stock_excel = {}
 	#goods = goods.filter(producer__name='Forsage')	
+	count = 0
 	for good in goods:
 		distribution_function(good.producer.name, good.code, good.articul)
 		url_photo = parser_th_tools(good.code)
-		print(good.articul, url_photo)
-		if url_photo:
+		if url_photo and count < 3:
 			new_photo = Photo()
 			new_photo.name = good.code
 			new_photo.image_url = url_photo
@@ -40,6 +42,8 @@ def download_photo_view(request):
 			new_photo.get_remote_image('/goods/photos/')
 			good.photo = new_photo
 			good.save()
+			for_stock_excel.update({good.code: good.photo.photo.url})
+			count += 1
 			#full_name = dowanload_on_server(url_photo, good.code)
 			# if full_name:
 			# 	full_path = "{}/goods/photos/{}".format(MEDIA_ROOT, full_name)
@@ -52,7 +56,22 @@ def download_photo_view(request):
 			# 	new_photo.save()
 			# 	good.photo = new_photo
 			# 	good.save()
+
+	excel_stock(for_stock_excel)
 	return HttpResponse(goods)
+
+
+def excel_stock(_dict):
+	BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	full_path = "{}/uploads/{}".format(BASE_DIR, 'stock.xlsx')
+	meta = {"code": 0, 'photo': 12}
+	print(_dict)
+	ex = Excel(
+		full_path,
+		meta,
+		)
+
+
 
 
 

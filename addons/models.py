@@ -8,13 +8,21 @@ class ExcelImport(models.Model):
 	file =  models.FileField(upload_to = "excel/")
 	date = models.DateTimeField(auto_now=True)
 	check = models.BooleanField(default=False, db_index=True, verbose_name='Проверрено')
+	only_old = models.BooleanField(default=False, db_index=True, verbose_name='Только обновить имеющийся позиции')
 
 	code = models.IntegerField(default=1, null=True, blank=True, verbose_name='Код')
 	articul = models.IntegerField(default=3, null=True, blank=True, verbose_name='Артикул')
 	producer = models.IntegerField(default=2, null=True, blank=True, verbose_name='Производитель')
 	description = models.IntegerField(default=4, null=True, blank=True, verbose_name='Описание')
 	stock = models.IntegerField(default=5, null=True, blank=True, verbose_name='Количество')
-	price = models.IntegerField(default=6, null=True, blank=True, verbose_name='Розничная цена')
+	
+	filter_one = models.IntegerField(null=True, blank=True, verbose_name='фильтр ур. 1')
+	filter_two = models.IntegerField(null=True, blank=True, verbose_name='фильтр ур. 2')
+	filter_three = models.IntegerField(null=True, blank=True, verbose_name='фильтр ур. 3')
+	filter_four = models.IntegerField(null=True, blank=True, verbose_name='фильтр ур. 4')
+	filter_five = models.IntegerField(null=True, blank=True, verbose_name='фильтр ур. 5')
+	
+	price = models.IntegerField(default=6, null=True, blank=True, verbose_name='Цена')
 	opt_0 = models.IntegerField(null=True, blank=True, verbose_name='опт 0')
 	opt_1 = models.IntegerField(default=7, null=True, blank=True, verbose_name='опт 1')
 	opt_2 = models.IntegerField(default=8, null=True, blank=True, verbose_name='опт 2')
@@ -43,6 +51,7 @@ class ExcelImport(models.Model):
 	class Meta:
 		verbose_name = 'Загрузить_эксел'
 		verbose_name_plural = 'Загрузить_эксели'
+	
 
 
 class BannerStock(models.Model):

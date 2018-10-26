@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'', include('searcher.urls')),
     url(r'', include('addons.urls')),
     url(r'', include('photo_download.urls')),
+    url(r'', include('filter.urls')),
     
 ]
 

@@ -1,7 +1,7 @@
 <nav class='menu_main menu_main_style'>
 	<div class='menu_main_content'>
 		<ul>
-		 	<li class="menu_main_link"><a href="#" id='main_filter_bottom'>Фильтр</a></li>
+            {% include "includes/filter_menu.html" %}
             {% include "includes/producers_all_navbar.html" %}
   			<li class="menu_main_link"><a href="{% url 'banners_view' %}" id='action_actions'>Акции</a></li>
   			<li class="menu_main_link"><a href="{% url 'download_excel' %}" id='download_excel'>Скачать прайс</a></li>

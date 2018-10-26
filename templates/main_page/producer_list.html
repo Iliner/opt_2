@@ -92,7 +92,11 @@
 		</tbody>	
 	</table>
 
-	{% include 'includes/paginater.html' %}
+	{% if page_obj.paginator.num_pages > 1 %}
+		{% include 'includes/paginater.html' %}
+	{% endif %}
+
+
 	{% comment %}
 	{% if page_obj.paginator.num_pages > 1 %}
 		<div id='pagination'>

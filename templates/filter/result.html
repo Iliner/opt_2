@@ -1,7 +1,4 @@
-{% extends "main_page/index.html" %}
-{% load poll_extras %}
-
-
+{% extends 'main_page/index.html' %}
 
 {% block content %}
 <div class='main'>
@@ -87,69 +84,5 @@
 	{% if page_obj.paginator.num_pages > 1 %}
 		{% include 'includes/paginater.html' %}
 	{% endif %}
-
-
-	{% comment %}
-	{% if page_obj.paginator.num_pages > 1 %}
-		<div id='pagination'>
-			{% if category %}
-				{% if page_obj.has_previous %}
-					<div id='previous-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.previous_page_number }}">&lt;</a></div>
-				{% endif %}
-				<div id='num-pages'>
-					{% for pn in page_obj.paginator.page_range %}
-						{% if not forllop.first %}
-							&nbsp;&nbsp;|&nbsp;&nbsp;
-						{% endif %}
-						{% if category %}
-							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
-							{% endif %}
-						{% else %}
-							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}?page={{ pn }}">
-							{% endif %}
-						{% endif %}
-						{{ pn }}
-						{% if page_obj.number != pn %}
-							</a>
-						{% endif %}
-					{% endfor %}
-				</div>	
-				{% if page_obj.has_next %}
-					<div id='next-page'><a href="{% url 'index' %}{{category.pk}}/?page={{ page_obj.next_page_number }}">&gt;</a></div>
-				{% endif %}
-			{% else %}
-				{% if page_obj.has_previous%}
-					<div id='previous-page'><a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">&lt;</a></div>
-				{% endif %}
-				<div id='num-pages'>
-					{% for pn in page_obj.paginator.page_range %}
-						{% if not forllop.first %}
-							&nbsp;&nbsp;|&nbsp;&nbsp;
-						{% endif %}
-						{% if category %}
-							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}{{category.pk}}/?page={{ pn }}">
-							{% endif %}
-						{% else %}
-							{% if page_obj.number != pn %}
-								<a href="{% url 'index' %}?page={{ pn }}">
-							{% endif %}
-						{% endif %}
-						{{ pn }}
-						{% if page_obj.number != pn %}
-							</a>
-						{% endif %}
-					{% endfor %}
-				</div>	
-				{% if page_obj.has_next%}
-					<div id='next-page'><a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">&gt;</a></div>
-				{% endif %}
-			{% endif %}
-		</div>
-	{% endif %}
-	{% endcomment %}
 </div>
 {% endblock %}
-

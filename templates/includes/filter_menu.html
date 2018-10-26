@@ -1,0 +1,158 @@
+{% load staticfiles %}
+
+
+<li class="menu_main_link filter_menu_main_li">
+	<a href="#" id='main_filter_bottom'>Фильтр</a>
+	<ul id='filer_wrapper'>
+		{% for lvl_one in filter_menu_lvl_one %}
+			<li class='filter_menu_li'>
+				<a href="{% url 'filter_request_one' category_id=lvl_one.id %}" class='filter_menu_a'>{{lvl_one.name}}</a>
+				{% if lvl_one.next_lvl.all.exists %}
+					<ul class='filter_menu_ul'>
+					{% for lvl_two in lvl_one.next_lvl.all  %}
+						<li class='filter_menu_li'>
+							<a href="{% url 'filter_request_two' category_id=lvl_two.id %}" class='filter_menu_a'>{{lvl_two.name}}</a>
+							{% if lvl_two.next_lvl.all.exists %}
+								<ul class='filter_menu_ul'>
+								{% for lvl_three in lvl_two.next_lvl.all  %}
+									<li class='filter_menu_li'>
+										<a href="{% url 'filter_request_three' category_id=lvl_three.id %}" class='filter_menu_a'>{{lvl_three.name}}</a>
+										{% if lvl_three.next_lvl.all.exists %}
+											<ul class='filter_menu_ul'>
+											{% for lvl_four in lvl_three.next_lvl.all  %}
+												<li class='filter_menu_li'>
+													<a href="{% url 'filter_request_four' category_id=lvl_four.id %}" class='filter_menu_a'>{{lvl_four.name}}</a>
+														{% if lvl_four.next_lvl.all.exists %}
+														<ul class='filter_menu_ul'>
+														{% for lvl_five in lvl_four.next_lvl.all  %}
+															<li class='filter_menu_li'>
+																<a href="{% url 'filter_request_five' category_id=lvl_five.id %}" class='filter_menu_a'>{{lvl_five.name}}</a>
+															</li>
+														{% endfor  %}
+														</ul>
+													{% endif %}
+												</li>
+											{% endfor  %}
+											</ul>
+										{% endif %}
+									</li>
+								{% endfor  %}
+								</ul>
+							{% endif %}
+						</li>
+					{% endfor  %}
+					</ul>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+<ul>
+{% for lvl_2 in lvl_one.next_lvl.all  %}
+	<li>{{lvl_2.name}}</li>
+{% endfor  %}
+</ul>
+{% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+<li class="menu_main_link filter_menu_li">
+	<a href="#" id='main_filter_bottom'>Фильтр</a>
+	<div id='filer_wrapper'>
+		<div id='filter_wrapper_one'>
+			<ul>
+			{% for category in filter_menu_lvl_one %}
+				<li>{{category.name}}</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</li>
+
+
+li.filter_menu_li {
+    align-items: end;
+}
+
+#filer_wrapper {
+    display: none;
+    position: absolute;
+    width: 1000px;
+    min-height: 80%;;
+    left: 200px;
+    background-color: #343a40;
+}
+
+
+.filter_menu_li:hover #filer_wrapper {
+  display: block; 
+}
+
+#filer_wrapper:hover {
+  display: block; 
+}
+
+{% endcomment %}
